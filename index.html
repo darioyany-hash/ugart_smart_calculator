@@ -527,8 +527,8 @@
     // State Object
     let state = {
       participants: [
-        { id: 'p1', name: 'Marco', age: 7, filterByAge: true, courses: [{ courseId: 'CIRCO_F1', slotId: 'slot_lun_9' }] },
-        { id: 'p2', name: 'Sofia', age: 4, filterByAge: true, courses: [{ courseId: 'ARTE_CREATIVA', slotId: 'slot_mar_8' }] }
+        { id: 'p1', name: 'Marco', age: 7, filterByAge: true, courses: [{ courseId: 'CIRCO_F1', slotId: '' }] },
+        { id: 'p2', name: 'Sofia', age: 4, filterByAge: true, courses: [{ courseId: 'ARTE_CREATIVA', slotId: '' }] }
       ],
       plan: 'TRIMESTRALE',
       discountStrategy: 'OPTIMIZED',
@@ -578,6 +578,101 @@
       { id: 'YAMUNA_BODY', cat: 'Fitness & Posturale', name: 'Yamuna Body Rolling', trim: 135, sol: 203, ageGroup: 'SENIOR' },
       { id: 'CALISTHENICS_1', cat: 'Fitness & Posturale', name: 'Calisthenics & Functional (1+1)', trim: 98, sol: 147, septFee: 18, ageGroup: 'SENIOR' },
       { id: 'BACHATA_JUNIOR', cat: 'Fitness & Posturale', name: 'Bachata Moderna Junior / Senior', trim: 135, sol: 203, ageGroup: 'JUNIOR' }
+    ];
+
+    // Complete Timetable Database
+    const TIMETABLE_DB = [
+      // LUNEDI
+      { day: 'LUNEDI', time: '12:45 - 13:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '12:45 - 13:30', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Giocoleria ed Equilibrismo', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'POLE_KIDS', name: 'Pole Kids', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'TEATRO_BIMBI', name: 'Teatro Bimbi (6-9 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 1 (6-7 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '18:00 - 19:15', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 1', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '18:45 - 19:45', courseId: 'FITNESS_F1', name: 'Flexy - Mobilità Articolare', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F3', name: 'Acrobatica Aerea Senior Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F2', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '20:00 - 21:00', courseId: 'FITNESS_F1', name: 'UGA Pilates Matwork', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '20:30 - 21:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior Corso 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '20:30 - 21:30', courseId: 'CIRCO_F1', name: 'Hula Hoop Dance Junior/Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+
+      // MARTEDI
+      { day: 'MARTEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '12:45 - 13:45', courseId: 'YAMUNA_BODY', name: 'Yamuna Body Rolling', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab 2.0', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Pre Acrobatica (3-5 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '17:00 - 18:15', courseId: 'JUDO_BIMBI_F1', name: 'Gioca Judo (3-5 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'BABY' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'FITNESS_F1', name: 'Viso Fitness', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '17:30 - 18:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (3-5 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BABY' },
+      { day: 'MARTEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '18:30 - 19:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (6-11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 2', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '19:30 - 20:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (+11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'FITNESS_F1', name: 'UGA Pilates Barré', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'BUNGEE_FLY', name: 'Bungee Fly', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '20:06 - 21:05', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '21:15 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+
+      // MERCOLEDI
+      { day: 'MERCOLEDI', time: '12:45 - 13:30', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCUS_BASE', name: 'Academy Circus 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Circo (3-5 anni)', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Junior', room: 'Sala 5', cat: 'Fitness & Posturale', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'TEATRO_JUNIOR', name: 'Teatro Junior (10-13 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR Avanzato Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 3', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:15 - 19:45', courseId: 'TEATRO_JUNIOR', name: 'Teatro Ragazzi (14-18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'RAGAZZI' },
+      { day: 'MERCOLEDI', time: '19:30 - 20:30', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '19:45 - 21:15', courseId: 'TEATRO_SENIOR', name: 'Teatro Senior (+18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '20:30 - 21:45', courseId: 'CALISTHENICS_1', name: 'Calisthenics Senior Corso 3', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '20:30 - 21:30', courseId: 'POLE_F2', name: 'Pole Dance Senior Intermedio/Advance', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+
+      // GIOVEDI
+      { day: 'GIOVEDI', time: '08:15 - 09:00', courseId: 'BUNGEE_FLY', name: 'Bungee Fly Mattino', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'FITNESS_F1', name: 'Hula Hoop Dance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'GIOVEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
+      { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'DANZA_CONTEMP', name: 'Danza Contemporanea & Lab', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '18:00 - 19:15', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '19:00 - 20:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern & Lab Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '20:30 - 22:00', courseId: 'FITNESS_F1', name: 'Hatha Yoga', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '20:30 - 21:30', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+
+      // VENERDI
+      { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 3', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '17:00 - 18:15', courseId: 'CIRCO_F1', name: 'Flexy Contortion Liv. 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Danza / Danza Motricità', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { day: 'VENERDI', time: '18:15 - 19:30', courseId: 'CIRCO_F3', name: 'Contorsionismo Livello 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '19:15 - 20:15', courseId: 'CALISTHENICS_1', name: 'Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '19:00 - 20:00', courseId: 'DANZA_HIPHOP', name: 'Cheerleading & Cheerdance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '20:00 - 21:00', courseId: 'FLYING_POLE', name: 'Flying Pole', room: 'Sala 1', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '20:30 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+      { day: 'VENERDI', time: '20:15 - 21:15', courseId: 'DANZA_HEELS', name: 'Danza Heels / Video Dance Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' }
     ];
 
     // Helper functions for Age Group mapping
@@ -685,7 +780,6 @@
     function buildCourseSlotOptions(pId, courseId, selectedSlotId) {
       const matchSlots = TIMETABLE_DB.filter(s => s.courseId === courseId);
       
-      // Find slots chosen by OTHER participants to detect coincidences
       const otherSlots = [];
       state.participants.forEach(p => {
         if (p.id !== pId && p.courses) {
@@ -713,6 +807,42 @@
       return optionsHtml;
     }
 
+    function getSelectedSlotBadgeHTML(slotId) {
+      if (!slotId) return '<span class="text-[10px] text-slate-400 italic">⏱️ Da concordare</span>';
+      const slot = TIMETABLE_DB.find(s => s.id === slotId);
+      if (!slot) return '<span class="text-[10px] text-slate-400 italic">⏱️ Da concordare</span>';
+      return `<span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-100 text-indigo-800 text-[10px] font-extrabold"><i class="fa-regular fa-calendar-check text-indigo-600"></i> ${capitalize(slot.day)} ${slot.time} (${slot.room})</span>`;
+    }
+
+    function init() {
+      // Ensure IDs on TIMETABLE_DB
+      TIMETABLE_DB.forEach((slot, index) => {
+        if (!slot.id) {
+          slot.id = 'slot_' + slot.day.toLowerCase() + '_' + index;
+        }
+      });
+
+      // Ensure participant structure
+      state.participants.forEach(p => {
+        if (!p.courses) {
+          p.courses = (p.courseIds || ['CIRCO_F1']).map(cId => ({ courseId: cId, slotId: '' }));
+        }
+        if (p.age === undefined) p.age = 7;
+        if (p.filterByAge === undefined) p.filterByAge = true;
+      });
+
+      render();
+      renderSchedule();
+      renderPrintModules();
+      buildHourlyPlannerTable();
+
+      const dateElem = document.getElementById('print-date-stamp');
+      if (dateElem) {
+        const now = new Date();
+        dateElem.innerText = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      }
+    }
+
     function render() {
       const listContainer = document.getElementById('participants-list');
       if (!listContainer) return;
@@ -724,10 +854,8 @@
         card.className = 'bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 space-y-3';
 
         if (!p.courses) {
-          p.courses = (p.courseIds || ['CIRCO_F1']).map(cId => ({ courseId: cId, slotId: '' }));
+          p.courses = [{ courseId: 'CIRCO_F1', slotId: '' }];
         }
-        if (p.age === undefined) p.age = pIdx === 0 ? 7 : 4;
-        if (p.filterByAge === undefined) p.filterByAge = true;
 
         const pAgeGroup = getAgeGroupFromAge(p.age);
         const pAgeGroupTag = getAgeGroupLabel(pAgeGroup);
@@ -827,6 +955,18 @@
       render();
     }
 
+    function removeParticipant(id) {
+      state.participants = state.participants.filter(p => p.id !== id);
+      render();
+    }
+
+    function updateParticipantName(id, val) {
+      const p = state.participants.find(item => item.id === id);
+      if (p) p.name = val;
+      renderPrintModules();
+      buildHourlyPlannerTable();
+    }
+
     function updateParticipantAge(id, ageVal) {
       const p = state.participants.find(item => item.id === id);
       if (p) {
@@ -841,6 +981,79 @@
         p.filterByAge = isChecked;
         render();
       }
+    }
+
+    function updateParticipantCourse(pId, cIdx, courseId) {
+      const p = state.participants.find(item => item.id === pId);
+      if (p && p.courses[cIdx]) {
+        p.courses[cIdx].courseId = courseId;
+        p.courses[cIdx].slotId = ''; // Reset slot selection when course changes
+        render();
+      }
+    }
+
+    function updateParticipantCourseSlot(pId, cIdx, slotId) {
+      const p = state.participants.find(item => item.id === pId);
+      if (p && p.courses[cIdx]) {
+        p.courses[cIdx].slotId = slotId;
+        render();
+      }
+    }
+
+    function addCourseToParticipant(pId, defaultCourseId = '') {
+      const p = state.participants.find(item => item.id === pId);
+      if (p) {
+        p.courses.push({ courseId: defaultCourseId || 'CIRCO_F1', slotId: '' });
+        render();
+      }
+    }
+
+    function removeCourseFromParticipant(pId, cIdx) {
+      const p = state.participants.find(item => item.id === pId);
+      if (p && p.courses.length > 1) {
+        p.courses.splice(cIdx, 1);
+        render();
+      }
+    }
+
+    function setPaymentPlan(planType) {
+      state.plan = planType;
+      const btnTrim = document.getElementById('plan-btn-trim');
+      const btnSol = document.getElementById('plan-btn-sol');
+
+      if (btnTrim && btnSol) {
+        if (planType === 'TRIMESTRALE') {
+          btnTrim.className = 'active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative';
+          btnSol.className = 'active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative';
+        } else {
+          btnSol.className = 'active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative';
+          btnTrim.className = 'active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative';
+        }
+      }
+      calculateSchedule();
+    }
+
+    function setDiscountStrategy(strategy) {
+      state.discountStrategy = strategy;
+      const btnOpt = document.getElementById('strat-opt-btn');
+      const btnStd = document.getElementById('strat-std-btn');
+      const savingsTag = document.getElementById('savings-delta-tag');
+
+      const activeClass = 'py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
+      const inactiveClass = 'py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+
+      if (btnOpt && btnStd) {
+        if (strategy === 'OPTIMIZED') {
+          btnOpt.className = activeClass;
+          btnStd.className = inactiveClass;
+          if (savingsTag) savingsTag.innerHTML = '⚡ Risparmio Max Attivo (-20% quota alta)';
+        } else {
+          btnStd.className = activeClass;
+          btnOpt.className = inactiveClass;
+          if (savingsTag) savingsTag.innerHTML = '⚖️ Standard Attivo (-20% quota minore)';
+        }
+      }
+      calculateSchedule();
     }
 
     function calculateSchedule() {
@@ -878,7 +1091,7 @@
           if (course) {
             allCourseItems.push({
               studentName: p.name,
-              courseId: c.id,
+              courseId: course.id,
               courseName: course.name,
               basePrice: state.plan === 'TRIMESTRALE' ? course.trim : course.sol,
               septFee: course.septFee || 0,
@@ -991,35 +1204,416 @@
       }
 
       renderPrintModules();
+      buildHourlyPlannerTable();
+    }
+
+    function renderScheduleCard(title, lines, amount, styleClasses, subtitle = '') {
+      const container = document.getElementById('schedule-container');
+      const card = document.createElement('div');
+      card.className = `p-3.5 rounded-2xl border ${styleClasses}`;
+
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-2 mb-1.5">
+          <div>
+            <h3 class="font-extrabold text-xs sm:text-sm tracking-tight text-slate-900">${title}</h3>
+            ${subtitle ? `<span class="inline-block text-[10px] font-semibold text-indigo-700 bg-indigo-100/60 px-2 py-0.5 rounded-md mt-0.5">${subtitle}</span>` : ''}
+          </div>
+          <span class="text-xs sm:text-sm font-extrabold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-sm shrink-0">
+            € ${amount.toFixed(2)}
+          </span>
+        </div>
+        <div class="text-[11px] space-y-1 opacity-90 leading-normal">
+          ${lines.join('<br>')}
+        </div>
+      `;
+
+      container.appendChild(card);
+    }
+
+    function switchTab(tabName) {
+      state.activeTab = tabName;
+
+      const viewCalc = document.getElementById('view-calculator');
+      const viewSchedule = document.getElementById('view-schedule');
+      const viewPrint = document.getElementById('view-print');
+
+      const btnCalc = document.getElementById('tab-btn-calc');
+      const btnSchedule = document.getElementById('tab-btn-schedule');
+      const btnPrint = document.getElementById('tab-btn-print');
+
+      const activeBtnClass = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5';
+      const inactiveBtnClass = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5';
+
+      if (viewCalc) viewCalc.classList.toggle('hidden', tabName !== 'calc');
+      if (viewSchedule) viewSchedule.classList.toggle('hidden', tabName !== 'schedule');
+      if (viewPrint) viewPrint.classList.toggle('hidden', tabName !== 'print');
+
+      if (btnCalc) btnCalc.className = tabName === 'calc' ? activeBtnClass : inactiveBtnClass;
+      if (btnSchedule) btnSchedule.className = tabName === 'schedule' ? activeBtnClass : inactiveBtnClass;
+      if (btnPrint) btnPrint.className = tabName === 'print' ? activeBtnClass : inactiveBtnClass;
+
+      if (tabName === 'schedule') {
+        renderSchedule();
+      } else if (tabName === 'print') {
+        renderPrintModules();
+      }
+    }
+
+    function filterDay(dayName) {
+      state.activeDay = dayName;
+      const buttons = document.querySelectorAll('.day-btn');
+      const days = ['LUNEDI', 'MARTEDI', 'MERCOLEDI', 'GIOVEDI', 'VENERDI'];
+
+      buttons.forEach((btn, idx) => {
+        if (days[idx] === dayName) {
+          btn.className = 'day-btn py-2 px-1 text-xs font-bold rounded-xl border border-indigo-600 bg-indigo-600 text-white text-center';
+        } else {
+          btn.className = 'day-btn py-2 px-1 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-center';
+        }
+      });
+
+      renderSchedule();
+    }
+
+    function filterRoom(roomName) {
+      state.activeRoom = roomName;
+      const buttons = document.querySelectorAll('.room-btn');
+      buttons.forEach(btn => {
+        if ((roomName === 'ALL' && btn.innerText.includes('Tutte')) || btn.innerText === roomName) {
+          btn.className = 'room-btn active-scale py-1.5 px-3 text-xs font-extrabold rounded-xl border border-indigo-600 bg-indigo-600 text-white';
+        } else {
+          btn.className = 'room-btn active-scale py-1.5 px-3 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100';
+        }
+      });
+
+      renderSchedule();
+    }
+
+    function setScheduleViewMode(mode) {
+      state.scheduleViewMode = mode;
+      const btnCron = document.getElementById('view-mode-cron');
+      const btnRoom = document.getElementById('view-mode-room');
+
+      if (btnCron && btnRoom) {
+        if (mode === 'CRON') {
+          btnCron.className = 'py-1 text-[10px] font-extrabold rounded-lg bg-white text-indigo-600 shadow-sm text-center';
+          btnRoom.className = 'py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-slate-900 text-center';
+        } else {
+          btnRoom.className = 'py-1 text-[10px] font-extrabold rounded-lg bg-white text-indigo-600 shadow-sm text-center';
+          btnCron.className = 'py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-slate-900 text-center';
+        }
+      }
+      renderSchedule();
+    }
+
+    function renderSchedule() {
+      const container = document.getElementById('schedule-slots-container');
+      const activeDayTitle = document.getElementById('active-day-title');
+      const slotCountBadge = document.getElementById('slot-count-badge');
+      const ageFilter = document.getElementById('schedule-age-filter')?.value || 'ALL';
+      const searchInput = document.getElementById('schedule-search')?.value.toLowerCase().trim() || '';
+
+      if (!container) return;
+
+      if (activeDayTitle) {
+        activeDayTitle.innerText = `📅 Programmazione del ${capitalize(state.activeDay)}`;
+      }
+
+      container.innerHTML = '';
+
+      let slots = TIMETABLE_DB.filter(s => s.day === state.activeDay);
+
+      if (state.activeRoom !== 'ALL') {
+        slots = slots.filter(s => s.room === state.activeRoom);
+      }
+
+      if (ageFilter !== 'ALL') {
+        slots = slots.filter(s => s.ageGroup === ageFilter || s.ageGroup === 'ALL');
+      }
+
+      if (searchInput) {
+        slots = slots.filter(s => s.name.toLowerCase().includes(searchInput) || s.room.toLowerCase().includes(searchInput) || s.cat.toLowerCase().includes(searchInput));
+      }
+
+      if (slotCountBadge) {
+        slotCountBadge.innerText = `${slots.length} lezioni`;
+      }
+
+      if (slots.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-slate-400 text-xs">
+            <i class="fa-solid fa-calendar-xmark text-2xl mb-2 block text-slate-300"></i>
+            Nessuna lezione trovata per i filtri selezionati.
+          </div>
+        `;
+        return;
+      }
+
+      if (state.scheduleViewMode === 'PER_SALA') {
+        const rooms = ['Sala 1', 'Sala 2', 'Sala 3', 'Sala 4', 'Sala 5'];
+        rooms.forEach(roomName => {
+          if (state.activeRoom !== 'ALL' && state.activeRoom !== roomName) return;
+          
+          const roomSlots = slots.filter(s => s.room === roomName);
+          if (roomSlots.length === 0) return;
+
+          const roomCard = document.createElement('div');
+          roomCard.className = 'bg-slate-50 border border-slate-200/90 rounded-2xl p-3 space-y-2';
+
+          let itemsHtml = roomSlots.map(s => `
+            <div class="bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-2 shadow-sm">
+              <div>
+                <div class="flex items-center gap-1.5 mb-0.5">
+                  <span class="text-[10px] font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md">${s.time}</span>
+                  <span class="text-[9px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded-md border border-purple-100">${getAgeGroupLabel(s.ageGroup)}</span>
+                </div>
+                <h4 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h4>
+                <span class="text-[9px] text-slate-500 block">${escapeHtml(s.cat)}</span>
+              </div>
+              <button onclick="addFromSchedule('${s.courseId}', '${escapeHtml(s.name)}', '${s.id}')" 
+                      class="active-scale bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-2.5 py-1.5 rounded-xl text-xs font-bold shrink-0 flex items-center gap-1">
+                <i class="fa-solid fa-plus text-[10px]"></i> Aggiungi
+              </button>
+            </div>
+          `).join('');
+
+          roomCard.innerHTML = `
+            <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+              <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-door-open text-indigo-600"></i> ${roomName}
+              </span>
+              <span class="text-[10px] font-bold text-slate-400">${roomSlots.length} corsi</span>
+            </div>
+            <div class="space-y-1.5">${itemsHtml}</div>
+          `;
+          container.appendChild(roomCard);
+        });
+      } else {
+        slots.sort((a, b) => a.time.localeCompare(b.time));
+
+        slots.forEach(s => {
+          const card = document.createElement('div');
+          card.className = 'p-3 rounded-2xl border border-slate-200/90 bg-slate-50 flex items-center justify-between gap-2 hover:border-indigo-300 transition-all';
+
+          card.innerHTML = `
+            <div class="space-y-1">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[10px] font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md">${s.time}</span>
+                <span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-md">${s.room}</span>
+                <span class="text-[9px] font-extrabold text-purple-700 bg-purple-50 border border-purple-100 px-1.5 py-0.5 rounded-md">${getAgeGroupLabel(s.ageGroup)}</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h4>
+              <span class="text-[9px] text-slate-500 block">${escapeHtml(s.cat)}</span>
+            </div>
+            <button onclick="addFromSchedule('${s.courseId}', '${escapeHtml(s.name)}', '${s.id}')" 
+                    class="active-scale bg-white hover:bg-indigo-50 border border-slate-200 text-indigo-600 p-2 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm shrink-0">
+              <i class="fa-solid fa-plus text-[10px]"></i> Aggiungi
+            </button>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+
+    function addFromSchedule(courseId, courseName, slotId = '') {
+      if (state.participants.length === 0) {
+        const newId = 'p_' + Date.now();
+        state.participants.push({
+          id: newId,
+          name: `Allievo 1`,
+          age: 8,
+          filterByAge: true,
+          courses: [{ courseId: courseId, slotId: slotId }]
+        });
+      } else {
+        state.participants[0].courses.push({ courseId: courseId, slotId: slotId });
+      }
+      switchTab('calc');
+      render();
+      showToast(`Aggiunto ${courseName} a ${state.participants[0].name}!`);
     }
 
     function loadPreset(type) {
       if (type === 'family') {
         state.participants = [
-          { id: 'p1', name: 'Marco', age: 7, filterByAge: true, courses: [{ courseId: 'CIRCO_F1', slotId: 'slot_lun_9' }] },
-          { id: 'p2', name: 'Sofia', age: 4, filterByAge: true, courses: [{ courseId: 'ARTE_CREATIVA', slotId: 'slot_mar_8' }] }
+          { id: 'p1', name: 'Marco', age: 7, filterByAge: true, courses: [{ courseId: 'CIRCO_F1', slotId: '' }] },
+          { id: 'p2', name: 'Sofia', age: 4, filterByAge: true, courses: [{ courseId: 'ARTE_CREATIVA', slotId: '' }] }
         ];
         state.plan = 'TRIMESTRALE';
       } else if (type === 'multicourse') {
         state.participants = [
-          { id: 'p1', name: 'Laura', age: 24, filterByAge: true, courses: [{ courseId: 'POLE_F1', slotId: 'slot_lun_15' }, { courseId: 'FITNESS_F1', slotId: 'slot_lun_12' }] }
+          { id: 'p1', name: 'Laura', age: 24, filterByAge: true, courses: [{ courseId: 'POLE_F1', slotId: '' }, { courseId: 'FITNESS_F1', slotId: '' }] }
         ];
         state.plan = 'TRIMESTRALE';
       } else if (type === 'judo') {
         state.participants = [
-          { id: 'p1', name: 'Luca', age: 7, filterByAge: true, courses: [{ courseId: 'JUDO_BIMBI_F2', slotId: 'slot_mar_12' }] },
-          { id: 'p2', name: 'Elena', age: 8, filterByAge: true, courses: [{ courseId: 'CIRCO_F2', slotId: 'slot_lun_14' }] }
+          { id: 'p1', name: 'Luca', age: 7, filterByAge: true, courses: [{ courseId: 'JUDO_BIMBI_F2', slotId: '' }] },
+          { id: 'p2', name: 'Elena', age: 8, filterByAge: true, courses: [{ courseId: 'CIRCO_F2', slotId: '' }] }
         ];
         state.plan = 'TRIMESTRALE';
       } else if (type === 'pole') {
         state.participants = [
-          { id: 'p1', name: 'Valeria', age: 28, filterByAge: true, courses: [{ courseId: 'POLE_F2', slotId: 'slot_mer_16' }, { courseId: 'FITNESS_F2', slotId: 'slot_lun_12' }] }
+          { id: 'p1', name: 'Valeria', age: 28, filterByAge: true, courses: [{ courseId: 'POLE_F2', slotId: '' }, { courseId: 'FITNESS_F2', slotId: '' }] }
         ];
         state.plan = 'TRIMESTRALE';
       }
       setPaymentPlan(state.plan);
       render();
       showToast('Preset caricato con successo!');
+    }
+
+    function switchPrintModule(modNum) {
+      state.activeModule = modNum;
+      const mod1 = document.getElementById('print-module-1');
+      const mod2 = document.getElementById('print-module-2');
+      const btn1 = document.getElementById('mod-toggle-btn-1');
+      const btn2 = document.getElementById('mod-toggle-btn-2');
+
+      if (modNum === 1) {
+        if (mod1) mod1.classList.remove('hidden');
+        if (mod2) mod2.classList.add('hidden');
+        if (btn1) btn1.className = 'py-2.5 px-3 text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center';
+        if (btn2) btn2.className = 'py-2.5 px-3 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200';
+      } else {
+        if (mod2) mod2.classList.remove('hidden');
+        if (mod1) mod1.classList.add('hidden');
+        if (btn2) btn2.className = 'py-2.5 px-3 text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center';
+        if (btn1) btn1.className = 'py-2.5 px-3 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200';
+      }
+    }
+
+    function renderPrintModules() {
+      // 1. Render Module 1 (Preventivo Sintetico)
+      const mod1List = document.getElementById('mod1-allievi-list');
+      const mod1ScheduleRows = document.getElementById('mod1-schedule-rows');
+      const mod1GrandTotal = document.getElementById('mod1-grand-total');
+      const mod1PlanTitle = document.getElementById('mod1-plan-type-title');
+
+      if (mod1List) {
+        if (mod1PlanTitle) mod1PlanTitle.innerText = state.plan === 'TRIMESTRALE' ? 'Modalità Trimestrale' : 'Modalità Semestrale';
+        mod1List.innerHTML = '';
+
+        state.participants.forEach((p, idx) => {
+          let coursesDetail = (p.courses || []).map(cObj => {
+            const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
+            let slotText = 'Orario da concordare con la segreteria';
+            if (cObj.slotId) {
+              const slot = TIMETABLE_DB.find(s => s.id === cObj.slotId);
+              if (slot) slotText = `${capitalize(slot.day)} ${slot.time} (${slot.room})`;
+            }
+            return `<div class="text-xs text-slate-700 font-medium ml-3">• <strong>${course ? course.name : cObj.courseId}</strong> [${slotText}]</div>`;
+          }).join('');
+
+          mod1List.innerHTML += `
+            <div class="border-b border-slate-100 pb-2">
+              <div class="font-bold text-xs text-slate-900">Allievo #${idx + 1}: ${escapeHtml(p.name)} (Età: ${p.age} anni)</div>
+              ${coursesDetail}
+            </div>
+          `;
+        });
+      }
+
+      if (mod1ScheduleRows) {
+        mod1ScheduleRows.innerHTML = '';
+        const grandTotalText = document.getElementById('grand-total-amount')?.innerText || '€ 0,00';
+        if (mod1GrandTotal) mod1GrandTotal.innerText = grandTotalText;
+
+        if (state.plan === 'TRIMESTRALE') {
+          mod1ScheduleRows.innerHTML = `
+            <tr>
+              <td class="py-2 px-3 font-bold border-r border-slate-200">1° Versamento</td>
+              <td class="py-2 px-3 border-r border-slate-200">All'atto dell'iscrizione</td>
+              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">Iscrizione (€30/allievo) + 1° Trimestre (Ott, Nov, Dic)</td>
+              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche1.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold border-r border-slate-200">2° Versamento</td>
+              <td class="py-2 px-3 border-r border-slate-200">25 Dicembre 2026</td>
+              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">2° Trimestre (Gen, Feb, Mar 2027)</td>
+              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche2.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold border-r border-slate-200">3° Versamento</td>
+              <td class="py-2 px-3 border-r border-slate-200">27 Marzo 2027</td>
+              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">3° Trimestre (Apr, Mag, Giu 2027)</td>
+              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche3.toFixed(2)}</td>
+            </tr>
+          `;
+        } else {
+          mod1ScheduleRows.innerHTML = `
+            <tr>
+              <td class="py-2 px-3 font-bold border-r border-slate-200">1ª Soluzione</td>
+              <td class="py-2 px-3 border-r border-slate-200">All'atto dell'iscrizione</td>
+              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">Iscrizione (€30/allievo) + 50% Quota Corsi</td>
+              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche1.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold border-r border-slate-200">2ª Soluzione</td>
+              <td class="py-2 px-3 border-r border-slate-200">12 Febbraio 2027</td>
+              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">Saldo 50% restante (Feb - Giu 2027)</td>
+              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche2.toFixed(2)}</td>
+            </tr>
+          `;
+        }
+      }
+    }
+
+    function buildHourlyPlannerTable() {
+      const tbody = document.getElementById('hourly-planner-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      const days = ['LUNEDI', 'MARTEDI', 'MERCOLEDI', 'GIOVEDI', 'VENERDI'];
+
+      for (let hour = 7; hour <= 21; hour++) {
+        const timeLabel = `${hour.toString().padStart(2, '0')}:00`;
+        const tr = document.createElement('tr');
+
+        let rowHtml = `<td class="py-1 px-1 text-center font-bold text-slate-600 bg-slate-50 border border-slate-300">${timeLabel}</td>`;
+
+        days.forEach(day => {
+          const matchedItems = [];
+          state.participants.forEach(p => {
+            (p.courses || []).forEach(cObj => {
+              if (cObj.slotId) {
+                const slot = TIMETABLE_DB.find(s => s.id === cObj.slotId);
+                if (slot && slot.day === day) {
+                  const startHour = parseInt(slot.time.split(':')[0]);
+                  if (startHour === hour) {
+                    matchedItems.push({ studentName: p.name, slot });
+                  }
+                }
+              }
+            });
+          });
+
+          if (matchedItems.length > 0) {
+            let content = matchedItems.map(item => `
+              <div class="bg-indigo-100 border border-indigo-300 p-1 rounded text-[8px] leading-tight space-y-0.5 mb-1">
+                <strong class="text-indigo-950 block">${escapeHtml(item.studentName)}</strong>
+                <span class="text-indigo-700 font-bold block">${item.slot.time} (${item.slot.room})</span>
+                <span class="text-slate-700 block">${escapeHtml(item.slot.name)}</span>
+              </div>
+            `).join('');
+            rowHtml += `<td class="py-1 px-1 border border-slate-300 bg-indigo-50/40 align-top">${content}</td>`;
+          } else {
+            rowHtml += `<td class="py-1 px-1 border border-slate-300 text-slate-300 hover:bg-slate-50"></td>`;
+          }
+        });
+
+        tr.innerHTML = rowHtml;
+        tbody.appendChild(tr);
+      }
+    }
+
+    function triggerPrint(mode) {
+      document.body.classList.remove('print-only-1', 'print-only-2');
+      if (mode === '1') {
+        document.body.classList.add('print-only-1');
+      } else if (mode === '2') {
+        document.body.classList.add('print-only-2');
+      }
+      window.print();
     }
 
     function copySummaryText() {
@@ -1032,12 +1626,16 @@
       text += `Modalità: ${state.plan === 'TRIMESTRALE' ? 'Trimestrale' : 'Due Soluzioni'}\n\n`;
 
       state.participants.forEach((p, idx) => {
-        text += `• Allievo ${idx + 1}: ${p.name || 'Allievo'}\n`;
+        text += `• Allievo ${idx + 1}: ${p.name || 'Allievo'} (${p.age} anni)\n`;
         const userCourses = p.courses || [];
         userCourses.forEach(cObj => {
           const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
-          const slotsText = getCourseSlotTimesText(cObj);
-          text += `  - ${course ? course.name : cObj.courseId} [${slotsText}]\n`;
+          let slotText = 'Orario da concordare';
+          if (cObj.slotId) {
+            const slot = TIMETABLE_DB.find(s => s.id === cObj.slotId);
+            if (slot) slotText = `${capitalize(slot.day)} ${slot.time} (${slot.room})`;
+          }
+          text += `  - ${course ? course.name : cObj.courseId} [${slotText}]\n`;
         });
       });
 
