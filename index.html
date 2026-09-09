@@ -266,6 +266,19 @@
           </span>
         </div>
 
+        <!-- Student Family Selector Pills for Live Comparison -->
+        <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+              <i class="fa-solid fa-user-check text-indigo-600"></i> Seleziona Allievo per la Comparazione & Pianificazione:
+            </label>
+            <span class="text-[9px] text-slate-400 font-semibold">Tocca per filtrare o assegnare orari</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="schedule-student-pills">
+            <!-- Dynamically populated student selection pills -->
+          </div>
+        </div>
+
         <!-- Day Filter Buttons -->
         <div>
           <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">1. Seleziona Giorno Settimana</label>
@@ -324,6 +337,32 @@
             <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Cerca Corso o Istruttore</label>
             <input id="schedule-search" type="text" placeholder="Es. Circo, Danza, Judo..." oninput="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
           </div>
+        </div>
+      </section>
+
+      <!-- Live Family Schedule Matrix & Logistical Comparison Card -->
+      <section id="family-live-comparison-card" class="bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 rounded-3xl p-4 sm:p-5 text-white shadow-lg space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-400 font-extrabold text-sm border border-white/10">
+              ⚡
+            </span>
+            <div>
+              <h3 class="text-xs sm:text-sm font-extrabold tracking-tight">Comparatore Orari & Incontri Famiglia in Tempo Reale</h3>
+              <p class="text-[10px] text-indigo-200">Sincronizzazione logistica fra tutti i componenti del nucleo familiare</p>
+            </div>
+          </div>
+          <button onclick="switchTab('calc')" class="text-[10px] bg-white/10 hover:bg-white/20 text-indigo-100 font-bold px-2.5 py-1 rounded-lg border border-white/10 transition-all">
+            <i class="fa-solid fa-pen-to-square mr-1"></i> Modifica Allievi
+          </button>
+        </div>
+
+        <div id="family-comparison-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-1">
+          <!-- Dynamic Family Member Slots Comparison Cards -->
+        </div>
+
+        <div id="family-coincidence-alerts" class="text-[11px] bg-indigo-950/80 border border-indigo-700/60 p-2.5 rounded-2xl space-y-1 hidden">
+          <!-- Dynamic Overlap and Coincidence Highlights -->
         </div>
       </section>
 
@@ -534,6 +573,7 @@
       discountStrategy: 'OPTIMIZED',
       activeDay: 'LUNEDI',
       activeRoom: 'ALL',
+      activeStudentFilter: 'ALL', // 'ALL' or student pId
       scheduleViewMode: 'CRON', // 'CRON' | 'PER_SALA'
       activeTab: 'calc',
       activeModule: 1,
@@ -843,470 +883,127 @@
       }
     }
 
-    function render() {
-      const listContainer = document.getElementById('participants-list');
-      if (!listContainer) return;
+    function filterStudent(studentId) {
+      state.activeStudentFilter = studentId;
+      renderScheduleStudentPills();
+      renderSchedule();
+    }
 
-      listContainer.innerHTML = '';
+    function renderScheduleStudentPills() {
+      const container = document.getElementById('schedule-student-pills');
+      if (!container) return;
 
-      state.participants.forEach((p, pIdx) => {
-        const card = document.createElement('div');
-        card.className = 'bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 space-y-3';
+      let pillsHtml = `
+        <button onclick="filterStudent('ALL')" class="active-scale text-xs font-bold px-3 py-1.5 rounded-xl border ${state.activeStudentFilter === 'ALL' ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'}">
+          👨‍👩‍👧‍👦 Tutti gli Allievi (${state.participants.length})
+        </button>
+      `;
 
-        if (!p.courses) {
-          p.courses = [{ courseId: 'CIRCO_F1', slotId: '' }];
-        }
+      state.participants.forEach(p => {
+        const isSelected = state.activeStudentFilter === p.id;
+        const pCoursesCount = p.courses ? p.courses.length : 0;
+        pillsHtml += `
+          <button onclick="filterStudent('${p.id}')" class="active-scale text-xs font-bold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${isSelected ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'}">
+            <i class="fa-solid fa-user-graduate text-[10px] ${isSelected ? 'text-indigo-200' : 'text-indigo-600'}"></i>
+            <span>${escapeHtml(p.name || 'Allievo')} (${p.age}a)</span>
+            <span class="text-[9px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-indigo-50 text-indigo-700 font-extrabold'}">${pCoursesCount} corsi</span>
+          </button>
+        `;
+      });
 
-        const pAgeGroup = getAgeGroupFromAge(p.age);
-        const pAgeGroupTag = getAgeGroupLabel(pAgeGroup);
+      container.innerHTML = pillsHtml;
+    }
 
-        let coursesHtml = p.courses.map((cObj, cIdx) => `
-          <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div class="flex-1">
-                <div class="flex items-center justify-between mb-0.5">
-                  <label class="block text-[9px] font-extrabold uppercase text-slate-400">Disciplina & Frequenza</label>
-                  <label class="text-[9px] font-bold text-indigo-600 flex items-center gap-1 cursor-pointer">
-                    <input type="checkbox" ${p.filterByAge ? 'checked' : ''} onchange="toggleParticipantAgeFilter('${p.id}', this.checked)" class="rounded text-indigo-600">
-                    <span>Filtra per età (${pAgeGroup})</span>
-                  </label>
-                </div>
-                <select onchange="updateParticipantCourse('${p.id}', ${cIdx}, this.value)" 
-                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500">
-                  ${buildCourseOptions(cObj.courseId, p.age, p.filterByAge)}
-                </select>
+    function renderFamilyComparisonGrid() {
+      const grid = document.getElementById('family-comparison-grid');
+      const alerts = document.getElementById('family-coincidence-alerts');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+
+      if (state.participants.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-xs text-indigo-300 py-3">Nessun allievo inserito nel preventivo.</div>`;
+        return;
+      }
+
+      state.participants.forEach((p, idx) => {
+        const pCourses = p.courses || [];
+        
+        let coursesDetailHtml = pCourses.map((cObj, cIdx) => {
+          const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
+          const courseName = course ? course.name : 'Corso';
+          
+          let slotBadge = `<span class="text-[10px] text-amber-300 italic">⏱️ Incontro ${cIdx + 1}: Orario da assegnare</span>`;
+          if (cObj.slotId) {
+            const slot = TIMETABLE_DB.find(s => s.id === cObj.slotId);
+            if (slot) {
+              slotBadge = `<span class="text-[10px] font-extrabold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-md inline-flex items-center gap-1"><i class="fa-solid fa-clock"></i> ${capitalize(slot.day)} ${slot.time} (${slot.room})</span>`;
+            }
+          }
+
+          return `
+            <div class="bg-white/10 p-2 rounded-xl border border-white/10 space-y-1">
+              <div class="flex items-center justify-between text-[11px] font-extrabold text-white">
+                <span class="truncate">${escapeHtml(courseName)}</span>
+                <span class="text-[9px] text-indigo-200 bg-white/10 px-1.5 py-0.5 rounded">Incontro #${cIdx + 1}</span>
               </div>
-              ${p.courses.length > 1 ? `
-                <button onclick="removeCourseFromParticipant('${p.id}', ${cIdx})" class="self-end sm:self-center text-slate-400 hover:text-rose-500 text-xs px-2 py-1 flex items-center gap-1">
-                  <i class="fa-solid fa-trash-can"></i> Rimuovi
-                </button>
-              ` : ''}
+              <div>${slotBadge}</div>
             </div>
+          `;
+        }).join('');
 
-            <div class="pt-1.5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div class="flex-1">
-                <label class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Orario & Sala (con ricerca Coincidenze Familiari)</label>
-                <select onchange="updateParticipantCourseSlot('${p.id}', ${cIdx}, this.value)" 
-                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-semibold text-slate-700 focus:outline-none focus:border-indigo-500">
-                  ${buildCourseSlotOptions(p.id, cObj.courseId, cObj.slotId)}
-                </select>
-              </div>
-              <div class="shrink-0 self-start sm:self-end">
-                ${getSelectedSlotBadgeHTML(cObj.slotId)}
-              </div>
-            </div>
-          </div>
-        `).join('');
-
-        card.innerHTML = `
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded">
-                Allievo #${pIdx + 1}
+        grid.innerHTML += `
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3 space-y-2 hover:border-indigo-400/50 transition-all">
+            <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
+              <span class="text-xs font-black text-white flex items-center gap-1.5">
+                <i class="fa-solid fa-user text-indigo-300"></i> ${escapeHtml(p.name || 'Allievo ' + (idx + 1))}
               </span>
-              <input type="text" value="${escapeHtml(p.name)}" oninput="updateParticipantName('${p.id}', this.value)" 
-                     placeholder="Nome allievo"
-                     class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500 w-36 sm:w-48">
-              
-              <div class="flex items-center gap-1 bg-white border border-slate-200 rounded-lg px-2 py-1">
-                <span class="text-[10px] font-bold text-slate-400 uppercase">Età:</span>
-                <input type="number" min="3" max="99" value="${p.age}" onchange="updateParticipantAge('${p.id}', this.value)" 
-                       class="w-10 text-xs font-bold text-indigo-700 text-center focus:outline-none">
-                <span class="text-[9px] font-extrabold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-100">${pAgeGroupTag}</span>
-              </div>
+              <span class="text-[10px] text-indigo-200 font-bold bg-indigo-500/20 px-2 py-0.5 rounded-full border border-indigo-400/30">
+                ${p.age} Anni (${getAgeGroupLabel(getAgeGroupFromAge(p.age))})
+              </span>
             </div>
-
-            ${state.participants.length > 1 ? `
-              <button onclick="removeParticipant('${p.id}')" class="text-slate-400 hover:text-rose-500 text-[11px] font-semibold px-1">
-                <i class="fa-solid fa-trash-can mr-1"></i> Rimuovi Allievo
-              </button>
-            ` : ''}
-          </div>
-
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <label class="block text-[10px] font-bold uppercase text-slate-500">
-                Discipline Assegnate (${p.courses.length})
-              </label>
-              <button onclick="addCourseToParticipant('${p.id}')" class="text-[10px] font-bold text-indigo-600 hover:underline flex items-center gap-1">
-                <i class="fa-solid fa-circle-plus"></i> Aggiungi un altro corso
-              </button>
-            </div>
-            <div class="space-y-2">
-              ${coursesHtml}
+            <div class="space-y-1.5">
+              ${coursesDetailHtml}
             </div>
           </div>
         `;
-        listContainer.appendChild(card);
       });
 
-      calculateSchedule();
-    }
-
-    function addParticipant(name = '') {
-      const newId = 'p_' + Date.now();
-      state.participants.push({
-        id: newId,
-        name: name || `Allievo ${state.participants.length + 1}`,
-        age: 8,
-        filterByAge: true,
-        courses: [{ courseId: 'CIRCO_F1', slotId: '' }]
-      });
-      render();
-    }
-
-    function removeParticipant(id) {
-      state.participants = state.participants.filter(p => p.id !== id);
-      render();
-    }
-
-    function updateParticipantName(id, val) {
-      const p = state.participants.find(item => item.id === id);
-      if (p) p.name = val;
-      renderPrintModules();
-      buildHourlyPlannerTable();
-    }
-
-    function updateParticipantAge(id, ageVal) {
-      const p = state.participants.find(item => item.id === id);
-      if (p) {
-        p.age = parseInt(ageVal) || 7;
-        render();
+      // Analyze and render family overlaps and simultaneous drop-off opportunities
+      const coincidences = getFamilyCoincidences();
+      if (alerts) {
+        if (coincidences.length > 0) {
+          alerts.classList.remove('hidden');
+          alerts.innerHTML = `
+            <div class="flex items-center gap-1.5 font-bold text-amber-300 text-xs mb-1">
+              <i class="fa-solid fa-circle-check text-emerald-400"></i> 🎯 Opportunità Logistica Trovata! Lezioni Contemporanee nel Polo:
+            </div>
+            <ul class="list-disc pl-4 space-y-0.5 text-indigo-100 text-[10px]">
+              ${coincidences.map(c => `
+                <li><strong>${c.participantA}</strong> (${c.courseA} - ${c.roomA}) e <strong>${c.participantB}</strong> (${c.courseB} - ${c.roomB}) hanno lezioni in contemporanea il <strong>${capitalize(c.day)} (${c.timeA})</strong>.</li>
+              `).join('')}
+            </ul>
+          `;
+        } else {
+          alerts.classList.add('hidden');
+        }
       }
     }
 
-    function toggleParticipantAgeFilter(id, isChecked) {
-      const p = state.participants.find(item => item.id === id);
-      if (p) {
-        p.filterByAge = isChecked;
-        render();
-      }
-    }
-
-    function updateParticipantCourse(pId, cIdx, courseId) {
-      const p = state.participants.find(item => item.id === pId);
-      if (p && p.courses[cIdx]) {
-        p.courses[cIdx].courseId = courseId;
-        p.courses[cIdx].slotId = ''; // Reset slot selection when course changes
-        render();
-      }
-    }
-
-    function updateParticipantCourseSlot(pId, cIdx, slotId) {
+    function assignSlotToSpecificStudentCourse(pId, slotId, cIdx = 0) {
       const p = state.participants.find(item => item.id === pId);
       if (p && p.courses[cIdx]) {
         p.courses[cIdx].slotId = slotId;
         render();
-      }
-    }
-
-    function addCourseToParticipant(pId, defaultCourseId = '') {
-      const p = state.participants.find(item => item.id === pId);
-      if (p) {
-        p.courses.push({ courseId: defaultCourseId || 'CIRCO_F1', slotId: '' });
-        render();
-      }
-    }
-
-    function removeCourseFromParticipant(pId, cIdx) {
-      const p = state.participants.find(item => item.id === pId);
-      if (p && p.courses.length > 1) {
-        p.courses.splice(cIdx, 1);
-        render();
-      }
-    }
-
-    function setPaymentPlan(planType) {
-      state.plan = planType;
-      const btnTrim = document.getElementById('plan-btn-trim');
-      const btnSol = document.getElementById('plan-btn-sol');
-
-      if (btnTrim && btnSol) {
-        if (planType === 'TRIMESTRALE') {
-          btnTrim.className = 'active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative';
-          btnSol.className = 'active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative';
-        } else {
-          btnSol.className = 'active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative';
-          btnTrim.className = 'active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative';
-        }
-      }
-      calculateSchedule();
-    }
-
-    function setDiscountStrategy(strategy) {
-      state.discountStrategy = strategy;
-      const btnOpt = document.getElementById('strat-opt-btn');
-      const btnStd = document.getElementById('strat-std-btn');
-      const savingsTag = document.getElementById('savings-delta-tag');
-
-      const activeClass = 'py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
-      const inactiveClass = 'py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
-
-      if (btnOpt && btnStd) {
-        if (strategy === 'OPTIMIZED') {
-          btnOpt.className = activeClass;
-          btnStd.className = inactiveClass;
-          if (savingsTag) savingsTag.innerHTML = '⚡ Risparmio Max Attivo (-20% quota alta)';
-        } else {
-          btnStd.className = activeClass;
-          btnOpt.className = inactiveClass;
-          if (savingsTag) savingsTag.innerHTML = '⚖️ Standard Attivo (-20% quota minore)';
-        }
-      }
-      calculateSchedule();
-    }
-
-    function calculateSchedule() {
-      const scheduleContainer = document.getElementById('schedule-container');
-      const grandTotalElem = document.getElementById('grand-total-amount');
-      const appliedDiscountBadge = document.getElementById('applied-discount-badge');
-      const coincidencesBanner = document.getElementById('family-coincidences-banner');
-      const coincidencesList = document.getElementById('family-coincidences-list');
-
-      if (!scheduleContainer) return;
-      scheduleContainer.innerHTML = '';
-
-      // Check and render coincidences
-      const coincidences = getFamilyCoincidences();
-      if (coincidencesBanner && coincidencesList) {
-        if (coincidences.length > 0) {
-          coincidencesBanner.classList.remove('hidden');
-          coincidencesList.innerHTML = coincidences.map(c => `
-            <li>
-              <strong>${c.participantA}</strong> (${c.courseA} in ${c.roomA}) e <strong>${c.participantB}</strong> (${c.courseB} in ${c.roomB}) hanno lezioni sovrapposte il <strong>${capitalize(c.day)} (${c.timeA})</strong>.
-            </li>
-          `).join('');
-        } else {
-          coincidencesBanner.classList.add('hidden');
-        }
-      }
-
-      let allCourseItems = [];
-      let totalRegFee = state.participants.length * 30;
-
-      state.participants.forEach(p => {
-        const userCourses = p.courses || [];
-        userCourses.forEach(cObj => {
-          const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
-          if (course) {
-            allCourseItems.push({
-              studentName: p.name,
-              courseId: course.id,
-              courseName: course.name,
-              basePrice: state.plan === 'TRIMESTRALE' ? course.trim : course.sol,
-              septFee: course.septFee || 0,
-              discount: 0
-            });
-          }
-        });
-      });
-
-      let isDiscounted = false;
-      if (allCourseItems.length > 1) {
-        isDiscounted = true;
-        allCourseItems.sort((a, b) => b.basePrice - a.basePrice);
-
-        if (state.discountStrategy === 'OPTIMIZED') {
-          allCourseItems[0].discount = 0.20;
-        } else {
-          allCourseItems[allCourseItems.length - 1].discount = 0.20;
-        }
-      }
-
-      if (appliedDiscountBadge) {
-        if (isDiscounted) appliedDiscountBadge.classList.remove('hidden');
-        else appliedDiscountBadge.classList.add('hidden');
-      }
-
-      let grandTotal = totalRegFee;
-
-      if (state.plan === 'TRIMESTRALE') {
-        let t1CourseTotal = 0;
-        let t2CourseTotal = 0;
-        let t3CourseTotal = 0;
-        let septFeeTotal = 0;
-
-        let t1Lines = [`• Quota Associativa & Assicurativa: <strong>€ ${totalRegFee.toFixed(2)}</strong> (${state.participants.length} allievi x €30)`];
-        let t2Lines = [];
-        let t3Lines = [];
-
-        allCourseItems.forEach(item => {
-          const finalCoursePrice = item.basePrice * (1 - item.discount);
-          t1CourseTotal += finalCoursePrice;
-          t2CourseTotal += finalCoursePrice;
-          t3CourseTotal += finalCoursePrice;
-          septFeeTotal += item.septFee;
-
-          const discLabel = item.discount > 0 ? ' <strong class="text-emerald-700">(-20% Sconto)</strong>' : '';
-          const septText = item.septFee > 0 ? ` + Settembre (€${item.septFee})` : '';
-
-          t1Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>${discLabel}${septText}`);
-          t2Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>`);
-          t3Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>`);
-        });
-
-        const tranche1Amount = totalRegFee + t1CourseTotal + septFeeTotal;
-        const tranche2Amount = t2CourseTotal;
-        const tranche3Amount = t3CourseTotal;
-
-        grandTotal = tranche1Amount + tranche2Amount + tranche3Amount;
-
-        state.calculatedTotals = {
-          tranche1: tranche1Amount,
-          tranche2: tranche2Amount,
-          tranche3: tranche3Amount,
-          grandTotal: grandTotal
-        };
-
-        renderScheduleCard('1° Versamento (All\'atto dell\'iscrizione)', t1Lines, tranche1Amount, 'bg-indigo-50/80 border-indigo-200', 'Iscrizione + 1° Trimestre (Ott, Nov, Dic)');
-        renderScheduleCard('2° Versamento (Entro e non oltre 25 Dicembre 2026)', t2Lines, tranche2Amount, 'bg-slate-50 border-slate-200', '2° Trimestre (Gen, Feb, Mar 2027)');
-        renderScheduleCard('3° Versamento (Entro e non oltre 27 Marzo 2027)', t3Lines, tranche3Amount, 'bg-slate-50 border-slate-200', '3° Trimestre (Apr, Mag, Giu 2027)');
-
-      } else {
-        let s1CourseTotal = 0;
-        let s2CourseTotal = 0;
-        let septFeeTotal = 0;
-
-        let s1Lines = [`• Quota Associativa & Assicurativa: <strong>€ ${totalRegFee.toFixed(2)}</strong> (${state.participants.length} allievi x €30)`];
-        let s2Lines = [];
-
-        allCourseItems.forEach(item => {
-          const finalCoursePrice = item.basePrice * (1 - item.discount);
-          s1CourseTotal += finalCoursePrice;
-          s2CourseTotal += finalCoursePrice;
-          septFeeTotal += item.septFee;
-
-          const discLabel = item.discount > 0 ? ' <strong class="text-emerald-700">(-20% Sconto)</strong>' : '';
-          const septText = item.septFee > 0 ? ` + Settembre (€${item.septFee})` : '';
-
-          s1Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>${discLabel}${septText}`);
-          s2Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>`);
-        });
-
-        const sol1Amount = totalRegFee + s1CourseTotal + septFeeTotal;
-        const sol2Amount = s2CourseTotal;
-
-        grandTotal = sol1Amount + sol2Amount;
-
-        state.calculatedTotals = {
-          tranche1: sol1Amount,
-          tranche2: sol2Amount,
-          tranche3: 0,
-          grandTotal: grandTotal
-        };
-
-        renderScheduleCard('1ª Soluzione (All\'atto dell\'iscrizione)', s1Lines, sol1Amount, 'bg-indigo-50/80 border-indigo-200', 'Iscrizione + 50% Quota Corsi');
-        renderScheduleCard('2ª Soluzione (Entro e non oltre 12 Febbraio 2027)', s2Lines, sol2Amount, 'bg-slate-50 border-slate-200', 'Saldo 50% restante (Feb - Giu 2027)');
-      }
-
-      if (grandTotalElem) {
-        grandTotalElem.innerText = `€ ${grandTotal.toFixed(2)}`;
-      }
-
-      renderPrintModules();
-      buildHourlyPlannerTable();
-    }
-
-    function renderScheduleCard(title, lines, amount, styleClasses, subtitle = '') {
-      const container = document.getElementById('schedule-container');
-      const card = document.createElement('div');
-      card.className = `p-3.5 rounded-2xl border ${styleClasses}`;
-
-      card.innerHTML = `
-        <div class="flex items-start justify-between gap-2 mb-1.5">
-          <div>
-            <h3 class="font-extrabold text-xs sm:text-sm tracking-tight text-slate-900">${title}</h3>
-            ${subtitle ? `<span class="inline-block text-[10px] font-semibold text-indigo-700 bg-indigo-100/60 px-2 py-0.5 rounded-md mt-0.5">${subtitle}</span>` : ''}
-          </div>
-          <span class="text-xs sm:text-sm font-extrabold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-sm shrink-0">
-            € ${amount.toFixed(2)}
-          </span>
-        </div>
-        <div class="text-[11px] space-y-1 opacity-90 leading-normal">
-          ${lines.join('<br>')}
-        </div>
-      `;
-
-      container.appendChild(card);
-    }
-
-    function switchTab(tabName) {
-      state.activeTab = tabName;
-
-      const viewCalc = document.getElementById('view-calculator');
-      const viewSchedule = document.getElementById('view-schedule');
-      const viewPrint = document.getElementById('view-print');
-
-      const btnCalc = document.getElementById('tab-btn-calc');
-      const btnSchedule = document.getElementById('tab-btn-schedule');
-      const btnPrint = document.getElementById('tab-btn-print');
-
-      const activeBtnClass = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5';
-      const inactiveBtnClass = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5';
-
-      if (viewCalc) viewCalc.classList.toggle('hidden', tabName !== 'calc');
-      if (viewSchedule) viewSchedule.classList.toggle('hidden', tabName !== 'schedule');
-      if (viewPrint) viewPrint.classList.toggle('hidden', tabName !== 'print');
-
-      if (btnCalc) btnCalc.className = tabName === 'calc' ? activeBtnClass : inactiveBtnClass;
-      if (btnSchedule) btnSchedule.className = tabName === 'schedule' ? activeBtnClass : inactiveBtnClass;
-      if (btnPrint) btnPrint.className = tabName === 'print' ? activeBtnClass : inactiveBtnClass;
-
-      if (tabName === 'schedule') {
         renderSchedule();
-      } else if (tabName === 'print') {
-        renderPrintModules();
+        showToast(`Orario assegnato a ${p.name}!`);
       }
-    }
-
-    function filterDay(dayName) {
-      state.activeDay = dayName;
-      const buttons = document.querySelectorAll('.day-btn');
-      const days = ['LUNEDI', 'MARTEDI', 'MERCOLEDI', 'GIOVEDI', 'VENERDI'];
-
-      buttons.forEach((btn, idx) => {
-        if (days[idx] === dayName) {
-          btn.className = 'day-btn py-2 px-1 text-xs font-bold rounded-xl border border-indigo-600 bg-indigo-600 text-white text-center';
-        } else {
-          btn.className = 'day-btn py-2 px-1 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-center';
-        }
-      });
-
-      renderSchedule();
-    }
-
-    function filterRoom(roomName) {
-      state.activeRoom = roomName;
-      const buttons = document.querySelectorAll('.room-btn');
-      buttons.forEach(btn => {
-        if ((roomName === 'ALL' && btn.innerText.includes('Tutte')) || btn.innerText === roomName) {
-          btn.className = 'room-btn active-scale py-1.5 px-3 text-xs font-extrabold rounded-xl border border-indigo-600 bg-indigo-600 text-white';
-        } else {
-          btn.className = 'room-btn active-scale py-1.5 px-3 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100';
-        }
-      });
-
-      renderSchedule();
-    }
-
-    function setScheduleViewMode(mode) {
-      state.scheduleViewMode = mode;
-      const btnCron = document.getElementById('view-mode-cron');
-      const btnRoom = document.getElementById('view-mode-room');
-
-      if (btnCron && btnRoom) {
-        if (mode === 'CRON') {
-          btnCron.className = 'py-1 text-[10px] font-extrabold rounded-lg bg-white text-indigo-600 shadow-sm text-center';
-          btnRoom.className = 'py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-slate-900 text-center';
-        } else {
-          btnRoom.className = 'py-1 text-[10px] font-extrabold rounded-lg bg-white text-indigo-600 shadow-sm text-center';
-          btnCron.className = 'py-1 text-[10px] font-bold rounded-lg text-slate-600 hover:text-slate-900 text-center';
-        }
-      }
-      renderSchedule();
     }
 
     function renderSchedule() {
+      renderScheduleStudentPills();
+      renderFamilyComparisonGrid();
+
       const container = document.getElementById('schedule-slots-container');
       const activeDayTitle = document.getElementById('active-day-title');
       const slotCountBadge = document.getElementById('slot-count-badge');
@@ -1327,7 +1024,16 @@
         slots = slots.filter(s => s.room === state.activeRoom);
       }
 
-      if (ageFilter !== 'ALL') {
+      // Filter by selected student if specific student selected
+      if (state.activeStudentFilter !== 'ALL') {
+        const p = state.participants.find(item => item.id === state.activeStudentFilter);
+        if (p) {
+          const pAgeGroup = getAgeGroupFromAge(p.age);
+          if (p.filterByAge && pAgeGroup !== 'ALL') {
+            slots = slots.filter(s => s.ageGroup === pAgeGroup || s.ageGroup === 'ALL');
+          }
+        }
+      } else if (ageFilter !== 'ALL') {
         slots = slots.filter(s => s.ageGroup === ageFilter || s.ageGroup === 'ALL');
       }
 
@@ -1348,6 +1054,45 @@
         `;
         return;
       }
+
+      const buildAssignmentDropdown = (slot) => {
+        if (state.participants.length === 0) return '';
+
+        let targetParticipants = state.participants;
+        if (state.activeStudentFilter !== 'ALL') {
+          targetParticipants = state.participants.filter(p => p.id === state.activeStudentFilter);
+        }
+
+        let optionsHtml = '';
+        targetParticipants.forEach(p => {
+          (p.courses || []).forEach((cObj, cIdx) => {
+            const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
+            const courseName = course ? course.name : cObj.courseId;
+            const isAssigned = cObj.slotId === slot.id;
+            optionsHtml += `
+              <button onclick="assignSlotToSpecificStudentCourse('${p.id}', '${slot.id}', ${cIdx})" 
+                      class="w-full text-left px-3 py-1.5 hover:bg-indigo-50 text-[11px] font-bold text-slate-800 border-b border-slate-100 flex items-center justify-between ${isAssigned ? 'bg-indigo-100 text-indigo-900' : ''}">
+                <span>${escapeHtml(p.name)} — Incontro #${cIdx + 1} (${escapeHtml(courseName)})</span>
+                ${isAssigned ? '<i class="fa-solid fa-check text-indigo-600"></i>' : '<i class="fa-solid fa-plus text-slate-400"></i>'}
+              </button>
+            `;
+          });
+        });
+
+        return `
+          <div class="relative inline-block text-left group shrink-0">
+            <button class="active-scale bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
+              <i class="fa-solid fa-plus text-[10px]"></i> Assegna ad Allievo
+            </button>
+            <div class="hidden group-hover:block group-focus-within:block absolute right-0 mt-1 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl z-30 overflow-hidden py-1">
+              <div class="px-3 py-1 bg-slate-50 border-b border-slate-100 text-[9px] font-extrabold uppercase text-slate-400">
+                Seleziona Allievo & Incontro
+              </div>
+              ${optionsHtml}
+            </div>
+          </div>
+        `;
+      };
 
       if (state.scheduleViewMode === 'PER_SALA') {
         const rooms = ['Sala 1', 'Sala 2', 'Sala 3', 'Sala 4', 'Sala 5'];
@@ -1370,10 +1115,7 @@
                 <h4 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h4>
                 <span class="text-[9px] text-slate-500 block">${escapeHtml(s.cat)}</span>
               </div>
-              <button onclick="addFromSchedule('${s.courseId}', '${escapeHtml(s.name)}', '${s.id}')" 
-                      class="active-scale bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-2.5 py-1.5 rounded-xl text-xs font-bold shrink-0 flex items-center gap-1">
-                <i class="fa-solid fa-plus text-[10px]"></i> Aggiungi
-              </button>
+              ${buildAssignmentDropdown(s)}
             </div>
           `).join('');
 
@@ -1405,10 +1147,7 @@
               <h4 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h4>
               <span class="text-[9px] text-slate-500 block">${escapeHtml(s.cat)}</span>
             </div>
-            <button onclick="addFromSchedule('${s.courseId}', '${escapeHtml(s.name)}', '${s.id}')" 
-                    class="active-scale bg-white hover:bg-indigo-50 border border-slate-200 text-indigo-600 p-2 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm shrink-0">
-              <i class="fa-solid fa-plus text-[10px]"></i> Aggiungi
-            </button>
+            ${buildAssignmentDropdown(s)}
           `;
           container.appendChild(card);
         });
