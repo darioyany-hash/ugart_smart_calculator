@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>UGART Smart Quote Calculator & Interactive Timetable</title>
+  <title>UGART Smart Quote Calculator & Interactive Weekly Planner</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,26 +22,35 @@
       transition: transform 0.15s ease, opacity 0.15s ease;
     }
     .active-scale:active {
-      transform: scale(0.96);
+      transform: scale(0.97);
       opacity: 0.9;
     }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-    }
+
+    /* Print Specific Styles for Professional Minimalist Exports */
     @media print {
       .no-print { display: none !important; }
-      body { background: white; padding: 0; }
-      .print-shadow-none { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+      body { background: white !important; color: #0f172a !important; padding: 0 !important; margin: 0 !important; font-size: 8.5pt; }
+      .print-area { display: block !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+      .page-break { page-break-before: always !important; }
+      
+      /* Print Mode Control Toggles */
+      body.print-only-1 #print-module-2 { display: none !important; }
+      body.print-only-2 #print-module-1 { display: none !important; }
+
+      /* Pristine A4 Layout Settings */
+      @page { size: A4 portrait; margin: 6mm 8mm; }
+      
+      table { border-collapse: collapse !important; width: 100% !important; }
+      th, td { border-color: #cbd5e1 !important; }
     }
   </style>
 </head>
 <body class="h-full text-slate-800 antialiased selection:bg-indigo-500 selection:text-white pb-10">
 
-  <div class="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto px-3 sm:px-6 pt-3 sm:pt-6">
+  <div class="max-w-md md:max-w-3xl lg:max-w-5xl mx-auto px-3 sm:px-6 pt-3 sm:pt-6">
     
-    <!-- Top Header Banner Optimized for Mobile & Desktop -->
-    <header class="gradient-header rounded-3xl p-5 text-white shadow-xl shadow-indigo-500/15 mb-4 relative overflow-hidden">
+    <!-- Top Header Banner -->
+    <header class="no-print gradient-header rounded-3xl p-5 text-white shadow-xl shadow-indigo-500/15 mb-4 relative overflow-hidden">
       <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
       <div class="flex items-center justify-between gap-3 relative z-10">
         <div class="flex items-center gap-3">
@@ -49,8 +58,11 @@
             🎪
           </div>
           <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-widest text-indigo-200 block">Polo UGART Vigevano</span>
-            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight leading-tight">Gestionale Preventivi & Orari</h1>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-widest text-indigo-200 block">Polo UGART Vigevano</span>
+              <span class="text-[9px] bg-white/20 text-white font-bold px-1.5 py-0.5 rounded">Powered by Railim Solutions</span>
+            </div>
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight leading-tight">Gestionale Preventivi, Multi-Corso & Planner</h1>
           </div>
         </div>
         <span class="bg-white/20 backdrop-blur-md text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full border border-white/20 shrink-0">
@@ -59,76 +71,82 @@
       </div>
     </header>
 
-    <nav class="no-print bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200/80 mb-4 grid grid-cols-2 gap-1.5">
-      <button id="tab-btn-calc" onclick="switchTab('calc')" class="py-2.5 px-3 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-2">
-        <i class="fa-solid fa-calculator"></i> Preventivatore & Rate
+    <!-- Navigation Bar -->
+    <nav class="no-print bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200/80 mb-4 grid grid-cols-3 gap-1.5">
+      <button id="tab-btn-calc" onclick="switchTab('calc')" class="py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5">
+        <i class="fa-solid fa-calculator"></i> <span class="hidden sm:inline">Preventivo &</span> Allievi
       </button>
-      <button id="tab-btn-schedule" onclick="switchTab('schedule')" class="py-2.5 px-3 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-2">
-        <i class="fa-solid fa-calendar-days"></i> Orari & Calendario
+      <button id="tab-btn-schedule" onclick="switchTab('schedule')" class="py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5">
+        <i class="fa-solid fa-calendar-days"></i> Orari <span class="hidden sm:inline">& Fasce Età</span>
+      </button>
+      <button id="tab-btn-print" onclick="switchTab('print')" class="py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5">
+        <i class="fa-solid fa-print"></i> Stampa <span class="hidden sm:inline">Moduli</span>
       </button>
     </nav>
 
     <!-- ========================================== -->
-    <!-- SECTION 1: CALCULATOR & PAYMENT PLANNER TAB -->
+    <!-- SECTION 1: CALCULATOR & ALLIEVI MANAGEMENT -->
     <!-- ========================================== -->
     <div id="view-calculator" class="space-y-4">
 
-      <!-- Quick Demo Presets (1-Touch Scenarios) -->
+      <!-- Quick Scenario Presets -->
       <section class="no-print bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200/80">
         <div class="flex items-center justify-between mb-2">
           <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
             <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Preset Rapidi (Simulazione 1-Click)
           </span>
-          <span class="text-[10px] text-slate-400 hidden sm:inline">Tocca uno scenario per precompilare:</span>
+          <span class="text-[10px] text-slate-400 hidden sm:inline">Tocca per precompilare:</span>
         </div>
-        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <button onclick="loadPreset('family')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-100 text-center">
             <i class="fa-solid fa-users text-indigo-600 mb-1 text-sm"></i>
             <span class="text-[11px]">2 Figli (Circo+Arte)</span>
           </button>
-          <button onclick="loadPreset('single')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold rounded-xl border border-purple-100 text-center">
-            <i class="fa-solid fa-user text-purple-600 mb-1 text-sm"></i>
-            <span class="text-[11px]">Singolo (2 Corsi)</span>
+          <button onclick="loadPreset('multicourse')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold rounded-xl border border-purple-100 text-center">
+            <i class="fa-solid fa-layer-group text-purple-600 mb-1 text-sm"></i>
+            <span class="text-[11px]">Singolo (Multi-Corso)</span>
           </button>
           <button onclick="loadPreset('judo')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-100 text-center">
             <i class="fa-solid fa-child text-emerald-600 mb-1 text-sm"></i>
-            <span class="text-[11px]">Fratelli Judo</span>
+            <span class="text-[11px]">Fratelli Judo + Circo</span>
           </button>
-          <button onclick="loadPreset('pole')" class="active-scale hidden sm:flex flex-col items-center justify-center p-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-bold rounded-xl border border-pink-100 text-center">
+          <button onclick="loadPreset('pole')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-bold rounded-xl border border-pink-100 text-center">
             <i class="fa-solid fa-person-dots-from-line text-pink-600 mb-1 text-sm"></i>
-            <span class="text-[11px]">Adulto Pole+Fit</span>
+            <span class="text-[11px]">Adulto Pole + Flexy</span>
           </button>
         </div>
       </section>
 
+      <!-- Allievi Card -->
       <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/80">
         <div class="flex items-center justify-between mb-3">
           <div>
             <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
-              <i class="fa-solid fa-user-plus text-indigo-600"></i> Partecipanti & Discipline
+              <i class="fa-solid fa-user-group text-indigo-600"></i> Partecipanti e Corsi Assegnati
             </h2>
-            <p class="text-[11px] text-slate-500">Aggiungi singoli, coppie o fratelli per calcolare il preventivo</p>
+            <p class="text-[11px] text-slate-500">Puoi aggiungere più allievi e associare <strong>più corsi</strong> per ciascuno</p>
           </div>
           <button onclick="addParticipant()" class="no-print active-scale bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
-            <i class="fa-solid fa-plus"></i> Aggiungi
+            <i class="fa-solid fa-user-plus"></i> Nuovo Allievo
           </button>
         </div>
 
-        <div id="participants-list" class="space-y-3">
-          <!-- Dynamic Participant Cards inserted via JavaScript -->
+        <div id="participants-list" class="space-y-4">
+          <!-- Dynamic Participant Cards with Multi-Course selector -->
         </div>
       </section>
 
+      <!-- Plan & Discount Strategy Switcher -->
       <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/80">
         <h2 class="text-base font-extrabold text-slate-900 mb-0.5 flex items-center gap-1.5">
-          <i class="fa-solid fa-sliders text-indigo-600"></i> Modalità & Calcolo Sconti
+          <i class="fa-solid fa-sliders text-indigo-600"></i> Modalità di Rateizzazione & Ottimizzazione
         </h2>
-        <p class="text-[11px] text-slate-500 mb-3">Seleziona la rateizzazione e la strategia degli acconti</p>
+        <p class="text-[11px] text-slate-500 mb-3">Scegli la formula di versamento e la strategia sconti applicata</p>
 
         <!-- Payment Plan Cards -->
         <div class="grid grid-cols-2 gap-2.5 no-print mb-3">
           <div id="plan-btn-trim" onclick="setPaymentPlan('TRIMESTRALE')" class="active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative">
-            <span class="text-[9px] font-extrabold uppercase text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded block mb-1 w-fit">Scelta Consigliata</span>
+            <span class="text-[9px] font-extrabold uppercase text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded block mb-1 w-fit">Formula Consigliata</span>
             <h3 class="font-bold text-slate-900 text-xs sm:text-sm">Trimestrale</h3>
             <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Iscrizione + 3 Tranche (Ott, Dic, Mar)</p>
           </div>
@@ -140,14 +158,14 @@
           </div>
         </div>
 
-        <!-- Strategy Switcher for Maximized Discounts -->
+        <!-- Strategy Switcher -->
         <div class="no-print pt-3 border-t border-slate-100 flex flex-col gap-1.5">
           <div class="flex items-center justify-between">
             <span class="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-              <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Ottimizzazione Acconto & Sconti:
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Calcolo Sconti Famiglia / Multi-Corso:
             </span>
             <span id="savings-delta-tag" class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-              ⚡ Risparmio Max Attivo
+              ⚡ Risparmio Max Attivo (-20% quota alta)
             </span>
           </div>
           <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200/80">
@@ -161,20 +179,21 @@
         </div>
       </section>
 
+      <!-- Financial Schedule Summary Card -->
       <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/80 relative">
         <div class="flex items-center justify-between mb-3">
           <div>
             <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
-              <i class="fa-solid fa-receipt text-indigo-600"></i> Piano Scadenze Prospettato
+              <i class="fa-solid fa-receipt text-indigo-600"></i> Piano Scadenze & Tranche
             </h2>
-            <p class="text-[11px] text-slate-500">Prospetto ufficiale A.A. 2026/2027</p>
+            <p class="text-[11px] text-slate-500">Prospetto sintetico per A.A. 2026/2027 con scadenze trasparenti</p>
           </div>
           <span id="applied-discount-badge" class="hidden bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-emerald-200">
             Sconto Applicato
           </span>
         </div>
 
-        <!-- Dynamic Schedule Cards -->
+        <!-- Schedule Cards -->
         <div class="space-y-2.5 mb-4" id="schedule-container">
           <!-- Rendered via JS -->
         </div>
@@ -183,7 +202,7 @@
         <div class="gradient-header rounded-2xl p-4 text-white flex items-center justify-between shadow-lg shadow-indigo-500/10">
           <div>
             <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-200 block">Totale Annuo Complessivo</span>
-            <p class="text-[10px] text-indigo-100">Tutte le quote, t-shirt e assicurazione incluse</p>
+            <p class="text-[10px] text-indigo-100">Comprensivo di t-shirt, iscrizione ed assicurazione annuale</p>
           </div>
           <div class="text-right">
             <span class="text-xl sm:text-2xl font-extrabold tracking-tight" id="grand-total-amount">€ 0,00</span>
@@ -193,19 +212,19 @@
         <!-- Action Buttons -->
         <div class="no-print mt-4 pt-3 border-t border-slate-100 flex gap-2">
           <button onclick="copySummaryText()" class="active-scale flex-1 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-3 px-3 rounded-xl flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-copy text-indigo-400"></i> Copia (WhatsApp)
+            <i class="fa-solid fa-copy text-indigo-400"></i> Copia per WhatsApp
           </button>
-          <button onclick="window.print()" class="active-scale bg-slate-100 text-slate-700 text-xs font-bold py-3 px-3 rounded-xl flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-print"></i> Stampa
+          <button onclick="switchTab('print')" class="active-scale bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-3 px-3 rounded-xl flex items-center justify-center gap-1.5 border border-indigo-200">
+            <i class="fa-solid fa-file-pdf"></i> Genera Moduli Stampa
           </button>
         </div>
       </section>
 
+      <!-- IBAN Note Box -->
       <section class="bg-amber-50/80 rounded-3xl p-4 border border-amber-200/80 text-amber-900 text-[11px] leading-relaxed space-y-2">
         <div class="flex items-center gap-1.5 text-amber-900 font-bold text-xs">
           <i class="fa-solid fa-building-columns text-amber-600"></i> Dati Bonifico Bancario & Detrazione 730
         </div>
-        
         <div class="bg-white/90 p-3 rounded-xl border border-amber-200/60 space-y-1">
           <div>
             <span class="text-[9px] uppercase font-bold text-amber-700 block">Banca Intestataria</span>
@@ -217,18 +236,12 @@
             <code class="bg-amber-100 px-2 py-0.5 rounded text-slate-900 font-mono font-bold text-[11px] select-all block mt-0.5">IT84E0306909606100000137439</code>
           </div>
         </div>
-
-        <ul class="space-y-1 text-amber-800 pl-1 list-disc list-inside text-[10px]">
-          <li><strong>Detrazione 730:</strong> Pagamenti ammessi unicamente tramite Bonifico Bancario o POS.</li>
-          <li><strong>Quota Associativa:</strong> € 30,00 a persona (include T-shirt ufficiale e assicurazione valida fino al 31/08/2027).</li>
-          <li><strong>Sconto Famiglia:</strong> -20% applicato sul secondo componente o sul secondo corso.</li>
-        </ul>
       </section>
 
     </div>
 
     <!-- ========================================== -->
-    <!-- SECTION 2: INTERACTIVE WEEKLY TIMETABLE TAB -->
+    <!-- SECTION 2: INTERACTIVE WEEKLY TIMETABLE & FILTERS -->
     <!-- ========================================== -->
     <div id="view-schedule" class="hidden space-y-4">
       
@@ -255,8 +268,20 @@
           </div>
         </div>
 
-        <!-- Search and Category Filters -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <!-- Category & Age Group Filters -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Fascia di Età</label>
+            <select id="schedule-age-filter" onchange="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
+              <option value="ALL">Tutte le età</option>
+              <option value="BABY">Baby (3-5 anni)</option>
+              <option value="BIMBI">Bimbi (6-9 anni)</option>
+              <option value="JUNIOR">Junior (10-13 anni)</option>
+              <option value="RAGAZZI">Ragazzi (14-18 anni)</option>
+              <option value="SENIOR">Senior / Adulti (18+ anni)</option>
+            </select>
+          </div>
+
           <div>
             <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Area Disciplina</label>
             <select id="schedule-cat-filter" onchange="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
@@ -268,9 +293,10 @@
               <option value="Arte & Cultura">Arte, Teatro & Cultura</option>
             </select>
           </div>
+
           <div>
             <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Cerca Corso o Sala</label>
-            <input id="schedule-search" type="text" placeholder="Es. Circo, Judo, Sala 1..." oninput="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
+            <input id="schedule-search" type="text" placeholder="Es. Circo, Sala 1..." oninput="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
           </div>
         </div>
       </section>
@@ -290,205 +316,455 @@
       </section>
     </div>
 
-    <footer class="mt-8 text-center text-[10px] text-slate-400 space-y-0.5 pb-6">
+    <!-- ========================================== -->
+    <!-- SECTION 3: PRINTABLE MODULES (MODULO 1 & MODULO 2) -->
+    <!-- ========================================== -->
+    <div id="view-print" class="space-y-6">
+      
+      <!-- Module Selector & Direct Print Control (Screen view only) -->
+      <section class="no-print bg-white p-4 rounded-3xl shadow-sm border border-slate-200/80 space-y-3">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-file-export text-indigo-600"></i> Generatore & Stampa Moduli PDF
+            </h2>
+            <p class="text-[11px] text-slate-500">Stampa singola o combinata in formato A4 ad alta definizione</p>
+          </div>
+
+          <!-- Print Action Trigger Buttons -->
+          <div class="flex flex-wrap gap-1.5 w-full sm:w-auto">
+            <button onclick="triggerPrint('1')" class="active-scale bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md flex items-center gap-1">
+              <i class="fa-solid fa-print"></i> Stampa Mod. 1 (Preventivo)
+            </button>
+            <button onclick="triggerPrint('2')" class="active-scale bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md flex items-center gap-1">
+              <i class="fa-solid fa-calendar-week"></i> Stampa Mod. 2 (Planner 07-22)
+            </button>
+            <button onclick="triggerPrint('all')" class="active-scale bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md flex items-center gap-1">
+              <i class="fa-solid fa-copy"></i> Stampa Entrambi
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-100">
+          <button id="mod-toggle-btn-1" onclick="switchPrintModule(1)" class="py-2.5 px-3 text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center">
+            📄 Vista Modulo 1: Preventivo & Rate Scontate
+          </button>
+          <button id="mod-toggle-btn-2" onclick="switchPrintModule(2)" class="py-2.5 px-3 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200">
+            📅 Vista Modulo 2: Planner Settimanale 07:00-22:00
+          </button>
+        </div>
+      </section>
+
+      <!-- PRINTABLE MODULE 1: PREVENTIVO SINTETICO -->
+      <div id="print-module-1" class="print-area bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+        
+        <!-- Header Railim Solutions / UGART -->
+        <div class="flex justify-between items-start border-b border-slate-300 pb-3">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-sm">
+                RS
+              </div>
+              <div>
+                <span class="text-xs font-black uppercase tracking-wider text-indigo-900 block">RAILIM SOLUTIONS</span>
+                <span class="text-[9px] text-slate-500 block">Management Software per Poli Sportivi & Artistici</span>
+              </div>
+            </div>
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-slate-900 pt-1">Prospetto Preventivo Economico & Rateizzazioni</h1>
+            <p class="text-xs text-slate-600">Polo Artistico Ludico Sportivo — Urban Gravity Academy A.S.D. Vigevano</p>
+          </div>
+          <div class="text-right text-xs text-slate-500 space-y-0.5">
+            <p><strong>A.A. 2026/2027</strong></p>
+            <p>Emissione: <span id="print-date-stamp">07/09/2026</span></p>
+            <p class="text-[10px] text-indigo-600 font-mono font-bold" id="print-quote-code">RFR-UGART-2026-948</p>
+          </div>
+        </div>
+
+        <!-- Allievi & Courses Synthetic Breakdown -->
+        <div class="space-y-2">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 border-b border-slate-200 pb-1">
+            1. Dettaglio Iscritti e Discipline Assegnate
+          </h3>
+          <div id="mod1-allievi-list" class="space-y-2 pt-1">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Financial Schedule Table with Calculated Tranches -->
+        <div class="space-y-2">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 border-b border-slate-200 pb-1">
+            2. Piano Scadenze e Importi Esatti (<span id="mod1-plan-type-title">Trimestrale</span>)
+          </h3>
+          <table class="w-full text-xs text-left border-collapse border border-slate-200">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-300">
+                <th class="py-2 px-3 font-bold border-r border-slate-200">Versamento / Tranche</th>
+                <th class="py-2 px-3 font-bold border-r border-slate-200">Scadenza Tassativa</th>
+                <th class="py-2 px-3 font-bold border-r border-slate-200">Dettaglio Voci Incluse</th>
+                <th class="py-2 px-3 font-bold text-right">Importo Rata</th>
+              </tr>
+            </thead>
+            <tbody id="mod1-schedule-rows" class="divide-y divide-slate-200">
+              <!-- Dynamically populated with calculated Euro values -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-50 border-t-2 border-slate-800 text-sm font-bold">
+                <td colspan="3" class="py-2.5 px-3 text-slate-900">TOTALE COMPLESSIVO ANNUALE</td>
+                <td class="py-2.5 px-3 text-right text-indigo-700" id="mod1-grand-total">€ 0,00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Payment Instructions & Legal Note -->
+        <div class="pt-3 border-t border-slate-200 text-[10px] text-slate-600 space-y-1.5 leading-relaxed">
+          <p><strong>Dati Bonifico Bancario (Detrazione Fiscale 730):</strong> Banca INTESA SANPAOLO — Filiale di Vigevano<br>
+          <strong>IBAN:</strong> <code class="font-bold text-slate-900 select-all">IT84E0306909606100000137439</code> | <strong>Intestato a:</strong> URBAN GRAVITY ACADEMY A.S.D.&A.C.</p>
+          <p>• La quota associativa di € 30,00/allievo comprende t-shirt in omaggio e copertura assicurativa valida fino al 31/08/2027.<br>
+          • Per la detrazione fiscale 730, i versamenti devono essere eseguiti esclusivamente tramite bonifico bancario o POS.</p>
+        </div>
+
+        <!-- Signatures Row -->
+        <div class="pt-6 flex justify-between text-xs text-slate-600">
+          <div class="border-t border-slate-400 pt-1 w-48 text-center">
+            Firma Genitore / Atleta
+          </div>
+          <div class="border-t border-slate-400 pt-1 w-48 text-center">
+            Timbro e Firma Segreteria UGART
+          </div>
+        </div>
+      </div>
+
+      <!-- PRINTABLE MODULE 2: PLANNER SETTIMANALE HOURLY (07:00 - 22:00) -->
+      <div id="print-module-2" class="print-area hidden bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        
+        <!-- Header Railim Solutions / UGART -->
+        <div class="flex justify-between items-start border-b border-slate-300 pb-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded bg-indigo-600 text-white flex items-center justify-center font-black text-xs">
+                RS
+              </div>
+              <span class="text-xs font-black uppercase tracking-wider text-indigo-900">RAILIM SOLUTIONS — Weekly Family EdTech Planner</span>
+            </div>
+            <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 pt-0.5">Agenda & Planner Settimanale Attività (07:00 – 22:00)</h1>
+            <p class="text-[11px] text-slate-600" id="mod2-family-title">Programmazione settimanale personalizzata ed appuntamenti familiari</p>
+          </div>
+          <div class="text-right text-xs text-slate-500">
+            <p><strong>A.A. 2026/2027</strong></p>
+            <p class="text-[10px]">Urban Gravity Academy Vigevano</p>
+          </div>
+        </div>
+
+        <!-- Hourly Planner Timeline Matrix Table (07:00 to 22:00) -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-[9px] border-collapse border border-slate-300">
+            <thead>
+              <tr class="bg-indigo-900 text-white font-bold text-center">
+                <th class="py-1 px-1 w-12 border border-indigo-950">ORA</th>
+                <th class="py-1 px-1 w-1/5 border border-indigo-950 uppercase">Lunedì</th>
+                <th class="py-1 px-1 w-1/5 border border-indigo-950 uppercase">Martedì</th>
+                <th class="py-1 px-1 w-1/5 border border-indigo-950 uppercase">Mercoledì</th>
+                <th class="py-1 px-1 w-1/5 border border-indigo-950 uppercase">Giovedì</th>
+                <th class="py-1 px-1 w-1/5 border border-indigo-950 uppercase">Venerdì</th>
+              </tr>
+            </thead>
+            <tbody id="hourly-planner-body" class="divide-y divide-slate-200">
+              <!-- Dynamically populated from 07:00 to 22:00 -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-[9px] text-slate-500 text-center border-t border-slate-200 pt-2 flex justify-between items-center">
+          <span>Polo UGART Vigevano — Via Domenico Pisani 1 | Tel: +39 389 2050256</span>
+          <span class="font-bold">App gestionale sviluppata da Railim Solutions</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="no-print mt-8 text-center text-[10px] text-slate-400 space-y-0.5 pb-6">
       <p>Urban Gravity Academy A.S.D. & Arti Circensi — Vigevano (PV)</p>
       <p>Via Domenico Pisani 1 | Tel: +39 389 2050256 | www.ugacademy.it</p>
     </footer>
 
   </div>
 
+  <!-- Toast Message Alert -->
   <div id="toast" class="fixed bottom-4 left-4 right-4 max-w-xs mx-auto bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl transition-all duration-300 opacity-0 pointer-events-none transform translate-y-4 flex items-center justify-center gap-2 z-50">
     <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
     <span id="toast-message">Copiato negli appunti!</span>
   </div>
 
   <script>
-    // Database Listino UGART A.A. 2026/2027
-    const COURSE_CATALOG = [
-      { id: 'CIRCO_F1', cat: 'Accademica Circo/Danza', name: 'Formula 1 (1 lez/sett)', trim: 170, sol: 255 },
-      { id: 'CIRCO_F2', cat: 'Accademica Circo/Danza', name: 'Formula 2 (2 lez/sett)', trim: 260, sol: 390 },
-      { id: 'CIRCO_F3', cat: 'Accademica Circo/Danza', name: 'Formula 3 (3 lez/sett)', trim: 315, sol: 473 },
-      { id: 'CIRCO_F4', cat: 'Accademica Circo/Danza', name: 'Formula 4 (4 lez/sett)', trim: 410, sol: 615 },
-      { id: 'POLE_F1', cat: 'Pole Dance', name: 'Pole Dance - Formula 1', trim: 190, sol: 285 },
-      { id: 'POLE_F2', cat: 'Pole Dance', name: 'Pole Dance - Formula 2', trim: 295, sol: 430 },
-      { id: 'ARTE_CREATIVA', cat: 'Arte & Cultura', name: 'Arte Creativa (Sett. Gratis)', trim: 120, sol: 180, septFree: true },
-      { id: 'TEATRO_BIMBI', cat: 'Arte & Cultura', name: 'Teatro Bimbi / Junior', trim: 150, sol: 225 },
-      { id: 'TEATRO_SENIOR', cat: 'Arte & Cultura', name: 'Teatro Senior (Adulti)', trim: 180, sol: 270 },
-      { id: 'JUDO_BIMBI_F1', cat: 'Arti Marziali', name: 'Judo Bimbi - Formula 1', trim: 120, sol: 180, septFee: 35 },
-      { id: 'JUDO_BIMBI_F2', cat: 'Arti Marziali', name: 'Judo Bimbi - Formula 2', trim: 150, sol: 225, septFee: 45 },
-      { id: 'FITNESS_F1', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (1 v/sett)', trim: 135, sol: 203 },
-      { id: 'FITNESS_F2', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (2 v/sett)', trim: 195, sol: 293 }
-    ];
-
-    // Comprehensive Timetable Database (001_ORARI UGA A.A.26.27 rev. 31_08_2026)
-    const TIMETABLE_DB = [
-      // LUNEDI
-      { day: 'LUNEDI', time: '12:45 - 13:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'LUNEDI', time: '12:45 - 13:30', courseId: 'FITNESS_F1', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale' },
-      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 1', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Giocoleria ed Equilibrismo', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Danza Modern Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza' },
-      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'POLE_F1', name: 'Pole Kids', room: 'Sala 3', cat: 'Pole Dance' },
-      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'TEATRO_BIMBI', name: 'Teatro Bimbi (6-9 anni)', room: 'Sala 4', cat: 'Arte & Cultura' },
-      { day: 'LUNEDI', time: '15:00 - 17:00', courseId: 'ARTE_CREATIVA', name: 'Spazio Compiti Studio Lab', room: 'Sala 5', cat: 'Arte & Cultura' },
-      { day: 'LUNEDI', time: '17:00 - 18:15', courseId: 'CIRCO_F1', name: 'Academy Circus 1', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'CIRCO_F1', name: 'Circo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Danza Classica Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza' },
-      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 1', room: 'Sala 3', cat: 'Pole Dance' },
-      { day: 'LUNEDI', time: '18:45 - 19:45', courseId: 'FITNESS_F1', name: 'Flexy - Mobilità Articolare', room: 'Sala 4', cat: 'Fitness & Posturale' },
-      { day: 'LUNEDI', time: '19:30 - 20:30', courseId: 'FITNESS_F1', name: 'UGA Calisthenics & Functional', room: 'Sala 1', cat: 'Fitness & Posturale' },
-      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'UGA Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance' },
-      { day: 'LUNEDI', time: '20:00 - 21:20', courseId: 'CIRCO_F1', name: 'Danza Heels', room: 'Sala 4', cat: 'Accademica Circo/Danza' },
-
-      // MARTEDI
-      { day: 'MARTEDI', time: '09:00 - 10:00', courseId: 'FITNESS_F1', name: 'GEP Ginnastica Energetico Posturale', room: 'Sala 2', cat: 'Fitness & Posturale' },
-      { day: 'MARTEDI', time: '12:45 - 13:30', courseId: 'FITNESS_F1', name: 'Bachata Moderna Open', room: 'Sala 3', cat: 'Fitness & Posturale' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Pre Acrobatica (3-5 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Baby Circo', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Danza Hip Hop Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza' },
-      { day: 'MARTEDI', time: '17:30 - 18:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (3-5 anni)', room: 'Sala 5', cat: 'Arte & Cultura' },
-      { day: 'MARTEDI', time: '18:30 - 19:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (6-11 anni)', room: 'Sala 5', cat: 'Arte & Cultura' },
-      { day: 'MARTEDI', time: '19:30 - 20:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (+11 anni)', room: 'Sala 5', cat: 'Arte & Cultura' },
-      { day: 'MARTEDI', time: '17:00 - 18:15', courseId: 'JUDO_BIMBI_F1', name: 'Gioca Judo', room: 'Sala 1', cat: 'Arti Marziali' },
-      { day: 'MARTEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali' },
-      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali' },
-      { day: 'MARTEDI', time: '20:15 - 21:30', courseId: 'JUDO_BIMBI_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali' },
-      { day: 'MARTEDI', time: '18:30 - 19:30', courseId: 'FITNESS_F1', name: 'UGA Calisthenics', room: 'Sala 1', cat: 'Fitness & Posturale' },
-      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'FITNESS_F1', name: 'Bungee Fly', room: 'Sala 3', cat: 'Fitness & Posturale' },
-
-      // MERCOLEDI
-      { day: 'MERCOLEDI', time: '09:00 - 10:00', courseId: 'FITNESS_F1', name: 'GEP Ginnastica Energetico Posturale', room: 'Sala 2', cat: 'Fitness & Posturale' },
-      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Baby Danza / Danza Motricità', room: 'Sala 2', cat: 'Accademica Circo/Danza' },
-      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'POLE_F1', name: 'Acro Pole Junior 2', room: 'Sala 3', cat: 'Pole Dance' },
-      { day: 'MERCOLEDI', time: '17:15 - 18:45', courseId: 'TEATRO_BIMBI', name: 'Teatro Junior (10-13 anni)', room: 'Sala 4', cat: 'Arte & Cultura' },
-      { day: 'MERCOLEDI', time: '18:15 - 19:45', courseId: 'TEATRO_SENIOR', name: 'Teatro Junior (14-18 anni)', room: 'Sala 4', cat: 'Arte & Cultura' },
-      { day: 'MERCOLEDI', time: '19:45 - 21:15', courseId: 'TEATRO_SENIOR', name: 'Teatro Senior (+18 anni)', room: 'Sala 4', cat: 'Arte & Cultura' },
-
-      // GIOVEDI
-      { day: 'GIOVEDI', time: '10:00 - 11:00', courseId: 'FITNESS_F1', name: 'Yamuna Body Rolling', room: 'Sala 2', cat: 'Fitness & Posturale' },
-      { day: 'GIOVEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'GIOVEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali' },
-      { day: 'GIOVEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali' },
-      { day: 'GIOVEDI', time: '20:30 - 22:00', courseId: 'FITNESS_F1', name: 'Hatha Yoga', room: 'Sala 2', cat: 'Fitness & Posturale' },
-
-      // VENERDI
-      { day: 'VENERDI', time: '08:15 - 09:00', courseId: 'FITNESS_F1', name: 'Bungee Fly Mattina', room: 'Sala 3', cat: 'Fitness & Posturale' },
-      { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra JR/SN', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'VENERDI', time: '17:00 - 18:15', courseId: 'CIRCO_F1', name: 'Flexy Contortion Livello 1', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'VENERDI', time: '18:15 - 19:30', courseId: 'CIRCO_F1', name: 'Contorsionismo Livello 2', room: 'Sala 1', cat: 'Accademica Circo/Danza' },
-      { day: 'VENERDI', time: '17:00 - 18:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi', room: 'Sala 1', cat: 'Arti Marziali' },
-      { day: 'VENERDI', time: '20:00 - 21:00', courseId: 'POLE_F1', name: 'Flying Pole', room: 'Sala 1', cat: 'Pole Dance' }
-    ];
-
+    // Complete State Object
     let state = {
-      plan: 'TRIMESTRALE',
-      discountStrategy: 'OPTIMIZED',
       participants: [
-        { id: 'p1', name: 'Marco (7 anni)', courseId: 'CIRCO_F1' },
-        { id: 'p2', name: 'Sofia (4 anni)', courseId: 'ARTE_CREATIVA' }
+        { id: 'p1', name: 'Marco (7 anni)', courseIds: ['CIRCO_F1'] },
+        { id: 'p2', name: 'Sofia (4 anni)', courseIds: ['ARTE_CREATIVA'] }
       ],
-      activeDay: 'LUNEDI'
+      plan: 'TRIMESTRALE', // 'TRIMESTRALE' | 'DUE_SOLUZIONI'
+      discountStrategy: 'OPTIMIZED', // 'OPTIMIZED' | 'STANDARD'
+      activeDay: 'LUNEDI',
+      activeTab: 'calc', // 'calc' | 'schedule' | 'print'
+      activeModule: 1,
+      calculatedTotals: {
+        tranche1: 0,
+        tranche2: 0,
+        tranche3: 0,
+        grandTotal: 0
+      }
     };
 
+    // Complete Database Listino UGART A.A. 2026/2027 (Tutte le Sezioni)
+    const COURSE_CATALOG = [
+      // Sezione Accademica Circo & Acrobatica
+      { id: 'CIRCO_F1', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'CIRCO_F2', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (2 v/sett)', trim: 260, sol: 390, ageGroup: 'BIMBI' },
+      { id: 'CIRCO_F3', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (3 v/sett)', trim: 315, sol: 473, ageGroup: 'JUNIOR' },
+      { id: 'CIRCO_F4', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (4 v/sett)', trim: 410, sol: 615, ageGroup: 'JUNIOR' },
+      { id: 'CIRCUS_BASE', cat: 'Accademica Circo/Danza', name: 'Academy Circus Base (Acro + Circo)', trim: 240, sol: 360, ageGroup: 'JUNIOR' },
+      { id: 'CIRCUS_PLUS', cat: 'Accademica Circo/Danza', name: 'Academy Circus Plus (Open All Access)', trim: 400, sol: 600, ageGroup: 'JUNIOR' },
+      { id: 'PRE_ACRO', cat: 'Accademica Circo/Danza', name: 'Pre Acrobatica (3-5 anni)', trim: 170, sol: 255, ageGroup: 'BABY' },
+
+      // Danza & Pole
+      { id: 'DANZA_CLASSICA_F1', cat: 'Accademica Circo/Danza', name: 'Danza Classica (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'DANZA_MODERN_F1', cat: 'Accademica Circo/Danza', name: 'Danza Modern (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'DANZA_CONTEMP', cat: 'Accademica Circo/Danza', name: 'Danza Contemporanea & Lab', trim: 170, sol: 255, ageGroup: 'JUNIOR' },
+      { id: 'DANZA_HIPHOP', cat: 'Accademica Circo/Danza', name: 'Danza Hip Hop / VideoDance', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'DANZA_HEELS', cat: 'Accademica Circo/Danza', name: 'Danza Heels (Senior / Tacchi)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
+      { id: 'POLE_KIDS', cat: 'Pole Dance', name: 'Pole Kids (Bimbi / Junior)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'POLE_F1', cat: 'Pole Dance', name: 'Pole Dance Senior (1 v/sett)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
+      { id: 'POLE_F2', cat: 'Pole Dance', name: 'Pole Dance Senior (2 v/sett)', trim: 295, sol: 430, ageGroup: 'SENIOR' },
+      { id: 'FLYING_POLE', cat: 'Pole Dance', name: 'Flying Pole (Palo Volante)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
+
+      // Arte & Cultura
+      { id: 'ARTE_CREATIVA', cat: 'Arte & Cultura', name: 'Arte Creativa (Sett. Gratis)', trim: 120, sol: 180, septFree: true, ageGroup: 'BABY' },
+      { id: 'TEATRO_BIMBI', cat: 'Arte & Cultura', name: 'Teatro Bimbi (6-9 anni)', trim: 150, sol: 225, ageGroup: 'BIMBI' },
+      { id: 'TEATRO_JUNIOR', cat: 'Arte & Cultura', name: 'Teatro Junior (10-18 anni)', trim: 150, sol: 225, ageGroup: 'JUNIOR' },
+      { id: 'TEATRO_SENIOR', cat: 'Arte & Cultura', name: 'Teatro Senior (Adulti)', trim: 180, sol: 270, ageGroup: 'SENIOR' },
+
+      // Arti Marziali
+      { id: 'JUDO_BIMBI_F1', cat: 'Arti Marziali', name: 'Judo Bimbi (1 v/sett)', trim: 120, sol: 180, septFee: 35, ageGroup: 'BIMBI' },
+      { id: 'JUDO_BIMBI_F2', cat: 'Arti Marziali', name: 'Judo Bimbi (2 v/sett)', trim: 150, sol: 225, septFee: 45, ageGroup: 'BIMBI' },
+      { id: 'JUDO_SENIOR_F2', cat: 'Arti Marziali', name: 'Judo Senior (+12 anni 2 v/sett)', trim: 165, sol: 248, septFee: 35, ageGroup: 'SENIOR' },
+      { id: 'KUNG_FU', cat: 'Arti Marziali', name: 'Kung Fu - Arku Tai Pa (+14 anni)', trim: 165, sol: 248, ageGroup: 'RAGAZZI' },
+
+      // Fitness & Posturale
+      { id: 'FITNESS_F1', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (1 v/sett)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'FITNESS_F2', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (2 v/sett)', trim: 195, sol: 293, ageGroup: 'SENIOR' },
+      { id: 'NO_GRAVITY', cat: 'Fitness & Posturale', name: 'No Gravity Pilates', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'BUNGEE_FLY', cat: 'Fitness & Posturale', name: 'Bungee Fly (1 v/sett)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'GEP_POSTURALE', cat: 'Fitness & Posturale', name: 'GEP Ginnastica Posturale (Mattino)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'YAMUNA_BODY', cat: 'Fitness & Posturale', name: 'Yamuna Body Rolling', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'CALISTHENICS_1', cat: 'Fitness & Posturale', name: 'Calisthenics & Functional (1+1)', trim: 98, sol: 147, septFee: 18, ageGroup: 'SENIOR' },
+      { id: 'BACHATA_JUNIOR', cat: 'Fitness & Posturale', name: 'Bachata Moderna Junior / Senior', trim: 135, sol: 203, ageGroup: 'JUNIOR' }
+    ];
+
+    // Complete Timetable Database (001_ORARI UGA A.A.26.27 rev. 31_08_2026)
+    const TIMETABLE_DB = [
+      // LUNEDI
+      { day: 'LUNEDI', time: '12:45 - 13:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '12:45 - 13:30', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Giocoleria ed Equilibrismo', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'POLE_KIDS', name: 'Pole Kids', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'TEATRO_BIMBI', name: 'Teatro Bimbi (6-9 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 1 (6-7 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '18:00 - 19:15', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 1', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '18:45 - 19:45', courseId: 'FITNESS_F1', name: 'Flexy - Mobilità Articolare', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F3', name: 'Acrobatica Aerea Senior Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F2', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '20:00 - 21:00', courseId: 'FITNESS_F1', name: 'UGA Pilates Matwork', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '20:30 - 21:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior Corso 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '20:30 - 21:30', courseId: 'CIRCO_F1', name: 'Hula Hoop Dance Junior/Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+
+      // MARTEDI
+      { day: 'MARTEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '12:45 - 13:45', courseId: 'YAMUNA_BODY', name: 'Yamuna Body Rolling', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab 2.0', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Pre Acrobatica (3-5 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '17:00 - 18:15', courseId: 'JUDO_BIMBI_F1', name: 'Gioca Judo (3-5 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'BABY' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'FITNESS_F1', name: 'Viso Fitness', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '17:30 - 18:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (3-5 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BABY' },
+      { day: 'MARTEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '18:30 - 19:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (6-11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 2', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '19:30 - 20:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (+11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'FITNESS_F1', name: 'UGA Pilates Barré', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'BUNGEE_FLY', name: 'Bungee Fly', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '20:00 - 21:00', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '21:15 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+
+      // MERCOLEDI
+      { day: 'MERCOLEDI', time: '12:45 - 13:30', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCUS_BASE', name: 'Academy Circus 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Circo (3-5 anni)', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Junior', room: 'Sala 5', cat: 'Fitness & Posturale', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'TEATRO_JUNIOR', name: 'Teatro Junior (10-13 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR Avanzato Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 3', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:15 - 19:45', courseId: 'TEATRO_JUNIOR', name: 'Teatro Ragazzi (14-18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'RAGAZZI' },
+      { day: 'MERCOLEDI', time: '19:30 - 20:30', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '19:45 - 21:15', courseId: 'TEATRO_SENIOR', name: 'Teatro Senior (+18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '20:30 - 21:45', courseId: 'CALISTHENICS_1', name: 'Calisthenics Senior Corso 3', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '20:30 - 21:30', courseId: 'POLE_F2', name: 'Pole Dance Senior Intermedio/Advance', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+
+      // GIOVEDI
+      { day: 'GIOVEDI', time: '08:15 - 09:00', courseId: 'BUNGEE_FLY', name: 'Bungee Fly Mattino', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'FITNESS_F1', name: 'Hula Hoop Dance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'GIOVEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
+      { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'DANZA_CONTEMP', name: 'Danza Contemporanea & Lab', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '18:00 - 19:15', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '19:00 - 20:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern & Lab Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '20:30 - 22:00', courseId: 'FITNESS_F1', name: 'Hatha Yoga', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '20:30 - 21:30', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+
+      // VENERDI
+      { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 3', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '17:00 - 18:15', courseId: 'CIRCO_F1', name: 'Flexy Contortion Liv. 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Danza / Danza Motricità', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { day: 'VENERDI', time: '18:15 - 19:30', courseId: 'CIRCO_F3', name: 'Contorsionismo Livello 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '19:15 - 20:15', courseId: 'CALISTHENICS_1', name: 'Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '19:00 - 20:00', courseId: 'DANZA_HIPHOP', name: 'Cheerleading & Cheerdance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '20:00 - 21:00', courseId: 'FLYING_POLE', name: 'Flying Pole', room: 'Sala 1', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '20:30 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+      { day: 'VENERDI', time: '20:15 - 21:15', courseId: 'DANZA_HEELS', name: 'Danza Heels / Video Dance Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' }
+    ];
+
+    // Main Init Function
     function init() {
+      const dateStamp = document.getElementById('print-date-stamp');
+      const codeStamp = document.getElementById('print-quote-code');
+      if (dateStamp) {
+        const today = new Date();
+        dateStamp.innerText = today.toLocaleDateString('it-IT');
+      }
+      if (codeStamp) {
+        codeStamp.innerText = 'RFR-UGART-' + Math.floor(1000 + Math.random() * 9000);
+      }
+      
+      setPaymentPlan(state.plan);
+      setDiscountStrategy(state.discountStrategy);
       render();
       renderSchedule();
+      buildHourlyPlannerTable();
     }
 
-    function switchTab(tabName) {
-      const calcView = document.getElementById('view-calculator');
-      const scheduleView = document.getElementById('view-schedule');
-      const calcBtn = document.getElementById('tab-btn-calc');
-      const scheduleBtn = document.getElementById('tab-btn-schedule');
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      const vCalc = document.getElementById('view-calculator');
+      const vSched = document.getElementById('view-schedule');
+      const vPrint = document.getElementById('view-print');
 
-      if (tabName === 'calc') {
-        calcView.classList.remove('hidden');
-        scheduleView.classList.add('hidden');
-        calcBtn.className = 'py-2.5 px-3 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-2';
-        scheduleBtn.className = 'py-2.5 px-3 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-2';
-      } else {
-        calcView.classList.add('hidden');
-        scheduleView.classList.remove('hidden');
-        scheduleBtn.className = 'py-2.5 px-3 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-2';
-        calcBtn.className = 'py-2.5 px-3 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-2';
+      const btnCalc = document.getElementById('tab-btn-calc');
+      const btnSched = document.getElementById('tab-btn-schedule');
+      const btnPrint = document.getElementById('tab-btn-print');
+
+      vCalc.classList.add('hidden');
+      vSched.classList.add('hidden');
+      vPrint.classList.add('hidden');
+
+      btnCalc.className = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5';
+      btnSched.className = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5';
+      btnPrint.className = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5';
+
+      if (tabId === 'calc') {
+        vCalc.classList.remove('hidden');
+        btnCalc.className = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5';
+      } else if (tabId === 'schedule') {
+        vSched.classList.remove('hidden');
+        btnSched.className = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5';
         renderSchedule();
+      } else if (tabId === 'print') {
+        vPrint.classList.remove('hidden');
+        btnPrint.className = 'py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5';
+        renderPrintModules();
       }
     }
 
-    function addParticipant(name = '', courseId = 'CIRCO_F1') {
-      const newId = 'p_' + Date.now();
-      state.participants.push({
-        id: newId,
-        name: name || `Allievo #${state.participants.length + 1}`,
-        courseId: courseId
-      });
-      render();
+    function buildCourseOptions(selectedCourseId) {
+      return COURSE_CATALOG.map(c => `
+        <option value="${c.id}" ${c.id === selectedCourseId ? 'selected' : ''}>
+          ${escapeHtml(c.name)} — Trim: €${c.trim} / Sol: €${c.sol}
+        </option>
+      `).join('');
     }
 
-    function removeParticipant(id) {
-      state.participants = state.participants.filter(p => p.id !== id);
-      render();
-    }
-
-    function updateParticipant(id, field, val) {
-      const p = state.participants.find(p => p.id === id);
-      if (p) {
-        p[field] = val;
-        render();
+    function getCourseSlotBadgesHTML(courseId) {
+      const matchSlots = TIMETABLE_DB.filter(s => s.courseId === courseId);
+      if (matchSlots.length === 0) {
+        return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold"><i class="fa-regular fa-clock text-[9px]"></i> Orario in segreteria</span>`;
       }
-    }
-
-    function setPaymentPlan(plan) {
-      state.plan = plan;
-      const btnTrim = document.getElementById('plan-btn-trim');
-      const btnSol = document.getElementById('plan-btn-sol');
-
-      if (plan === 'TRIMESTRALE') {
-        btnTrim.className = 'active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative';
-        btnSol.className = 'active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative';
-      } else {
-        btnSol.className = 'active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative';
-        btnTrim.className = 'active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative';
-      }
-      calculateSchedule();
-    }
-
-    function setDiscountStrategy(strat) {
-      state.discountStrategy = strat;
-      const btnOpt = document.getElementById('strat-opt-btn');
-      const btnStd = document.getElementById('strat-std-btn');
-      const deltaTag = document.getElementById('savings-delta-tag');
-
-      if (strat === 'OPTIMIZED') {
-        btnOpt.className = 'py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
-        btnStd.className = 'py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
-        deltaTag.innerText = '⚡ Risparmio Max Attivo';
-      } else {
-        btnStd.className = 'py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
-        btnOpt.className = 'py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
-        deltaTag.innerText = 'Sconto Standard';
-      }
-      calculateSchedule();
+      return matchSlots.map(s => `
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-bold">
+          <i class="fa-regular fa-calendar-check text-[9px] text-indigo-500"></i> ${capitalize(s.day.substring(0, 3))} ${s.time.split(' - ')[0]} (${s.room})
+        </span>
+      `).join(' ');
     }
 
     function render() {
       const listContainer = document.getElementById('participants-list');
+      if (!listContainer) return;
+
       listContainer.innerHTML = '';
 
-      state.participants.forEach((p, idx) => {
+      state.participants.forEach((p, pIdx) => {
         const card = document.createElement('div');
-        card.className = 'bg-slate-50 border border-slate-200/90 rounded-2xl p-3 sm:p-4 space-y-2';
-        
+        card.className = 'bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 space-y-3';
+
+        let coursesHtml = p.courseIds.map((cId, cIdx) => `
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200">
+            <div class="flex-1">
+              <select onchange="updateParticipantCourse('${p.id}', ${cIdx}, this.value)" 
+                      class="w-full bg-transparent text-xs font-semibold text-slate-800 focus:outline-none">
+                ${buildCourseOptions(cId)}
+              </select>
+              <div class="flex flex-wrap gap-1 mt-1">
+                ${getCourseSlotBadgesHTML(cId)}
+              </div>
+            </div>
+            ${p.courseIds.length > 1 ? `
+              <button onclick="removeCourseFromParticipant('${p.id}', ${cIdx})" class="self-end sm:self-center text-slate-400 hover:text-rose-500 text-xs px-2 py-1">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            ` : ''}
+          </div>
+        `).join('');
+
         card.innerHTML = `
-          <div class="flex items-center justify-between gap-1">
-            <div class="flex items-center gap-1.5">
+          <div class="flex items-center justify-between gap-1 border-b border-slate-200/60 pb-2">
+            <div class="flex items-center gap-2">
               <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded">
-                Allievo #${idx + 1}
+                Allievo #${pIdx + 1}
               </span>
-              ${getCourseDaysText(p.courseId)}
+              <input type="text" value="${escapeHtml(p.name)}" oninput="updateParticipantName('${p.id}', this.value)" 
+                     class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500 w-40 sm:w-56">
             </div>
             ${state.participants.length > 1 ? `
               <button onclick="removeParticipant('${p.id}')" class="text-slate-400 hover:text-rose-500 text-[11px] font-semibold px-1">
@@ -496,23 +772,18 @@
               </button>
             ` : ''}
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div>
-              <label class="block text-[10px] font-bold uppercase text-slate-500 mb-0.5">Nome / Ruolo</label>
-              <input type="text" value="${escapeHtml(p.name)}" oninput="updateParticipant('${p.id}', 'name', this.value)" 
-                     class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-500">
+
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="block text-[10px] font-bold uppercase text-slate-500">
+                Discipline Frequentate (${p.courseIds.length})
+              </label>
+              <button onclick="addCourseToParticipant('${p.id}')" class="text-[10px] font-bold text-indigo-600 hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-circle-plus"></i> Aggiungi corso
+              </button>
             </div>
-            <div>
-              <div class="flex items-center justify-between mb-0.5">
-                <label class="block text-[10px] font-bold uppercase text-slate-500">Disciplina / Corso</label>
-                <button onclick="switchTab('schedule')" class="text-[9px] font-bold text-indigo-600 hover:underline">
-                  <i class="fa-solid fa-calendar-days mr-0.5"></i> Vedi in orario
-                </button>
-              </div>
-              <select onchange="updateParticipant('${p.id}', 'courseId', this.value)" 
-                      class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-500">
-                ${buildCourseOptions(p.courseId)}
-              </select>
+            <div class="space-y-2">
+              ${coursesHtml}
             </div>
           </div>
         `;
@@ -522,128 +793,221 @@
       calculateSchedule();
     }
 
-    function buildCourseOptions(selectedId) {
-      const categories = [...new Set(COURSE_CATALOG.map(c => c.cat))];
-      let html = '';
-
-      categories.forEach(cat => {
-        html += `<optgroup label="${cat}">`;
-        COURSE_CATALOG.filter(c => c.cat === cat).forEach(c => {
-          html += `<option value="${c.id}" ${c.id === selectedId ? 'selected' : ''}>${c.name}</option>`;
-        });
-        html += `</optgroup>`;
+    function addParticipant(name = '') {
+      const newId = 'p_' + Date.now();
+      state.participants.push({
+        id: newId,
+        name: name || `Allievo ${state.participants.length + 1}`,
+        courseIds: ['CIRCO_F1']
       });
+      render();
+    }
 
-      return html;
+    function removeParticipant(id) {
+      if (state.participants.length <= 1) return;
+      state.participants = state.participants.filter(p => p.id !== id);
+      render();
+    }
+
+    function updateParticipantName(id, name) {
+      const p = state.participants.find(item => item.id === id);
+      if (p) p.name = name;
+      calculateSchedule();
+    }
+
+    function addCourseToParticipant(pId, courseId = 'CIRCO_F1') {
+      const p = state.participants.find(item => item.id === pId);
+      if (p) {
+        p.courseIds.push(courseId);
+        render();
+      }
+    }
+
+    function removeCourseFromParticipant(pId, cIdx) {
+      const p = state.participants.find(item => item.id === pId);
+      if (p && p.courseIds.length > 1) {
+        p.courseIds.splice(cIdx, 1);
+        render();
+      }
+    }
+
+    function updateParticipantCourse(pId, cIdx, courseId) {
+      const p = state.participants.find(item => item.id === pId);
+      if (p) {
+        p.courseIds[cIdx] = courseId;
+        calculateSchedule();
+      }
+    }
+
+    function setPaymentPlan(planType) {
+      state.plan = planType;
+      const btnTrim = document.getElementById('plan-btn-trim');
+      const btnSol = document.getElementById('plan-btn-sol');
+
+      if (planType === 'TRIMESTRALE') {
+        btnTrim.className = 'active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative';
+        btnSol.className = 'active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative';
+      } else {
+        btnSol.className = 'active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative';
+        btnTrim.className = 'active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative';
+      }
+
+      calculateSchedule();
+    }
+
+    function setDiscountStrategy(strategy) {
+      state.discountStrategy = strategy;
+      const btnOpt = document.getElementById('strat-opt-btn');
+      const btnStd = document.getElementById('strat-std-btn');
+      const deltaTag = document.getElementById('savings-delta-tag');
+
+      if (strategy === 'OPTIMIZED') {
+        btnOpt.className = 'py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
+        btnStd.className = 'py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+        deltaTag.innerText = '⚡ Risparmio Max Attivo (-20% quota alta)';
+      } else {
+        btnStd.className = 'py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
+        btnOpt.className = 'py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+        deltaTag.innerText = 'Standard (-20% quota minore)';
+      }
+
+      calculateSchedule();
     }
 
     function calculateSchedule() {
       const scheduleContainer = document.getElementById('schedule-container');
+      const grandTotalElem = document.getElementById('grand-total-amount');
       const appliedDiscountBadge = document.getElementById('applied-discount-badge');
+
+      if (!scheduleContainer) return;
       scheduleContainer.innerHTML = '';
 
-      let items = state.participants.map(p => {
-        const course = COURSE_CATALOG.find(c => c.id === p.courseId);
-        return {
-          participantName: p.name || 'Allievo',
-          courseName: course.name,
-          trimPrice: course.trim,
-          solPrice: course.sol,
-          septFee: course.septFee || 0,
-          septFree: course.septFree || false,
-          discount: 0
-        };
-      });
+      let allCourseItems = [];
+      let totalRegFee = state.participants.length * 30; // €30/person
 
-      let hasDiscount = false;
-      if (items.length > 1) {
-        hasDiscount = true;
-        let sortedIndices = items.map((_, idx) => idx).sort((a, b) => {
-          const priceA = state.plan === 'TRIMESTRALE' ? items[a].trimPrice : items[a].solPrice;
-          const priceB = state.plan === 'TRIMESTRALE' ? items[b].trimPrice : items[b].solPrice;
-          
-          if (state.discountStrategy === 'OPTIMIZED') {
-            return priceA - priceB;
-          } else {
-            return priceB - priceA;
+      state.participants.forEach(p => {
+        p.courseIds.forEach(cId => {
+          const course = COURSE_CATALOG.find(c => c.id === cId);
+          if (course) {
+            allCourseItems.push({
+              studentName: p.name,
+              courseId: c.id,
+              courseName: course.name,
+              basePrice: state.plan === 'TRIMESTRALE' ? course.trim : course.sol,
+              septFee: course.septFee || 0,
+              discount: 0
+            });
           }
         });
+      });
 
-        for (let i = 1; i < sortedIndices.length; i++) {
-          items[sortedIndices[i]].discount = (i === 1) ? 0.20 : 0.10;
+      // Discount Logic
+      let isDiscounted = false;
+      if (allCourseItems.length > 1) {
+        isDiscounted = true;
+        allCourseItems.sort((a, b) => b.basePrice - a.basePrice);
+
+        if (state.discountStrategy === 'OPTIMIZED') {
+          // -20% on the highest price course
+          allCourseItems[0].discount = 0.20;
+        } else {
+          // -20% on the lowest price course
+          allCourseItems[allCourseItems.length - 1].discount = 0.20;
         }
       }
 
       if (appliedDiscountBadge) {
-        if (hasDiscount) {
-          appliedDiscountBadge.classList.remove('hidden');
-          appliedDiscountBadge.innerText = state.discountStrategy === 'OPTIMIZED' 
-            ? '⚡ Sconto Max Ottimizzato (-20%)' 
-            : '-20% Sconto Standard';
-        } else {
-          appliedDiscountBadge.classList.add('hidden');
-        }
+        if (isDiscounted) appliedDiscountBadge.classList.remove('hidden');
+        else appliedDiscountBadge.classList.add('hidden');
       }
 
-      const regFeePerPerson = 30;
-      const totalRegFee = items.length * regFeePerPerson;
       let grandTotal = totalRegFee;
 
       if (state.plan === 'TRIMESTRALE') {
-        let r1Total = totalRegFee;
-        let r2Total = 0;
-        let r3Total = 0;
+        let t1CourseTotal = 0;
+        let t2CourseTotal = 0;
+        let t3CourseTotal = 0;
+        let septFeeTotal = 0;
 
-        let r1Lines = [`• Quota Associativa (${items.length}x €30,00)`];
-        let r2Lines = [];
-        let r3Lines = [];
+        let t1Lines = [`• Quota Associativa & Assicurativa: <strong>€ ${totalRegFee.toFixed(2)}</strong> (${state.participants.length} allievi x €30)`];
+        let t2Lines = [];
+        let t3Lines = [];
 
-        items.forEach(item => {
-          const discountedTrim = item.trimPrice * (1 - item.discount);
-          const discBadge = item.discount > 0 ? ` <span class="bg-emerald-100 text-emerald-700 font-bold px-1 rounded text-[9px]">-${(item.discount*100)}%</span>` : '';
-          const septText = item.septFree ? ' <span class="text-indigo-600 font-bold">(Sett. Gratis)</span>' : (item.septFee > 0 ? ` + Sett (${item.septFee}€)` : '');
+        allCourseItems.forEach(item => {
+          const finalCoursePrice = item.basePrice * (1 - item.discount);
+          t1CourseTotal += finalCoursePrice;
+          t2CourseTotal += finalCoursePrice;
+          t3CourseTotal += finalCoursePrice;
+          septFeeTotal += item.septFee;
 
-          r1Total += discountedTrim + (item.septFree ? 0 : item.septFee);
-          r2Total += discountedTrim;
-          r3Total += discountedTrim;
+          const discLabel = item.discount > 0 ? ' <strong class="text-emerald-700">(-20% Sconto)</strong>' : '';
+          const septText = item.septFee > 0 ? ` + Settembre (€${item.septFee})` : '';
 
-          r1Lines.push(`• <strong>${escapeHtml(item.participantName)}:</strong> ${item.courseName} (€${discountedTrim.toFixed(2)}${discBadge})${septText}`);
-          r2Lines.push(`• <strong>${escapeHtml(item.participantName)}:</strong> ${item.courseName} (€${discountedTrim.toFixed(2)}${discBadge})`);
-          r3Lines.push(`• <strong>${escapeHtml(item.participantName)}:</strong> ${item.courseName} (€${discountedTrim.toFixed(2)}${discBadge})`);
+          t1Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>${discLabel}${septText}`);
+          t2Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>`);
+          t3Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>`);
         });
 
-        grandTotal += (r1Total - totalRegFee) + r2Total + r3Total;
+        const tranche1Amount = totalRegFee + t1CourseTotal + septFeeTotal;
+        const tranche2Amount = t2CourseTotal;
+        const tranche3Amount = t3CourseTotal;
 
-        renderScheduleCard('1° Versamento (Acconto & Iscrizione)', r1Lines, r1Total, 'bg-indigo-50/80 border-indigo-200 text-indigo-950');
-        renderScheduleCard('2° Versamento — Entro il 25 Dicembre 2026', r2Lines, r2Total, 'bg-slate-50 border-slate-200 text-slate-800', 'Periodo: Gen, Feb, Mar 2027');
-        renderScheduleCard('3° Versamento — Entro il 27 Marzo 2027', r3Lines, r3Total, 'bg-slate-50 border-slate-200 text-slate-800', 'Periodo: Apr, Mag, Giu 2027');
+        grandTotal = tranche1Amount + tranche2Amount + tranche3Amount;
+
+        state.calculatedTotals = {
+          tranche1: tranche1Amount,
+          tranche2: tranche2Amount,
+          tranche3: tranche3Amount,
+          grandTotal: grandTotal
+        };
+
+        renderScheduleCard('1° Versamento (All\'atto dell\'iscrizione)', t1Lines, tranche1Amount, 'bg-indigo-50/80 border-indigo-200', 'Iscrizione + 1° Trimestre (Ott, Nov, Dic)');
+        renderScheduleCard('2° Versamento (Entro e non oltre 25 Dicembre 2026)', t2Lines, tranche2Amount, 'bg-slate-50 border-slate-200', '2° Trimestre (Gen, Feb, Mar 2027)');
+        renderScheduleCard('3° Versamento (Entro e non oltre 27 Marzo 2027)', t3Lines, tranche3Amount, 'bg-slate-50 border-slate-200', '3° Trimestre (Apr, Mag, Giu 2027)');
 
       } else {
-        let s1Total = totalRegFee;
-        let s2Total = 0;
+        // DUE SOLUZIONI
+        let s1CourseTotal = 0;
+        let s2CourseTotal = 0;
+        let septFeeTotal = 0;
 
-        let s1Lines = [`• Quota Associativa (${items.length}x €30,00)`];
+        let s1Lines = [`• Quota Associativa & Assicurativa: <strong>€ ${totalRegFee.toFixed(2)}</strong> (${state.participants.length} allievi x €30)`];
         let s2Lines = [];
 
-        items.forEach(item => {
-          const discountedSol = item.solPrice * (1 - item.discount);
-          const discBadge = item.discount > 0 ? ` <span class="bg-emerald-100 text-emerald-700 font-bold px-1 rounded text-[9px]">-${(item.discount*100)}%</span>` : '';
-          const septText = item.septFree ? ' <span class="text-indigo-600 font-bold">(Sett. Gratis)</span>' : (item.septFee > 0 ? ` + Sett (${item.septFee}€)` : '');
+        allCourseItems.forEach(item => {
+          const finalCoursePrice = item.basePrice * (1 - item.discount);
+          s1CourseTotal += finalCoursePrice;
+          s2CourseTotal += finalCoursePrice;
+          septFeeTotal += item.septFee;
 
-          s1Total += discountedSol + (item.septFree ? 0 : item.septFee);
-          s2Total += discountedSol;
+          const discLabel = item.discount > 0 ? ' <strong class="text-emerald-700">(-20% Sconto)</strong>' : '';
+          const septText = item.septFee > 0 ? ` + Settembre (€${item.septFee})` : '';
 
-          s1Lines.push(`• <strong>${escapeHtml(item.participantName)}:</strong> ${item.courseName} (€${discountedSol.toFixed(2)}${discBadge})${septText}`);
-          s2Lines.push(`• <strong>${escapeHtml(item.participantName)}:</strong> ${item.courseName} (€${discountedSol.toFixed(2)}${discBadge})`);
+          s1Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>${discLabel}${septText}`);
+          s2Lines.push(`• ${escapeHtml(item.studentName)} — ${escapeHtml(item.courseName)}: <strong>€ ${finalCoursePrice.toFixed(2)}</strong>`);
         });
 
-        grandTotal += (s1Total - totalRegFee) + s2Total;
+        const sol1Amount = totalRegFee + s1CourseTotal + septFeeTotal;
+        const sol2Amount = s2CourseTotal;
 
-        renderScheduleCard('1° Versamento (Acconto 50% & Iscrizione)', s1Lines, s1Total, 'bg-indigo-50/80 border-indigo-200 text-indigo-950');
-        renderScheduleCard('2° Versamento — Entro il 12 Febbraio 2027', s2Lines, s2Total, 'bg-slate-50 border-slate-200 text-slate-800', 'Periodo: Febbraio – Giugno 2027');
+        grandTotal = sol1Amount + sol2Amount;
+
+        state.calculatedTotals = {
+          tranche1: sol1Amount,
+          tranche2: sol2Amount,
+          tranche3: 0,
+          grandTotal: grandTotal
+        };
+
+        renderScheduleCard('1ª Soluzione (All\'atto dell\'iscrizione)', s1Lines, sol1Amount, 'bg-indigo-50/80 border-indigo-200', 'Iscrizione + 50% Quota Corsi');
+        renderScheduleCard('2ª Soluzione (Entro e non oltre 12 Febbraio 2027)', s2Lines, sol2Amount, 'bg-slate-50 border-slate-200', 'Saldo 50% restante (Feb - Giu 2027)');
       }
 
-      document.getElementById('grand-total-amount').innerText = `€ ${grandTotal.toFixed(2)}`;
+      if (grandTotalElem) {
+        grandTotalElem.innerText = `€ ${grandTotal.toFixed(2)}`;
+      }
+
+      renderPrintModules();
     }
 
     function renderScheduleCard(title, lines, amount, styleClasses, subtitle = '') {
@@ -655,13 +1019,13 @@
         <div class="flex items-start justify-between gap-2 mb-1.5">
           <div>
             <h3 class="font-extrabold text-xs sm:text-sm tracking-tight text-slate-900">${title}</h3>
-            ${subtitle ? `<span class="text-[10px] text-slate-500">${subtitle}</span>` : ''}
+            ${subtitle ? `<span class="inline-block text-[10px] font-semibold text-indigo-700 bg-indigo-100/60 px-2 py-0.5 rounded-md mt-0.5">${subtitle}</span>` : ''}
           </div>
           <span class="text-xs sm:text-sm font-extrabold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-sm shrink-0">
             € ${amount.toFixed(2)}
           </span>
         </div>
-        <div class="text-[11px] space-y-0.5 opacity-90 leading-tight">
+        <div class="text-[11px] space-y-1 opacity-90 leading-normal">
           ${lines.join('<br>')}
         </div>
       `;
@@ -689,10 +1053,13 @@
       const slotsContainer = document.getElementById('schedule-slots-container');
       const activeDayTitle = document.getElementById('active-day-title');
       const slotCountBadge = document.getElementById('slot-count-badge');
-      const catFilter = document.getElementById('schedule-cat-filter').value;
-      const searchQuery = document.getElementById('schedule-search').value.toLowerCase().trim();
+      const catFilter = document.getElementById('schedule-cat-filter')?.value || 'ALL';
+      const ageFilter = document.getElementById('schedule-age-filter')?.value || 'ALL';
+      const searchQuery = document.getElementById('schedule-search')?.value.toLowerCase().trim() || '';
 
-      activeDayTitle.innerText = `📅 Programmazione del ${capitalize(state.activeDay)}`;
+      if (!slotsContainer) return;
+
+      if (activeDayTitle) activeDayTitle.innerText = `📅 Programmazione del ${capitalize(state.activeDay)}`;
       slotsContainer.innerHTML = '';
 
       let slots = TIMETABLE_DB.filter(s => s.day === state.activeDay);
@@ -701,11 +1068,15 @@
         slots = slots.filter(s => s.cat === catFilter);
       }
 
+      if (ageFilter !== 'ALL') {
+        slots = slots.filter(s => s.ageGroup === ageFilter);
+      }
+
       if (searchQuery) {
         slots = slots.filter(s => s.name.toLowerCase().includes(searchQuery) || s.room.toLowerCase().includes(searchQuery));
       }
 
-      slotCountBadge.innerText = `${slots.length} lezioni trovate`;
+      if (slotCountBadge) slotCountBadge.innerText = `${slots.length} lezioni trovate`;
 
       if (slots.length === 0) {
         slotsContainer.innerHTML = `
@@ -730,6 +1101,9 @@
               <span class="text-[10px] font-bold text-slate-500 bg-slate-200 px-1.5 py-0.5 rounded-md">
                 ${s.room}
               </span>
+              <span class="text-[9px] font-bold text-purple-700 bg-purple-50 border border-purple-100 px-1.5 py-0.5 rounded-md">
+                Fascia: ${s.ageGroup}
+              </span>
             </div>
             <h4 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h4>
             <span class="text-[9px] text-slate-500 block">${s.cat}</span>
@@ -743,40 +1117,203 @@
     }
 
     function addFromSchedule(courseId, courseName) {
-      addParticipant(`Allievo (${courseName})`, courseId);
+      if (state.participants.length === 0) {
+        addParticipant(`Allievo (${courseName})`);
+      } else {
+        addCourseToParticipant(state.participants[0].id, courseId);
+      }
       switchTab('calc');
       showToast(`Aggiunto ${courseName} al preventivo!`);
     }
 
-    function getCourseDaysText(courseId) {
+    function getCourseSlotTimesText(courseId) {
       const matchSlots = TIMETABLE_DB.filter(s => s.courseId === courseId);
-      if (matchSlots.length === 0) return '';
-      const days = [...new Set(matchSlots.map(s => capitalize(s.day.substring(0, 3))))];
-      return ` <span class="text-[9px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded"><i class="fa-solid fa-clock mr-0.5"></i> ${days.join(', ')}</span>`;
+      if (matchSlots.length === 0) return 'Orario da definire in segreteria';
+      
+      return matchSlots.map(s => `${capitalize(s.day.substring(0, 3))} ${s.time} (${s.room})`).join(' | ');
+    }
+
+    function switchPrintModule(modNum) {
+      state.activeModule = modNum;
+      const mod1 = document.getElementById('print-module-1');
+      const mod2 = document.getElementById('print-module-2');
+      const btn1 = document.getElementById('mod-toggle-btn-1');
+      const btn2 = document.getElementById('mod-toggle-btn-2');
+
+      if (modNum === 1) {
+        mod1.classList.remove('hidden');
+        mod2.classList.add('hidden');
+        btn1.className = 'py-2.5 px-3 text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center';
+        btn2.className = 'py-2.5 px-3 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200';
+      } else {
+        mod2.classList.remove('hidden');
+        mod1.classList.add('hidden');
+        btn2.className = 'py-2.5 px-3 text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center';
+        btn1.className = 'py-2.5 px-3 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200';
+      }
+    }
+
+    function renderPrintModules() {
+      // 1. Render Module 1 (Preventivo Sintetico)
+      const mod1List = document.getElementById('mod1-allievi-list');
+      const mod1ScheduleRows = document.getElementById('mod1-schedule-rows');
+      const mod1GrandTotal = document.getElementById('mod1-grand-total');
+      const mod1PlanTitle = document.getElementById('mod1-plan-type-title');
+
+      if (mod1List) {
+        mod1PlanTitle.innerText = state.plan === 'TRIMESTRALE' ? 'Modalità Trimestrale' : 'Modalità Semestrale';
+        mod1List.innerHTML = '';
+
+        state.participants.forEach((p, idx) => {
+          let coursesDetail = p.courseIds.map(cId => {
+            const course = COURSE_CATALOG.find(c => c.id === cId);
+            const slotsText = getCourseSlotTimesText(cId);
+            return `<div class="text-xs text-slate-700 font-medium ml-3">• <strong>${course.name}</strong> (${slotsText})</div>`;
+          }).join('');
+
+          mod1List.innerHTML += `
+            <div class="border-b border-slate-100 pb-2">
+              <div class="font-bold text-xs text-slate-900">Allievo #${idx + 1}: ${escapeHtml(p.name)}</div>
+              ${coursesDetail}
+            </div>
+          `;
+        });
+      }
+
+      if (mod1ScheduleRows) {
+        mod1ScheduleRows.innerHTML = '';
+        const totals = state.calculatedTotals;
+        if (mod1GrandTotal) mod1GrandTotal.innerText = `€ ${totals.grandTotal.toFixed(2)}`;
+
+        if (state.plan === 'TRIMESTRALE') {
+          mod1ScheduleRows.innerHTML = `
+            <tr>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">1° Versamento</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">All'atto dell'iscrizione</td>
+              <td class="py-1.5 px-2 text-slate-600 border-r border-slate-200">Iscrizione (€30/allievo) + 1° Trimestre (Ott, Nov, Dic)</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${totals.tranche1.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">2° Versamento</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">25 Dicembre 2026</td>
+              <td class="py-1.5 px-2 text-slate-600 border-r border-slate-200">2° Trimestre (Gennaio, Febbraio, Marzo 2027)</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${totals.tranche2.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">3° Versamento</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">27 Marzo 2027</td>
+              <td class="py-1.5 px-2 text-slate-600 border-r border-slate-200">3° Trimestre (Aprile, Maggio, Giugno 2027)</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${totals.tranche3.toFixed(2)}</td>
+            </tr>
+          `;
+        } else {
+          mod1ScheduleRows.innerHTML = `
+            <tr>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">1ª Soluzione</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">All'atto dell'iscrizione</td>
+              <td class="py-1.5 px-2 text-slate-600 border-r border-slate-200">Iscrizione (€30/allievo) + Acconto 50% corsi</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${totals.tranche1.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">2ª Soluzione</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">12 Febbraio 2027</td>
+              <td class="py-1.5 px-2 text-slate-600 border-r border-slate-200">Saldo 50% restante (Febbraio - Giugno 2027)</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${totals.tranche2.toFixed(2)}</td>
+            </tr>
+          `;
+        }
+      }
+
+      // Rebuild Module 2 Table
+      buildHourlyPlannerTable();
+    }
+
+    function buildHourlyPlannerTable() {
+      const tableBody = document.getElementById('hourly-planner-body');
+      if (!tableBody) return;
+
+      tableBody.innerHTML = '';
+      const days = ['LUNEDI', 'MARTEDI', 'MERCOLEDI', 'GIOVEDI', 'VENERDI'];
+
+      for (let hour = 7; hour <= 21; hour++) {
+        const hourStr = hour < 10 ? `0${hour}:00` : `${hour}:00`;
+        const nextHourStr = hour + 1 < 10 ? `0${hour + 1}:00` : `${hour + 1}:00`;
+
+        let rowHtml = `<tr class="border-b border-slate-200">`;
+        rowHtml += `<td class="py-1 px-1 text-center font-bold bg-slate-100 text-slate-700 border-r border-slate-300 text-[8px]">${hourStr}</td>`;
+
+        days.forEach(day => {
+          let slotContent = [];
+
+          state.participants.forEach(p => {
+            p.courseIds.forEach(cId => {
+              const matchedSlots = TIMETABLE_DB.filter(s => {
+                if (s.courseId !== cId || s.day !== day) return false;
+                const startHour = parseInt(s.time.split(':')[0]);
+                return startHour === hour;
+              });
+
+              matchedSlots.forEach(s => {
+                slotContent.push(`
+                  <div class="bg-indigo-50 border border-indigo-200 p-1 rounded text-[8px] leading-tight mb-0.5">
+                    <div class="font-extrabold text-indigo-950">${escapeHtml(p.name)}</div>
+                    <div class="font-bold text-indigo-700">${s.time} (${s.room})</div>
+                    <div class="text-slate-600 truncate">${escapeHtml(s.name)}</div>
+                  </div>
+                `);
+              });
+            });
+          });
+
+          if (slotContent.length > 0) {
+            rowHtml += `<td class="p-1 border-r border-slate-200 vertical-top bg-white">${slotContent.join('')}</td>`;
+          } else {
+            rowHtml += `<td class="p-1 border-r border-slate-200 text-slate-300 text-[7px] italic text-center">---</td>`;
+          }
+        });
+
+        rowHtml += `</tr>`;
+        tableBody.innerHTML += rowHtml;
+      }
+    }
+
+    function triggerPrint(mode) {
+      document.body.classList.remove('print-only-1', 'print-only-2');
+
+      if (mode === '1') {
+        document.body.classList.add('print-only-1');
+        switchPrintModule(1);
+      } else if (mode === '2') {
+        document.body.classList.add('print-only-2');
+        switchPrintModule(2);
+      } else {
+        switchPrintModule(1);
+      }
+
+      window.print();
     }
 
     function loadPreset(type) {
       if (type === 'family') {
         state.participants = [
-          { id: 'p1', name: 'Marco (7 anni)', courseId: 'CIRCO_F1' },
-          { id: 'p2', name: 'Sofia (4 anni)', courseId: 'ARTE_CREATIVA' }
+          { id: 'p1', name: 'Marco (7 anni)', courseIds: ['CIRCO_F1'] },
+          { id: 'p2', name: 'Sofia (4 anni)', courseIds: ['ARTE_CREATIVA'] }
         ];
         state.plan = 'TRIMESTRALE';
-      } else if (type === 'single') {
+      } else if (type === 'multicourse') {
         state.participants = [
-          { id: 'p1', name: 'Laura', courseId: 'POLE_F1' },
-          { id: 'p2', name: 'Laura (2° Corso)', courseId: 'FITNESS_F1' }
+          { id: 'p1', name: 'Laura (Adulto)', courseIds: ['POLE_F1', 'FITNESS_F1'] }
         ];
         state.plan = 'TRIMESTRALE';
       } else if (type === 'judo') {
         state.participants = [
-          { id: 'p1', name: 'Luca (7 anni)', courseId: 'JUDO_BIMBI_F2' },
-          { id: 'p2', name: 'Elena (8 anni)', courseId: 'CIRCO_F2' }
+          { id: 'p1', name: 'Luca (7 anni)', courseIds: ['JUDO_BIMBI_F2'] },
+          { id: 'p2', name: 'Elena (8 anni)', courseIds: ['CIRCO_F2'] }
         ];
         state.plan = 'TRIMESTRALE';
       } else if (type === 'pole') {
         state.participants = [
-          { id: 'p1', name: 'Valeria', courseId: 'POLE_F2' }
+          { id: 'p1', name: 'Valeria', courseIds: ['POLE_F2', 'FITNESS_F2'] }
         ];
         state.plan = 'TRIMESTRALE';
       }
@@ -786,18 +1323,24 @@
     }
 
     function copySummaryText() {
-      const totalText = document.getElementById('grand-total-amount').innerText;
+      const grandTotalElem = document.getElementById('grand-total-amount');
+      const grandTotalText = grandTotalElem ? grandTotalElem.innerText : '€ 0,00';
+
       let text = `🎪 *PROSPETTO PREVENTIVO URBAN GRAVITY ACADEMY*\n`;
       text += `Polo UGART Vigevano - A.A. 2026/2027\n`;
       text += `-----------------------------------------\n`;
       text += `Modalità: ${state.plan === 'TRIMESTRALE' ? 'Trimestrale' : 'Due Soluzioni'}\n\n`;
 
       state.participants.forEach((p, idx) => {
-        const course = COURSE_CATALOG.find(c => c.id === p.courseId);
-        text += `• Allievo ${idx + 1}: ${p.name || 'Allievo'} -> ${course.name}\n`;
+        text += `• Allievo ${idx + 1}: ${p.name || 'Allievo'}\n`;
+        p.courseIds.forEach(cId => {
+          const course = COURSE_CATALOG.find(c => c.id === cId);
+          const slotsText = getCourseSlotTimesText(cId);
+          text += `  - ${course ? course.name : cId} [${slotsText}]\n`;
+        });
       });
 
-      text += `\n💰 *Totale Annuo Complessivo:* ${totalText}\n`;
+      text += `\n💰 *Totale Annuo Complessivo:* ${grandTotalText}\n`;
       text += `🏦 *IBAN Bonifico:* IT84E0306909606100000137439\n`;
       text += `Info e orari completi su: www.ugacademy.it`;
 
@@ -814,18 +1357,22 @@
     function showToast(msg) {
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toast-message');
-      toastMsg.innerText = msg;
-      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-      setTimeout(() => {
-        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-      }, 2500);
+      if (toast && toastMsg) {
+        toastMsg.innerText = msg;
+        toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        }, 2500);
+      }
     }
 
     function capitalize(str) {
+      if (!str) return '';
       return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
 
     function escapeHtml(str) {
+      if (!str) return '';
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
