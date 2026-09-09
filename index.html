@@ -104,7 +104,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
           <button onclick="loadPreset('family')" class="active-scale flex flex-col items-center justify-center p-2 sm:p-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-100 text-center">
             <i class="fa-solid fa-users text-indigo-600 mb-1 text-xs sm:text-sm"></i>
-            <span class="text-[10px] sm:text-[11px]">2 Figli (Circo+Arte)</span>
+            <span class="text-[10px] sm:text-[11px]">2 Figli (Corso 1 + Arte)</span>
           </button>
           <button onclick="loadPreset('multicourse')" class="active-scale flex flex-col items-center justify-center p-2 sm:p-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold rounded-xl border border-purple-100 text-center">
             <i class="fa-solid fa-layer-group text-purple-600 mb-1 text-xs sm:text-sm"></i>
@@ -112,7 +112,7 @@
           </button>
           <button onclick="loadPreset('judo')" class="active-scale flex flex-col items-center justify-center p-2 sm:p-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-100 text-center">
             <i class="fa-solid fa-child text-emerald-600 mb-1 text-xs sm:text-sm"></i>
-            <span class="text-[10px] sm:text-[11px]">Fratelli Judo + Circo</span>
+            <span class="text-[10px] sm:text-[11px]">Fratelli Judo + Corso 2</span>
           </button>
           <button onclick="loadPreset('pole')" class="active-scale flex flex-col items-center justify-center p-2 sm:p-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-bold rounded-xl border border-pink-100 text-center">
             <i class="fa-solid fa-person-dots-from-line text-pink-600 mb-1 text-xs sm:text-sm"></i>
@@ -128,7 +128,7 @@
             <h2 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
               <i class="fa-solid fa-user-group text-indigo-600"></i> Partecipanti e Corsi Assegnati
             </h2>
-            <p class="text-[10px] sm:text-[11px] text-slate-500">I corsi si filtrano in base all'età dell'allievo</p>
+            <p class="text-[10px] sm:text-[11px] text-slate-500">I corsi riportano la numerazione ufficiale (Corso 1, Corso 2, Corso 3, Corso 4)[cite: 2]</p>
           </div>
           <button onclick="addParticipant()" class="no-print active-scale bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl shadow-md shadow-indigo-600/20 flex items-center gap-1">
             <i class="fa-solid fa-user-plus text-[10px]"></i> <span class="hidden sm:inline">Nuovo</span> Allievo
@@ -310,7 +310,7 @@
 
           <div>
             <label class="block text-[9px] sm:text-[10px] font-bold uppercase text-slate-400 mb-1">Cerca Corso o Istruttore</label>
-            <input id="schedule-search" type="text" placeholder="Es. Circo, Danza, Judo..." oninput="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-1.5 text-xs font-semibold text-slate-800">
+            <input id="schedule-search" type="text" placeholder="Es. Corso 1, Corso 2, Judo..." oninput="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-1.5 text-xs font-semibold text-slate-800">
           </div>
         </div>
       </section>
@@ -504,24 +504,25 @@
 
     const REGISTRATION_FEE = 30;
 
-    // CATALOGO UNIFICATO E VERIFICATO DAL PDF ORARI A.A. 26/27 (REV. 31/08/2026)
+    // CATALOGO UNIFICATO E VERIFICATO DAL PDF ORARI A.A. 26/27 CON NUMERAZIONE CORSI UFFICIALE (CORSO 1, CORSO 2, CORSO 3, CORSO 4)
     const COURSE_CATALOG = [
-      { id: 'CIRCO_F1', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
-      { id: 'CIRCO_F2', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (2 v/sett)', trim: 260, sol: 390, ageGroup: 'BIMBI' },
-      { id: 'CIRCO_F3', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (3 v/sett)', trim: 315, sol: 473, ageGroup: 'JUNIOR' },
-      { id: 'CIRCUS_BASE', cat: 'Accademica Circo/Danza', name: 'Academy Circus Base', trim: 240, sol: 360, ageGroup: 'JUNIOR' },
-      { id: 'CIRCUS_PLUS', cat: 'Accademica Circo/Danza', name: 'Academy Circus Plus (Open)', trim: 400, sol: 600, ageGroup: 'JUNIOR' },
+      { id: 'CIRCO_F1', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (1 v/sett - Corso 1)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'CIRCO_F2', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (2 v/sett - Corso 2)', trim: 260, sol: 390, ageGroup: 'BIMBI' },
+      { id: 'CIRCO_F3', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (3 v/sett - Corso 3)', trim: 315, sol: 473, ageGroup: 'JUNIOR' },
+      { id: 'CIRCO_F4', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (4 v/sett - Corso 4)', trim: 410, sol: 615, ageGroup: 'JUNIOR' },
+      { id: 'CIRCUS_BASE', cat: 'Accademica Circo/Danza', name: 'Academy Circus Base (Corso 1)', trim: 240, sol: 360, ageGroup: 'JUNIOR' },
+      { id: 'CIRCUS_PLUS', cat: 'Accademica Circo/Danza', name: 'Academy Circus Plus (Open All Access)', trim: 400, sol: 600, ageGroup: 'JUNIOR' },
       { id: 'PRE_ACRO', cat: 'Accademica Circo/Danza', name: 'Pre Acrobatica / Baby Circo (3-5 anni)', trim: 170, sol: 255, ageGroup: 'BABY' },
 
-      { id: 'DANZA_CLASSICA_F1', cat: 'Accademica Circo/Danza', name: 'Danza Classica (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
-      { id: 'DANZA_MODERN_F1', cat: 'Accademica Circo/Danza', name: 'Danza Modern (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'DANZA_CLASSICA_F1', cat: 'Accademica Circo/Danza', name: 'Danza Classica (1 v/sett - Corso 1)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'DANZA_MODERN_F1', cat: 'Accademica Circo/Danza', name: 'Danza Modern (1 v/sett - Corso 1)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
       { id: 'DANZA_CONTEMP', cat: 'Accademica Circo/Danza', name: 'Danza Contemporanea & Lab', trim: 170, sol: 255, ageGroup: 'JUNIOR' },
       { id: 'DANZA_HIPHOP', cat: 'Accademica Circo/Danza', name: 'Danza Hip Hop / Cheerleading', trim: 170, sol: 255, ageGroup: 'BIMBI' },
       { id: 'DANZA_HEELS', cat: 'Accademica Circo/Danza', name: 'Danza Heels (Senior)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
       
       { id: 'POLE_KIDS', cat: 'Pole Dance', name: 'Pole Kids', trim: 170, sol: 255, ageGroup: 'BIMBI' },
-      { id: 'POLE_F1', cat: 'Pole Dance', name: 'Pole Dance Senior / Acro Pole (1 v/sett)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
-      { id: 'POLE_F2', cat: 'Pole Dance', name: 'Pole Dance Senior / Acro Pole (2 v/sett)', trim: 295, sol: 430, ageGroup: 'SENIOR' },
+      { id: 'POLE_F1', cat: 'Pole Dance', name: 'Pole Dance Senior / Acro Pole (1 v/sett - Corso 1)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
+      { id: 'POLE_F2', cat: 'Pole Dance', name: 'Pole Dance Senior / Acro Pole (2 v/sett - Corso 2)', trim: 295, sol: 430, ageGroup: 'SENIOR' },
       { id: 'FLYING_POLE', cat: 'Pole Dance', name: 'Flying Pole', trim: 190, sol: 285, ageGroup: 'SENIOR' },
 
       { id: 'ARTE_CREATIVA', cat: 'Arte & Cultura', name: 'Arte Creativa (Sett. Gratis)', trim: 120, sol: 180, septFree: true, ageGroup: 'BABY' },
@@ -529,35 +530,35 @@
       { id: 'TEATRO_JUNIOR', cat: 'Arte & Cultura', name: 'Teatro Junior (10-18 anni)', trim: 150, sol: 225, ageGroup: 'JUNIOR' },
       { id: 'TEATRO_SENIOR', cat: 'Arte & Cultura', name: 'Teatro Senior (Adulti)', trim: 180, sol: 270, ageGroup: 'SENIOR' },
 
-      { id: 'JUDO_BIMBI_F1', cat: 'Arti Marziali', name: 'Gioca Judo / Judo Bimbi (1 v/sett)', trim: 120, sol: 180, ageGroup: 'BIMBI' },
-      { id: 'JUDO_BIMBI_F2', cat: 'Arti Marziali', name: 'Judo Junior / Bimbi (2 v/sett)', trim: 150, sol: 225, ageGroup: 'BIMBI' },
-      { id: 'JUDO_SENIOR_F2', cat: 'Arti Marziali', name: 'Judo Senior (+12 anni 2 v/sett)', trim: 165, sol: 248, ageGroup: 'SENIOR' },
+      { id: 'JUDO_BIMBI_F1', cat: 'Arti Marziali', name: 'Gioca Judo / Judo Bimbi (1 v/sett - Corso 1)', trim: 120, sol: 180, ageGroup: 'BIMBI' },
+      { id: 'JUDO_BIMBI_F2', cat: 'Arti Marziali', name: 'Judo Junior / Bimbi (2 v/sett - Corso 2)', trim: 150, sol: 225, ageGroup: 'BIMBI' },
+      { id: 'JUDO_SENIOR_F2', cat: 'Arti Marziali', name: 'Judo Senior (+12 anni 2 v/sett - Corso 2)', trim: 165, sol: 248, ageGroup: 'SENIOR' },
       { id: 'KUNG_FU', cat: 'Arti Marziali', name: 'Kung Fu San Dao / Difesa Personale (+14 anni)', trim: 165, sol: 248, ageGroup: 'RAGAZZI' },
 
-      { id: 'FITNESS_F1', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (1 v/sett)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
-      { id: 'FITNESS_F2', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (2 v/sett)', trim: 195, sol: 293, ageGroup: 'SENIOR' },
+      { id: 'FITNESS_F1', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (1 v/sett - Corso 1)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'FITNESS_F2', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (2 v/sett - Corso 2)', trim: 195, sol: 293, ageGroup: 'SENIOR' },
       { id: 'NO_GRAVITY', cat: 'Fitness & Posturale', name: 'No Gravity Pilates', trim: 135, sol: 203, ageGroup: 'SENIOR' },
       { id: 'BUNGEE_FLY', cat: 'Fitness & Posturale', name: 'Bungee Fly', trim: 135, sol: 203, ageGroup: 'SENIOR' },
       { id: 'GEP_POSTURALE', cat: 'Fitness & Posturale', name: 'GEP Ginnastica Energetico Posturale', trim: 135, sol: 203, ageGroup: 'SENIOR' },
       { id: 'YAMUNA_BODY', cat: 'Fitness & Posturale', name: 'Yamuna Body Rolling', trim: 135, sol: 203, ageGroup: 'SENIOR' },
-      { id: 'CALISTHENICS_1', cat: 'Fitness & Posturale', name: 'UGA Calisthenics & Functional Training', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'CALISTHENICS_1', cat: 'Fitness & Posturale', name: 'UGA Calisthenics & Functional Training (Corso 1)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
       { id: 'BACHATA_JUNIOR', cat: 'Fitness & Posturale', name: 'Bachata Moderna / Sensual', trim: 135, sol: 203, ageGroup: 'JUNIOR' }
     ];
 
-    // DATABASE ORARI E SALE UNIFICATO ESATTAMENTE DAL PDF ORARI A.A. 26/27 (REV 31/08/2026)
+    // DATABASE ORARI E SALE UNIFICATO ESATTAMENTE DAL PDF ORARI A.A. 26/27 (REV 31/08/2026) CON INDICAZIONE "CORSO 1", "CORSO 2", "CORSO 3"
     const TIMETABLE_DB = [
       // LUNEDI
-      { day: 'LUNEDI', time: '12:45 - 13:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '12:45 - 13:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior Corso 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '12:45 - 13:30', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab 2.0', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
-      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Giocoleria ed Equilibrismo', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
       { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'POLE_KIDS', name: 'Pole Kids', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'BIMBI' },
       { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'TEATRO_BIMBI', name: 'Teatro Bimbi (6-9 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
       { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 1 (6-7 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
       { day: 'LUNEDI', time: '18:00 - 19:15', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 1', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior Corso 1', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
       { day: 'LUNEDI', time: '18:45 - 19:45', courseId: 'FITNESS_F1', name: 'Flexy - Mobilità Articolare', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F3', name: 'Acrobatica Aerea Senior Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F2', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
@@ -571,18 +572,18 @@
       { day: 'MARTEDI', time: '12:45 - 13:45', courseId: 'YAMUNA_BODY', name: 'Yamuna Body Rolling', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab 2.0', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
       { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Pre Acrobatica / Baby (3-5 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Junior Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'JUDO_BIMBI_F1', name: 'Gioca Judo (3-5 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BABY' },
       { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'FITNESS_F1', name: 'Viso Fitness', room: 'Sala 5', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '17:30 - 18:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (3-5 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BABY' },
-      { day: 'MARTEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
-      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi Corso 1 (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
       { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (6-11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
-      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'Acro Pole Junior 2', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior Corso 2 (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Senior Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'Acro Pole Junior Corso 2', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
       { day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (+11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior Corso 2 (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'FITNESS_F1', name: 'UGA Pilates Barré', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'BUNGEE_FLY', name: 'Bungee Fly', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '20:05 - 21:05', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna/Sensual Open Level', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
@@ -590,17 +591,17 @@
 
       // MERCOLEDI
       { day: 'MERCOLEDI', time: '12:45 - 13:30', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna/Sensual Open Level', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCUS_BASE', name: 'Academy Circus 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCUS_BASE', name: 'Academy Circus Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
       { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Circo (3-5 anni)', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
       { day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Junior', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'TEATRO_JUNIOR', name: 'Teatro 10-13 anni', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR Avanzato Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 3', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior Corso 3', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '18:15 - 19:45', courseId: 'TEATRO_JUNIOR', name: 'Teatro (Junior) 14-18 anni', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'RAGAZZI' },
-      { day: 'MERCOLEDI', time: '19:30 - 20:30', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '19:30 - 20:30', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional Training (Corso 1)', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MERCOLEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'UGA Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
       { day: 'MERCOLEDI', time: '19:45 - 21:15', courseId: 'TEATRO_SENIOR', name: 'Teatro (Senior) +18 anni', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'SENIOR' },
       { day: 'MERCOLEDI', time: '20:30 - 21:45', courseId: 'CALISTHENICS_1', name: 'Calisthenics Senior Corso 3', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
@@ -611,14 +612,14 @@
       { day: 'GIOVEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Energetico Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'GIOVEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Junior Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'FITNESS_F1', name: 'Hula Hoop Dance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'GIOVEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
+      { day: 'GIOVEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi Corso 1 (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
       { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'DANZA_CONTEMP', name: 'Danza Contemporanea & Lab', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'GIOVEDI', time: '18:00 - 19:15', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
-      { day: 'GIOVEDI', time: '19:00 - 20:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern & Lab Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior Corso 2 (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
+      { day: 'GIOVEDI', time: '19:00 - 20:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern & Lab Senior Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior Corso 2 (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
       { day: 'GIOVEDI', time: '20:30 - 22:00', courseId: 'FITNESS_F1', name: 'Hatha Yoga', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'GIOVEDI', time: '20:30 - 21:30', courseId: 'KUNG_FU', name: 'Kung Fu San Dao / Difesa Personale', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
 
@@ -631,8 +632,8 @@
       { day: 'VENERDI', time: '18:15 - 19:30', courseId: 'CIRCO_F3', name: 'Contorsionismo Livello 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'VENERDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'UGA Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'VENERDI', time: '19:15 - 20:15', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '19:15 - 20:15', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional Training Corso 1', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_HIPHOP', name: 'Cheerleading & Cheerdance Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
       { day: 'VENERDI', time: '20:00 - 21:00', courseId: 'FLYING_POLE', name: 'Flying Pole', room: 'Sala 1', cat: 'Pole Dance', ageGroup: 'SENIOR' },
       { day: 'VENERDI', time: '20:30 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu San Dao / Difesa Personale', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
@@ -846,7 +847,7 @@
         let coursesHtml = (p.courses || []).map((cObj, cIdx) => `
           <div class="bg-slate-50 p-2.5 sm:p-3 rounded-xl border border-slate-200/80 space-y-2">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-[9px] sm:text-[10px] font-extrabold uppercase text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">Corso #${cIdx + 1}</span>
+              <span class="text-[9px] sm:text-[10px] font-extrabold uppercase text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">Scelta Disciplina #${cIdx + 1}</span>
               ${p.courses.length > 1 ? `
                 <button onclick="removeCourseFromParticipant('${p.id}', ${cIdx})" class="text-[11px] text-rose-600 hover:text-rose-800 font-bold flex items-center gap-1">
                   <i class="fa-solid fa-trash-can text-[9px]"></i> Rimuovi
@@ -856,7 +857,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
-                <label class="block text-[9px] sm:text-[10px] font-bold text-slate-500 mb-1">Seleziona Disciplina</label>
+                <label class="block text-[9px] sm:text-[10px] font-bold text-slate-500 mb-1">Seleziona Corso Ufficiale UGART</label>
                 <select onchange="updateParticipantCourse('${p.id}', ${cIdx}, this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-2 py-1.5 text-xs font-semibold text-slate-800">
                   ${buildCourseOptions(cObj.courseId, p.age, p.filterByAge)}
                 </select>
@@ -907,7 +908,7 @@
             </div>
 
             <button onclick="addCourseToParticipant('${p.id}')" class="w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200/80 flex items-center justify-center gap-1.5 transition-all">
-              <i class="fa-solid fa-plus-circle text-[10px]"></i> Aggiungi corso per ${escapeHtml(p.name)}
+              <i class="fa-solid fa-plus-circle text-[10px]"></i> Aggiungi un altro corso a ${escapeHtml(p.name)}
             </button>
           </div>
         `;
@@ -1163,7 +1164,6 @@
 
       state.participants.forEach(p => {
         const isSelected = state.activeStudentFilter === p.id;
-        const pCoursesCount = p.courses ? p.courses.length : 0;
         pillsHtml += `
           <button onclick="filterStudent('${p.id}')" class="active-scale text-xs font-bold px-2.5 py-1 rounded-xl border flex items-center gap-1 ${isSelected ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'}">
             <i class="fa-solid fa-user-graduate text-[9px] ${isSelected ? 'text-indigo-200' : 'text-indigo-600'}"></i>
