@@ -517,8 +517,8 @@
     // State Object
     let state = {
       participants: [
-        { id: 'p1', name: 'Marco (7 anni)', courseIds: ['CIRCO_F1'] },
-        { id: 'p2', name: 'Sofia (4 anni)', courseIds: ['ARTE_CREATIVA'] }
+        { id: 'p1', name: 'Marco (7 anni)', courses: [{ courseId: 'CIRCO_F1', slotId: '' }] },
+        { id: 'p2', name: 'Sofia (4 anni)', courses: [{ courseId: 'ARTE_CREATIVA', slotId: '' }] }
       ],
       plan: 'TRIMESTRALE',
       discountStrategy: 'OPTIMIZED',
@@ -573,96 +573,96 @@
     // Complete Timetable Database
     const TIMETABLE_DB = [
       // LUNEDI
-      { day: 'LUNEDI', time: '12:45 - 13:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '12:45 - 13:30', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
-      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Giocoleria ed Equilibrismo', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'POLE_KIDS', name: 'Pole Kids', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'BIMBI' },
-      { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'TEATRO_BIMBI', name: 'Teatro Bimbi (6-9 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
-      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 1 (6-7 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'LUNEDI', time: '18:00 - 19:15', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 1', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
-      { day: 'LUNEDI', time: '18:45 - 19:45', courseId: 'FITNESS_F1', name: 'Flexy - Mobilità Articolare', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F3', name: 'Acrobatica Aerea Senior Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F2', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '20:00 - 21:00', courseId: 'FITNESS_F1', name: 'UGA Pilates Matwork', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '20:30 - 21:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior Corso 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '20:30 - 21:30', courseId: 'CIRCO_F1', name: 'Hula Hoop Dance Junior/Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { id: 'slot_lun_1', day: 'LUNEDI', time: '12:45 - 13:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { id: 'slot_lun_2', day: 'LUNEDI', time: '12:45 - 13:30', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_lun_3', day: 'LUNEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { id: 'slot_lun_4', day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_lun_5', day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_lun_6', day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Giocoleria ed Equilibrismo', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_lun_7', day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'POLE_KIDS', name: 'Pole Kids', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'BIMBI' },
+      { id: 'slot_lun_8', day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'TEATRO_BIMBI', name: 'Teatro Bimbi (6-9 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
+      { id: 'slot_lun_9', day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 1 (6-7 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_lun_10', day: 'LUNEDI', time: '18:00 - 19:15', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_lun_11', day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 1', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { id: 'slot_lun_12', day: 'LUNEDI', time: '18:45 - 19:45', courseId: 'FITNESS_F1', name: 'Flexy - Mobilità Articolare', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_lun_13', day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F3', name: 'Acrobatica Aerea Senior Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { id: 'slot_lun_14', day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F2', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_lun_15', day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { id: 'slot_lun_16', day: 'LUNEDI', time: '20:00 - 21:00', courseId: 'FITNESS_F1', name: 'UGA Pilates Matwork', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_lun_17', day: 'LUNEDI', time: '20:30 - 21:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior Corso 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { id: 'slot_lun_18', day: 'LUNEDI', time: '20:30 - 21:30', courseId: 'CIRCO_F1', name: 'Hula Hoop Dance Junior/Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
 
       // MARTEDI
-      { day: 'MARTEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '12:45 - 13:45', courseId: 'YAMUNA_BODY', name: 'Yamuna Body Rolling', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab 2.0', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Pre Acrobatica (3-5 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '17:00 - 18:15', courseId: 'JUDO_BIMBI_F1', name: 'Gioca Judo (3-5 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'BABY' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'FITNESS_F1', name: 'Viso Fitness', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '17:30 - 18:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (3-5 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BABY' },
-      { day: 'MARTEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
-      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'MARTEDI', time: '18:30 - 19:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (6-11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
-      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 2', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '19:30 - 20:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (+11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'FITNESS_F1', name: 'UGA Pilates Barré', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'BUNGEE_FLY', name: 'Bungee Fly', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '20:00 - 21:00', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '21:15 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+      { id: 'slot_mar_1', day: 'MARTEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mar_2', day: 'MARTEDI', time: '12:45 - 13:45', courseId: 'YAMUNA_BODY', name: 'Yamuna Body Rolling', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mar_3', day: 'MARTEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab 2.0', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { id: 'slot_mar_4', day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Pre Acrobatica (3-5 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { id: 'slot_mar_5', day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_mar_6', day: 'MARTEDI', time: '17:00 - 18:15', courseId: 'JUDO_BIMBI_F1', name: 'Gioca Judo (3-5 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'BABY' },
+      { id: 'slot_mar_7', day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'FITNESS_F1', name: 'Viso Fitness', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mar_8', day: 'MARTEDI', time: '17:30 - 18:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (3-5 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BABY' },
+      { id: 'slot_mar_9', day: 'MARTEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
+      { id: 'slot_mar_10', day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_mar_11', day: 'MARTEDI', time: '18:30 - 19:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (6-11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
+      { id: 'slot_mar_12', day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
+      { id: 'slot_mar_13', day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { id: 'slot_mar_14', day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 2', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { id: 'slot_mar_15', day: 'MARTEDI', time: '19:30 - 20:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (+11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { id: 'slot_mar_16', day: 'MARTEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
+      { id: 'slot_mar_17', day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'FITNESS_F1', name: 'UGA Pilates Barré', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mar_18', day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'BUNGEE_FLY', name: 'Bungee Fly', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mar_19', day: 'MARTEDI', time: '20:00 - 21:00', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mar_20', day: 'MARTEDI', time: '21:15 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
 
       // MERCOLEDI
-      { day: 'MERCOLEDI', time: '12:45 - 13:30', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCUS_BASE', name: 'Academy Circus 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Circo (3-5 anni)', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
-      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Junior', room: 'Sala 5', cat: 'Fitness & Posturale', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'TEATRO_JUNIOR', name: 'Teatro Junior (10-13 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR Avanzato Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 3', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '18:15 - 19:45', courseId: 'TEATRO_JUNIOR', name: 'Teatro Ragazzi (14-18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'RAGAZZI' },
-      { day: 'MERCOLEDI', time: '19:30 - 20:30', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '19:45 - 21:15', courseId: 'TEATRO_SENIOR', name: 'Teatro Senior (+18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '20:30 - 21:45', courseId: 'CALISTHENICS_1', name: 'Calisthenics Senior Corso 3', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '20:30 - 21:30', courseId: 'POLE_F2', name: 'Pole Dance Senior Intermedio/Advance', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { id: 'slot_mer_1', day: 'MERCOLEDI', time: '12:45 - 13:30', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mer_2', day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_mer_3', day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCUS_BASE', name: 'Academy Circus 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_mer_4', day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_mer_5', day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Circo (3-5 anni)', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { id: 'slot_mer_6', day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Junior', room: 'Sala 5', cat: 'Fitness & Posturale', ageGroup: 'JUNIOR' },
+      { id: 'slot_mer_7', day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'TEATRO_JUNIOR', name: 'Teatro Junior (10-13 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { id: 'slot_mer_8', day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR Avanzato Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_mer_9', day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_mer_10', day: 'MERCOLEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 3', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { id: 'slot_mer_11', day: 'MERCOLEDI', time: '18:15 - 19:45', courseId: 'TEATRO_JUNIOR', name: 'Teatro Ragazzi (14-18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'RAGAZZI' },
+      { id: 'slot_mer_12', day: 'MERCOLEDI', time: '19:30 - 20:30', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mer_13', day: 'MERCOLEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { id: 'slot_mer_14', day: 'MERCOLEDI', time: '19:45 - 21:15', courseId: 'TEATRO_SENIOR', name: 'Teatro Senior (+18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'SENIOR' },
+      { id: 'slot_mer_15', day: 'MERCOLEDI', time: '20:30 - 21:45', courseId: 'CALISTHENICS_1', name: 'Calisthenics Senior Corso 3', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_mer_16', day: 'MERCOLEDI', time: '20:30 - 21:30', courseId: 'POLE_F2', name: 'Pole Dance Senior Intermedio/Advance', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
 
       // GIOVEDI
-      { day: 'GIOVEDI', time: '08:15 - 09:00', courseId: 'BUNGEE_FLY', name: 'Bungee Fly Mattino', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'FITNESS_F1', name: 'Hula Hoop Dance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'GIOVEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
-      { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'DANZA_CONTEMP', name: 'Danza Contemporanea & Lab', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'GIOVEDI', time: '18:00 - 19:15', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
-      { day: 'GIOVEDI', time: '19:00 - 20:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern & Lab Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '20:30 - 22:00', courseId: 'FITNESS_F1', name: 'Hatha Yoga', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '20:30 - 21:30', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+      { id: 'slot_gio_1', day: 'GIOVEDI', time: '08:15 - 09:00', courseId: 'BUNGEE_FLY', name: 'Bungee Fly Mattino', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_gio_2', day: 'GIOVEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_gio_3', day: 'GIOVEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_gio_4', day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_gio_5', day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_gio_6', day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'FITNESS_F1', name: 'Hula Hoop Dance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_gio_7', day: 'GIOVEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
+      { id: 'slot_gio_8', day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'DANZA_CONTEMP', name: 'Danza Contemporanea & Lab', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_gio_9', day: 'GIOVEDI', time: '18:00 - 19:15', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_gio_10', day: 'GIOVEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
+      { id: 'slot_gio_11', day: 'GIOVEDI', time: '19:00 - 20:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern & Lab Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { id: 'slot_gio_12', day: 'GIOVEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
+      { id: 'slot_gio_13', day: 'GIOVEDI', time: '20:30 - 22:00', courseId: 'FITNESS_F1', name: 'Hatha Yoga', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_gio_14', day: 'GIOVEDI', time: '20:30 - 21:30', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
 
       // VENERDI
-      { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 3', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'VENERDI', time: '17:00 - 18:15', courseId: 'CIRCO_F1', name: 'Flexy Contortion Liv. 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Danza / Danza Motricità', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
-      { day: 'VENERDI', time: '18:15 - 19:30', courseId: 'CIRCO_F3', name: 'Contorsionismo Livello 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'VENERDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'VENERDI', time: '19:15 - 20:15', courseId: 'CALISTHENICS_1', name: 'Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'VENERDI', time: '19:00 - 20:00', courseId: 'DANZA_HIPHOP', name: 'Cheerleading & Cheerdance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'VENERDI', time: '20:00 - 21:00', courseId: 'FLYING_POLE', name: 'Flying Pole', room: 'Sala 1', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'VENERDI', time: '20:30 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
-      { day: 'VENERDI', time: '20:15 - 21:15', courseId: 'DANZA_HEELS', name: 'Danza Heels / Video Dance Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' }
+      { id: 'slot_ven_1', day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_ven_2', day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 3', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_ven_3', day: 'VENERDI', time: '17:00 - 18:15', courseId: 'CIRCO_F1', name: 'Flexy Contortion Liv. 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_ven_4', day: 'VENERDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_ven_5', day: 'VENERDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Danza / Danza Motricità', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { id: 'slot_ven_6', day: 'VENERDI', time: '18:15 - 19:30', courseId: 'CIRCO_F3', name: 'Contorsionismo Livello 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_ven_7', day: 'VENERDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { id: 'slot_ven_8', day: 'VENERDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { id: 'slot_ven_9', day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_ven_10', day: 'VENERDI', time: '19:15 - 20:15', courseId: 'CALISTHENICS_1', name: 'Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { id: 'slot_ven_11', day: 'VENERDI', time: '19:00 - 20:00', courseId: 'DANZA_HIPHOP', name: 'Cheerleading & Cheerdance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { id: 'slot_ven_12', day: 'VENERDI', time: '20:00 - 21:00', courseId: 'FLYING_POLE', name: 'Flying Pole', room: 'Sala 1', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { id: 'slot_ven_13', day: 'VENERDI', time: '20:30 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+      { id: 'slot_ven_14', day: 'VENERDI', time: '20:15 - 21:15', courseId: 'DANZA_HEELS', name: 'Danza Heels / Video Dance Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' }
     ];
 
     // Main Init Function
@@ -724,16 +724,31 @@
       `).join('');
     }
 
-    function getCourseSlotBadgesHTML(courseId) {
+    function buildCourseSlotOptions(courseId, selectedSlotId) {
       const matchSlots = TIMETABLE_DB.filter(s => s.courseId === courseId);
-      if (matchSlots.length === 0) {
-        return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold"><i class="fa-regular fa-clock text-[9px]"></i> Orario in segreteria</span>`;
+      
+      let optionsHtml = `<option value="" ${!selectedSlotId ? 'selected' : ''}>⏱️ Orario da concordare con la segreteria</option>`;
+      
+      matchSlots.forEach(s => {
+        const label = `${capitalize(s.day)} ${s.time} — ${s.name} (${s.room})`;
+        optionsHtml += `<option value="${s.id}" ${s.id === selectedSlotId ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+      });
+
+      return optionsHtml;
+    }
+
+    function getSelectedSlotBadgeHTML(slotId) {
+      if (!slotId) {
+        return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-semibold"><i class="fa-regular fa-clock text-[10px] text-indigo-500"></i> Orario flessibile (da concordare)</span>`;
       }
-      return matchSlots.map(s => `
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-bold">
-          <i class="fa-regular fa-calendar-check text-[9px] text-indigo-500"></i> ${capitalize(s.day.substring(0, 3))} ${s.time.split(' - ')[0]} (${s.room})
+      const slot = TIMETABLE_DB.find(s => s.id === slotId);
+      if (!slot) return '';
+      
+      return `
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-800 text-[10px] font-extrabold shadow-2xs">
+          <i class="fa-solid fa-calendar-check text-[10px] text-indigo-600"></i> ${capitalize(slot.day)} ${slot.time} (${slot.room})
         </span>
-      `).join(' ');
+      `;
     }
 
     function render() {
@@ -746,22 +761,40 @@
         const card = document.createElement('div');
         card.className = 'bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 space-y-3';
 
-        let coursesHtml = p.courseIds.map((cId, cIdx) => `
-          <div class="flex flex-col sm:flex-row sm:items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200">
-            <div class="flex-1">
-              <select onchange="updateParticipantCourse('${p.id}', ${cIdx}, this.value)" 
-                      class="w-full bg-transparent text-xs font-semibold text-slate-800 focus:outline-none">
-                ${buildCourseOptions(cId)}
-              </select>
-              <div class="flex flex-wrap gap-1 mt-1">
-                ${getCourseSlotBadgesHTML(cId)}
+        // Normalize participant course structure if legacy array
+        if (!p.courses) {
+          p.courses = (p.courseIds || ['CIRCO_F1']).map(cId => ({ courseId: cId, slotId: '' }));
+        }
+
+        let coursesHtml = p.courses.map((cObj, cIdx) => `
+          <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex-1">
+                <label class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Disciplina & Frequenza</label>
+                <select onchange="updateParticipantCourse('${p.id}', ${cIdx}, this.value)" 
+                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500">
+                  ${buildCourseOptions(cObj.courseId)}
+                </select>
+              </div>
+              ${p.courses.length > 1 ? `
+                <button onclick="removeCourseFromParticipant('${p.id}', ${cIdx})" class="self-end sm:self-center text-slate-400 hover:text-rose-500 text-xs px-2 py-1 flex items-center gap-1">
+                  <i class="fa-solid fa-trash-can"></i> Rimuovi
+                </button>
+              ` : ''}
+            </div>
+
+            <div class="pt-1.5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex-1">
+                <label class="block text-[9px] font-extrabold uppercase text-slate-400 mb-0.5">Orario & Sala Preferiti (Opzionale)</label>
+                <select onchange="updateParticipantCourseSlot('${p.id}', ${cIdx}, this.value)" 
+                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-semibold text-slate-700 focus:outline-none focus:border-indigo-500">
+                  ${buildCourseSlotOptions(cObj.courseId, cObj.slotId)}
+                </select>
+              </div>
+              <div class="shrink-0 self-start sm:self-end">
+                ${getSelectedSlotBadgeHTML(cObj.slotId)}
               </div>
             </div>
-            ${p.courseIds.length > 1 ? `
-              <button onclick="removeCourseFromParticipant('${p.id}', ${cIdx})" class="self-end sm:self-center text-slate-400 hover:text-rose-500 text-xs px-2 py-1">
-                <i class="fa-solid fa-trash-can"></i>
-              </button>
-            ` : ''}
           </div>
         `).join('');
 
@@ -776,7 +809,7 @@
             </div>
             ${state.participants.length > 1 ? `
               <button onclick="removeParticipant('${p.id}')" class="text-slate-400 hover:text-rose-500 text-[11px] font-semibold px-1">
-                <i class="fa-solid fa-trash-can mr-1"></i> Rimuovi
+                <i class="fa-solid fa-trash-can mr-1"></i> Rimuovi Allievo
               </button>
             ` : ''}
           </div>
@@ -784,10 +817,10 @@
           <div class="space-y-2">
             <div class="flex items-center justify-between">
               <label class="block text-[10px] font-bold uppercase text-slate-500">
-                Discipline Frequentate (${p.courseIds.length})
+                Discipline Assegnate (${p.courses.length})
               </label>
               <button onclick="addCourseToParticipant('${p.id}')" class="text-[10px] font-bold text-indigo-600 hover:underline flex items-center gap-1">
-                <i class="fa-solid fa-circle-plus"></i> Aggiungi corso
+                <i class="fa-solid fa-circle-plus"></i> Aggiungi un altro corso
               </button>
             </div>
             <div class="space-y-2">
@@ -806,7 +839,7 @@
       state.participants.push({
         id: newId,
         name: name || `Allievo ${state.participants.length + 1}`,
-        courseIds: ['CIRCO_F1']
+        courses: [{ courseId: 'CIRCO_F1', slotId: '' }]
       });
       render();
     }
@@ -823,27 +856,38 @@
       calculateSchedule();
     }
 
-    function addCourseToParticipant(pId, courseId = 'CIRCO_F1') {
+    function addCourseToParticipant(pId, courseId = 'CIRCO_F1', slotId = '') {
       const p = state.participants.find(item => item.id === pId);
       if (p) {
-        p.courseIds.push(courseId);
+        if (!p.courses) p.courses = [];
+        p.courses.push({ courseId, slotId });
         render();
       }
     }
 
     function removeCourseFromParticipant(pId, cIdx) {
       const p = state.participants.find(item => item.id === pId);
-      if (p && p.courseIds.length > 1) {
-        p.courseIds.splice(cIdx, 1);
+      if (p && p.courses && p.courses.length > 1) {
+        p.courses.splice(cIdx, 1);
         render();
       }
     }
 
     function updateParticipantCourse(pId, cIdx, courseId) {
       const p = state.participants.find(item => item.id === pId);
-      if (p) {
-        p.courseIds[cIdx] = courseId;
+      if (p && p.courses && p.courses[cIdx]) {
+        p.courses[cIdx].courseId = courseId;
+        p.courses[cIdx].slotId = ''; // Reset slot selection when course changes
+        render();
+      }
+    }
+
+    function updateParticipantCourseSlot(pId, cIdx, slotId) {
+      const p = state.participants.find(item => item.id === pId);
+      if (p && p.courses && p.courses[cIdx]) {
+        p.courses[cIdx].slotId = slotId;
         calculateSchedule();
+        render();
       }
     }
 
@@ -894,8 +938,9 @@
       let totalRegFee = state.participants.length * 30;
 
       state.participants.forEach(p => {
-        p.courseIds.forEach(cId => {
-          const course = COURSE_CATALOG.find(c => c.id === cId);
+        const userCourses = p.courses || [];
+        userCourses.forEach(cObj => {
+          const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
           if (course) {
             allCourseItems.push({
               studentName: p.name,
@@ -1150,7 +1195,7 @@
                   <h5 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h5>
                   <span class="text-[9px] text-slate-500 block">${s.cat}</span>
                 </div>
-                <button onclick="addFromSchedule('${s.courseId}', '${escapeHtml(s.name)}')" class="active-scale bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-indigo-600 p-1.5 rounded-lg text-xs font-bold shrink-0">
+                <button onclick="addFromSchedule('${s.courseId}', '${s.id}', '${escapeHtml(s.name)}')" class="active-scale bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-indigo-600 p-1.5 rounded-lg text-xs font-bold shrink-0">
                   <i class="fa-solid fa-plus text-[10px]"></i>
                 </button>
               </div>
@@ -1195,7 +1240,7 @@
               <h4 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h4>
               <span class="text-[9px] text-slate-500 block">${s.cat}</span>
             </div>
-            <button onclick="addFromSchedule('${s.courseId}', '${escapeHtml(s.name)}')" class="active-scale bg-white hover:bg-indigo-50 border border-slate-200 text-indigo-600 p-2 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm shrink-0">
+            <button onclick="addFromSchedule('${s.courseId}', '${s.id}', '${escapeHtml(s.name)}')" class="active-scale bg-white hover:bg-indigo-50 border border-slate-200 text-indigo-600 p-2 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm shrink-0">
               <i class="fa-solid fa-plus text-[10px]"></i> Aggiungi
             </button>
           `;
@@ -1204,21 +1249,30 @@
       }
     }
 
-    function addFromSchedule(courseId, courseName) {
+    function addFromSchedule(courseId, slotId, courseName) {
       if (state.participants.length === 0) {
         addParticipant(`Allievo (${courseName})`);
+        state.participants[0].courses = [{ courseId, slotId }];
       } else {
-        addCourseToParticipant(state.participants[0].id, courseId);
+        addCourseToParticipant(state.participants[0].id, courseId, slotId);
       }
       switchTab('calc');
-      showToast(`Aggiunto ${courseName} al preventivo!`);
+      showToast(`Aggiunto ${courseName} al preventivo con orario!`);
     }
 
-    function getCourseSlotTimesText(courseId) {
-      const matchSlots = TIMETABLE_DB.filter(s => s.courseId === courseId);
-      if (matchSlots.length === 0) return 'Orario da definire in segreteria';
-      
-      return matchSlots.map(s => `${capitalize(s.day.substring(0, 3))} ${s.time} (${s.room})`).join(' | ');
+    function getCourseSlotTimesText(cObj) {
+      if (typeof cObj === 'string') {
+        // Fallback for legacy string parameter
+        return 'Orario da concordare con la segreteria';
+      }
+
+      if (cObj.slotId) {
+        const slot = TIMETABLE_DB.find(s => s.id === cObj.slotId);
+        if (slot) {
+          return `${capitalize(slot.day)} ${slot.time} (${slot.room})`;
+        }
+      }
+      return 'Orario da concordare con la segreteria';
     }
 
     function switchPrintModule(modNum) {
@@ -1252,10 +1306,11 @@
         mod1List.innerHTML = '';
 
         state.participants.forEach((p, idx) => {
-          let coursesDetail = p.courseIds.map(cId => {
-            const course = COURSE_CATALOG.find(c => c.id === cId);
-            const slotsText = getCourseSlotTimesText(cId);
-            return `<div class="text-xs text-slate-700 font-medium ml-3">• <strong>${course.name}</strong> (${slotsText})</div>`;
+          const userCourses = p.courses || [];
+          let coursesDetail = userCourses.map(cObj => {
+            const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
+            const slotsText = getCourseSlotTimesText(cObj);
+            return `<div class="text-xs text-slate-700 font-medium ml-3">• <strong>${course ? course.name : cObj.courseId}</strong> — <span class="text-slate-600">${slotsText}</span></div>`;
           }).join('');
 
           mod1List.innerHTML += `
@@ -1331,9 +1386,12 @@
           let slotContent = [];
 
           state.participants.forEach(p => {
-            p.courseIds.forEach(cId => {
+            const userCourses = p.courses || [];
+            userCourses.forEach(cObj => {
               const matchedSlots = TIMETABLE_DB.filter(s => {
-                if (s.courseId !== cId || s.day !== day) return false;
+                if (s.courseId !== cObj.courseId || s.day !== day) return false;
+                // If specific slot chosen, match only that slot
+                if (cObj.slotId && s.id !== cObj.slotId) return false;
                 const startHour = parseInt(s.time.split(':')[0]);
                 return startHour === hour;
               });
@@ -1381,24 +1439,24 @@
     function loadPreset(type) {
       if (type === 'family') {
         state.participants = [
-          { id: 'p1', name: 'Marco (7 anni)', courseIds: ['CIRCO_F1'] },
-          { id: 'p2', name: 'Sofia (4 anni)', courseIds: ['ARTE_CREATIVA'] }
+          { id: 'p1', name: 'Marco (7 anni)', courses: [{ courseId: 'CIRCO_F1', slotId: 'slot_lun_9' }] },
+          { id: 'p2', name: 'Sofia (4 anni)', courses: [{ courseId: 'ARTE_CREATIVA', slotId: 'slot_mar_8' }] }
         ];
         state.plan = 'TRIMESTRALE';
       } else if (type === 'multicourse') {
         state.participants = [
-          { id: 'p1', name: 'Laura (Adulto)', courseIds: ['POLE_F1', 'FITNESS_F1'] }
+          { id: 'p1', name: 'Laura (Adulto)', courses: [{ courseId: 'POLE_F1', slotId: 'slot_lun_15' }, { courseId: 'FITNESS_F1', slotId: 'slot_lun_12' }] }
         ];
         state.plan = 'TRIMESTRALE';
       } else if (type === 'judo') {
         state.participants = [
-          { id: 'p1', name: 'Luca (7 anni)', courseIds: ['JUDO_BIMBI_F2'] },
-          { id: 'p2', name: 'Elena (8 anni)', courseIds: ['CIRCO_F2'] }
+          { id: 'p1', name: 'Luca (7 anni)', courses: [{ courseId: 'JUDO_BIMBI_F2', slotId: 'slot_mar_12' }] },
+          { id: 'p2', name: 'Elena (8 anni)', courses: [{ courseId: 'CIRCO_F2', slotId: 'slot_lun_14' }] }
         ];
         state.plan = 'TRIMESTRALE';
       } else if (type === 'pole') {
         state.participants = [
-          { id: 'p1', name: 'Valeria', courseIds: ['POLE_F2', 'FITNESS_F2'] }
+          { id: 'p1', name: 'Valeria', courses: [{ courseId: 'POLE_F2', slotId: 'slot_mer_16' }, { courseId: 'FITNESS_F2', slotId: 'slot_lun_12' }] }
         ];
         state.plan = 'TRIMESTRALE';
       }
@@ -1418,10 +1476,11 @@
 
       state.participants.forEach((p, idx) => {
         text += `• Allievo ${idx + 1}: ${p.name || 'Allievo'}\n`;
-        p.courseIds.forEach(cId => {
-          const course = COURSE_CATALOG.find(c => c.id === cId);
-          const slotsText = getCourseSlotTimesText(cId);
-          text += `  - ${course ? course.name : cId} [${slotsText}]\n`;
+        const userCourses = p.courses || [];
+        userCourses.forEach(cObj => {
+          const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
+          const slotsText = getCourseSlotTimesText(cObj);
+          text += `  - ${course ? course.name : cObj.courseId} [${slotsText}]\n`;
         });
       });
 
