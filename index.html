@@ -13,7 +13,7 @@
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-tap-highlight-color: transparent;
-      padding-bottom: env(safe-area-inset-bottom);
+      padding-bottom: calc(1rem + env(safe-area-inset-bottom));
     }
     .gradient-header {
       background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #d946ef 100%);
@@ -22,8 +22,16 @@
       transition: transform 0.15s ease, opacity 0.15s ease;
     }
     .active-scale:active {
-      transform: scale(0.97);
+      transform: scale(0.96);
       opacity: 0.9;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 4px;
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 99px;
     }
 
     @media print {
@@ -42,191 +50,186 @@
     }
   </style>
 </head>
-<body class="h-full text-slate-800 antialiased selection:bg-indigo-500 selection:text-white pb-10">
+<body class="h-full text-slate-800 antialiased selection:bg-indigo-500 selection:text-white pb-12">
 
-  <div class="max-w-md md:max-w-3xl lg:max-w-5xl mx-auto px-3 sm:px-6 pt-3 sm:pt-6">
+  <div class="max-w-md md:max-w-3xl lg:max-w-5xl mx-auto px-3 sm:px-6 pt-2 sm:pt-6">
     
-    <!-- Top Header Banner -->
-    <header class="no-print gradient-header rounded-3xl p-5 text-white shadow-xl shadow-indigo-500/15 mb-4 relative overflow-hidden">
+    <!-- Header Banner -->
+    <header class="no-print gradient-header rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-xl shadow-indigo-500/15 mb-3 sm:mb-4 relative overflow-hidden">
       <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
       <div class="flex items-center justify-between gap-3 relative z-10">
-        <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl shadow-inner shrink-0">
+        <div class="flex items-center gap-2.5 sm:gap-3">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl sm:text-2xl shadow-inner shrink-0">
             🎪
           </div>
           <div>
-            <div class="flex items-center gap-2">
-              <span class="text-[10px] font-extrabold uppercase tracking-widest text-indigo-200 block">Polo UGART Vigevano</span>
-              <span class="text-[9px] bg-white/20 text-white font-bold px-1.5 py-0.5 rounded">Powered by Railim Solutions</span>
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <span class="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-indigo-200 block">Polo UGART Vigevano</span>
+              <span class="text-[8px] sm:text-[9px] bg-white/20 text-white font-bold px-1.5 py-0.5 rounded">A.A. 26/27</span>
             </div>
-            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight leading-tight">Gestionale Preventivi, Multi-Corso & Planner</h1>
+            <h1 class="text-base sm:text-xl font-extrabold tracking-tight leading-tight">Gestionale Preventivi & Planner Lezioni</h1>
           </div>
         </div>
-        <span class="bg-white/20 backdrop-blur-md text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full border border-white/20 shrink-0">
-          A.A. 26/27
-        </span>
+        <div class="hidden sm:block text-right">
+          <span class="bg-white/20 backdrop-blur-md text-xs font-extrabold px-3 py-1 rounded-full border border-white/20 shrink-0 inline-block">
+            Rev. 31/08/2026
+          </span>
+        </div>
       </div>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="no-print bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200/80 mb-4 grid grid-cols-3 gap-1.5">
-      <button id="tab-btn-calc" onclick="switchTab('calc')" class="py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5">
-        <i class="fa-solid fa-calculator"></i> <span class="hidden sm:inline">Preventivo &</span> Allievi
+    <!-- Navigation Mobile First Tab Bar -->
+    <nav class="no-print bg-white p-1 rounded-2xl shadow-sm border border-slate-200/80 mb-3 sm:mb-4 grid grid-cols-3 gap-1 sticky top-2 z-40 backdrop-blur-md bg-white/95">
+      <button id="tab-btn-calc" onclick="switchTab('calc')" class="py-2.5 px-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1 sm:gap-1.5">
+        <i class="fa-solid fa-calculator text-xs"></i> <span>Preventivo</span>
       </button>
-      <button id="tab-btn-schedule" onclick="switchTab('schedule')" class="py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5">
-        <i class="fa-solid fa-door-open"></i> Orari <span class="hidden sm:inline">& Sale</span>
+      <button id="tab-btn-schedule" onclick="switchTab('schedule')" class="py-2.5 px-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1 sm:gap-1.5">
+        <i class="fa-solid fa-calendar-days text-xs"></i> <span>Orari & Sale</span>
       </button>
-      <button id="tab-btn-print" onclick="switchTab('print')" class="py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1.5">
-        <i class="fa-solid fa-print"></i> Stampa <span class="hidden sm:inline">Moduli</span>
+      <button id="tab-btn-print" onclick="switchTab('print')" class="py-2.5 px-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-600 hover:text-indigo-600 flex items-center justify-center gap-1 sm:gap-1.5">
+        <i class="fa-solid fa-print text-xs"></i> <span>Moduli PDF</span>
       </button>
     </nav>
 
     <!-- SECTION 1: CALCULATOR & ALLIEVI MANAGEMENT -->
-    <div id="view-calculator" class="space-y-4">
+    <div id="view-calculator" class="space-y-3 sm:space-y-4">
 
-      <!-- Quick Scenario Presets -->
-      <section class="no-print bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200/80">
+      <!-- Presets -->
+      <section class="no-print bg-white p-3 sm:p-3.5 rounded-2xl shadow-sm border border-slate-200/80">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-            <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Preset Rapidi (Simulazione 1-Click)
+          <span class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Preset Rapidi (1-Click)
           </span>
-          <span class="text-[10px] text-slate-400 hidden sm:inline">Tocca per precompilare:</span>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <button onclick="loadPreset('family')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-100 text-center">
-            <i class="fa-solid fa-users text-indigo-600 mb-1 text-sm"></i>
-            <span class="text-[11px]">2 Figli (Circo+Arte)</span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
+          <button onclick="loadPreset('family')" class="active-scale flex flex-col items-center justify-center p-2 sm:p-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-100 text-center">
+            <i class="fa-solid fa-users text-indigo-600 mb-1 text-xs sm:text-sm"></i>
+            <span class="text-[10px] sm:text-[11px]">2 Figli (Circo+Arte)</span>
           </button>
-          <button onclick="loadPreset('multicourse')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold rounded-xl border border-purple-100 text-center">
-            <i class="fa-solid fa-layer-group text-purple-600 mb-1 text-sm"></i>
-            <span class="text-[11px]">Singolo (Multi-Corso)</span>
+          <button onclick="loadPreset('multicourse')" class="active-scale flex flex-col items-center justify-center p-2 sm:p-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold rounded-xl border border-purple-100 text-center">
+            <i class="fa-solid fa-layer-group text-purple-600 mb-1 text-xs sm:text-sm"></i>
+            <span class="text-[10px] sm:text-[11px]">Single Multi-Corso</span>
           </button>
-          <button onclick="loadPreset('judo')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-100 text-center">
-            <i class="fa-solid fa-child text-emerald-600 mb-1 text-sm"></i>
-            <span class="text-[11px]">Fratelli Judo + Circo</span>
+          <button onclick="loadPreset('judo')" class="active-scale flex flex-col items-center justify-center p-2 sm:p-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-100 text-center">
+            <i class="fa-solid fa-child text-emerald-600 mb-1 text-xs sm:text-sm"></i>
+            <span class="text-[10px] sm:text-[11px]">Fratelli Judo + Circo</span>
           </button>
-          <button onclick="loadPreset('pole')" class="active-scale flex flex-col items-center justify-center p-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-bold rounded-xl border border-pink-100 text-center">
-            <i class="fa-solid fa-person-dots-from-line text-pink-600 mb-1 text-sm"></i>
-            <span class="text-[11px]">Adulto Pole + Flexy</span>
+          <button onclick="loadPreset('pole')" class="active-scale flex flex-col items-center justify-center p-2 sm:p-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-bold rounded-xl border border-pink-100 text-center">
+            <i class="fa-solid fa-person-dots-from-line text-pink-600 mb-1 text-xs sm:text-sm"></i>
+            <span class="text-[10px] sm:text-[11px]">Adulto Pole + Flexy</span>
           </button>
         </div>
       </section>
 
       <!-- Allievi Card -->
-      <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/80">
+      <section class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm border border-slate-200/80">
         <div class="flex items-center justify-between mb-3">
           <div>
-            <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
-              <i class="fa-solid fa-user-group text-indigo-600"></i> Partecipanti, Età e Corsi Assegnati
+            <h2 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-user-group text-indigo-600"></i> Partecipanti e Corsi Assegnati
             </h2>
-            <p class="text-[11px] text-slate-500">I corsi e gli orari si adattano automaticamente all'età dell'allievo ed evidenziano le lezioni contemporanee</p>
+            <p class="text-[10px] sm:text-[11px] text-slate-500">I corsi si filtrano in base all'età dell'allievo</p>
           </div>
-          <button onclick="addParticipant()" class="no-print active-scale bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
-            <i class="fa-solid fa-user-plus"></i> Nuovo Allievo
+          <button onclick="addParticipant()" class="no-print active-scale bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl shadow-md shadow-indigo-600/20 flex items-center gap-1">
+            <i class="fa-solid fa-user-plus text-[10px]"></i> <span class="hidden sm:inline">Nuovo</span> Allievo
           </button>
         </div>
 
-        <div id="participants-list" class="space-y-4"></div>
+        <div id="participants-list" class="space-y-3 sm:space-y-4"></div>
       </section>
 
       <!-- Plan & Discount Strategy Switcher -->
-      <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/80">
-        <h2 class="text-base font-extrabold text-slate-900 mb-0.5 flex items-center gap-1.5">
-          <i class="fa-solid fa-sliders text-indigo-600"></i> Modalità di Rateizzazione & Ottimizzazione
+      <section class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm border border-slate-200/80">
+        <h2 class="text-sm sm:text-base font-extrabold text-slate-900 mb-0.5 flex items-center gap-1.5">
+          <i class="fa-solid fa-sliders text-indigo-600"></i> Rateizzazione & Strategia Sconti
         </h2>
-        <p class="text-[11px] text-slate-500 mb-3">Scegli la formula di versamento e la strategia sconti applicata</p>
+        <p class="text-[10px] sm:text-[11px] text-slate-500 mb-3">Seleziona la modalità di versamento quote</p>
 
-        <div class="grid grid-cols-2 gap-2.5 no-print mb-3">
-          <div id="plan-btn-trim" onclick="setPaymentPlan('TRIMESTRALE')" class="active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-3 rounded-2xl relative">
-            <span class="text-[9px] font-extrabold uppercase text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded block mb-1 w-fit">Formula Consigliata</span>
+        <div class="grid grid-cols-2 gap-2 no-print mb-3">
+          <div id="plan-btn-trim" onclick="setPaymentPlan('TRIMESTRALE')" class="active-scale cursor-pointer border-2 border-indigo-600 bg-indigo-50/70 p-2.5 sm:p-3 rounded-2xl relative">
+            <span class="text-[8px] sm:text-[9px] font-extrabold uppercase text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded block mb-1 w-fit">Consigliata</span>
             <h3 class="font-bold text-slate-900 text-xs sm:text-sm">Trimestrale</h3>
-            <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Iscrizione + 3 Tranche (Ott, Dic, Mar)</p>
+            <p class="text-[9px] sm:text-[10px] text-slate-600 mt-0.5 leading-tight">Iscrizione + 3 Tranche</p>
           </div>
 
-          <div id="plan-btn-sol" onclick="setPaymentPlan('DUE_SOLUZIONI')" class="active-scale cursor-pointer border-2 border-slate-200 p-3 rounded-2xl relative">
-            <span class="text-[9px] font-extrabold uppercase text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded block mb-1 w-fit">Semestrale</span>
+          <div id="plan-btn-sol" onclick="setPaymentPlan('DUE_SOLUZIONI')" class="active-scale cursor-pointer border-2 border-slate-200 p-2.5 sm:p-3 rounded-2xl relative">
+            <span class="text-[8px] sm:text-[9px] font-extrabold uppercase text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded block mb-1 w-fit">Semestrale</span>
             <h3 class="font-bold text-slate-900 text-xs sm:text-sm">Due Soluzioni</h3>
-            <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Iscrizione 50% + Saldo a Febbraio</p>
+            <p class="text-[9px] sm:text-[10px] text-slate-600 mt-0.5 leading-tight">Iscrizione 50% + Saldo Feb</p>
           </div>
         </div>
 
-        <div class="no-print pt-3 border-t border-slate-100 flex flex-col gap-1.5">
+        <div class="no-print pt-2.5 border-t border-slate-100 flex flex-col gap-1.5">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-              <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Calcolo Sconti Famiglia / Multi-Corso:
-            </span>
-            <span id="savings-delta-tag" class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-              ⚡ Risparmio Max Attivo (-20% quota alta)
+            <span class="text-[10px] sm:text-[11px] font-bold text-slate-700 flex items-center gap-1">
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Algoritmo Sconto Multi-Corso:
             </span>
           </div>
-          <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200/80">
-            <button id="strat-opt-btn" onclick="setDiscountStrategy('OPTIMIZED')" class="py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm">
-              🚀 Max Risparmio (-20% quota alta)
+          <div class="grid grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200/80">
+            <button id="strat-opt-btn" onclick="setDiscountStrategy('OPTIMIZED')" class="py-1.5 px-2 text-[9px] sm:text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm">
+              🚀 Max Risparmio (-20%)
             </button>
-            <button id="strat-std-btn" onclick="setDiscountStrategy('STANDARD')" class="py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
-               Standard (-20% quota minore)
+            <button id="strat-std-btn" onclick="setDiscountStrategy('STANDARD')" class="py-1.5 px-2 text-[9px] sm:text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+               Standard (-20% quota min)
             </button>
           </div>
         </div>
       </section>
 
       <!-- Financial Schedule Summary Card -->
-      <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/80 relative">
+      <section class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm border border-slate-200/80 relative">
         <div class="flex items-center justify-between mb-3">
           <div>
-            <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
-              <i class="fa-solid fa-receipt text-indigo-600"></i> Piano Scadenze & Tranche
+            <h2 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-receipt text-indigo-600"></i> Piano Scadenze
             </h2>
-            <p class="text-[11px] text-slate-500">Prospetto sintetico per A.A. 2026/2027 con scadenze trasparenti</p>
+            <p class="text-[10px] sm:text-[11px] text-slate-500">Prospetto economico A.A. 2026/2027</p>
           </div>
-          <span id="applied-discount-badge" class="hidden bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-emerald-200">
-            Sconto Applicato
-          </span>
         </div>
 
-        <div id="family-coincidences-banner" class="hidden mb-3 p-3 bg-amber-50/90 border border-amber-200 rounded-2xl text-[11px] space-y-1">
+        <div id="family-coincidences-banner" class="hidden mb-3 p-2.5 sm:p-3 bg-amber-50/90 border border-amber-200 rounded-2xl text-[10px] sm:text-[11px] space-y-1">
           <div class="flex items-center gap-1.5 font-bold text-amber-900">
-            <i class="fa-solid fa-bolt-lightning text-amber-500"></i> 🎯 Ottimizzazione Logistica Famiglia (Lezioni Contemporanee)
+            <i class="fa-solid fa-bolt-lightning text-amber-500"></i> 🎯 Lezioni Contemporanee Famiglia
           </div>
           <div id="family-coincidences-list" class="text-amber-800 space-y-0.5 pl-4 list-disc"></div>
         </div>
 
-        <div class="space-y-2.5 mb-4" id="schedule-container"></div>
+        <div class="space-y-2 mb-3.5" id="schedule-container"></div>
 
-        <div class="gradient-header rounded-2xl p-4 text-white flex items-center justify-between shadow-lg shadow-indigo-500/10">
+        <div class="gradient-header rounded-2xl p-3.5 sm:p-4 text-white flex items-center justify-between shadow-lg shadow-indigo-500/10">
           <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-200 block">Totale Annuo Complessivo</span>
-            <p class="text-[10px] text-indigo-100">Comprensivo di t-shirt, iscrizione ed assicurazione annuale</p>
+            <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-indigo-200 block">Totale Annuo Complessivo</span>
+            <p class="text-[9px] sm:text-[10px] text-indigo-100">Compresa T-Shirt e Quota Associativa</p>
           </div>
           <div class="text-right">
-            <span class="text-xl sm:text-2xl font-extrabold tracking-tight" id="grand-total-amount">€ 0,00</span>
+            <span class="text-lg sm:text-2xl font-extrabold tracking-tight" id="grand-total-amount">€ 0,00</span>
           </div>
         </div>
 
-        <div class="no-print mt-4 pt-3 border-t border-slate-100 flex gap-2">
-          <button onclick="copySummaryText()" class="active-scale flex-1 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-3 px-3 rounded-xl flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-copy text-indigo-400"></i> Copia per WhatsApp
+        <div class="no-print mt-3.5 pt-3 border-t border-slate-100 flex gap-2">
+          <button onclick="copySummaryText()" class="active-scale flex-1 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 sm:py-3 px-2 rounded-xl flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-copy text-indigo-400"></i> Copia WhatsApp
           </button>
-          <button onclick="switchTab('print')" class="active-scale bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-3 px-3 rounded-xl flex items-center justify-center gap-1.5 border border-indigo-200">
-            <i class="fa-solid fa-file-pdf"></i> Genera Moduli Stampa
+          <button onclick="switchTab('print')" class="active-scale bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-2.5 sm:py-3 px-3 rounded-xl flex items-center justify-center gap-1.5 border border-indigo-200 shrink-0">
+            <i class="fa-solid fa-file-pdf"></i> Moduli Stampa
           </button>
         </div>
       </section>
 
       <!-- IBAN Note Box -->
-      <section class="bg-amber-50/80 rounded-3xl p-4 border border-amber-200/80 text-amber-900 text-[11px] leading-relaxed space-y-2">
+      <section class="bg-amber-50/80 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-amber-200/80 text-amber-900 text-[10px] sm:text-[11px] leading-relaxed space-y-1.5">
         <div class="flex items-center gap-1.5 text-amber-900 font-bold text-xs">
           <i class="fa-solid fa-building-columns text-amber-600"></i> Dati Bonifico Bancario & Detrazione 730
         </div>
-        <div class="bg-white/90 p-3 rounded-xl border border-amber-200/60 space-y-1">
+        <div class="bg-white/90 p-2.5 sm:p-3 rounded-xl border border-amber-200/60 space-y-1">
           <div>
-            <span class="text-[9px] uppercase font-bold text-amber-700 block">Banca Intestataria</span>
-            <strong class="text-slate-800 text-[11px]">Banca INTESA SANPAOLO (Fil. Vigevano)</strong><br>
-            <span class="text-slate-600 text-[10px]">URBAN GRAVITY ACADEMY A.S.D.&A.C.</span>
+            <span class="text-[8px] sm:text-[9px] uppercase font-bold text-amber-700 block">Banca Intestataria</span>
+            <strong class="text-slate-800 text-[10px] sm:text-[11px]">Banca INTESA SANPAOLO (Fil. Vigevano)</strong><br>
+            <span class="text-slate-600 text-[9px] sm:text-[10px]">URBAN GRAVITY ACADEMY A.S.D.&A.C.</span>
           </div>
-          <div class="pt-1">
-            <span class="text-[9px] uppercase font-bold text-amber-700 block">Codice IBAN</span>
-            <code class="bg-amber-100 px-2 py-0.5 rounded text-slate-900 font-mono font-bold text-[11px] select-all block mt-0.5">IT84E0306909606100000137439</code>
+          <div class="pt-0.5">
+            <span class="text-[8px] sm:text-[9px] uppercase font-bold text-amber-700 block">Codice IBAN</span>
+            <code class="bg-amber-100 px-2 py-0.5 rounded text-slate-900 font-mono font-bold text-[10px] sm:text-[11px] select-all block mt-0.5">IT84E0306909606100000137439</code>
           </div>
         </div>
       </section>
@@ -234,30 +237,29 @@
     </div>
 
     <!-- SECTION 2: INTERACTIVE WEEKLY TIMETABLE & ROOMS -->
-    <div id="view-schedule" class="hidden space-y-4">
-      <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/80 space-y-3">
+    <div id="view-schedule" class="hidden space-y-3 sm:space-y-4">
+      <section class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm border border-slate-200/80 space-y-3">
         <div class="flex items-center justify-between">
-          <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
-            <i class="fa-solid fa-door-open text-indigo-600"></i> Programmazione Lezioni & Sale UGART
+          <h2 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-door-open text-indigo-600"></i> Orari & Sale UGART
           </h2>
-          <span class="text-[10px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded-full border border-indigo-100">
+          <span class="text-[9px] sm:text-[10px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded-full border border-indigo-100">
             Rev. 31/08/2026
           </span>
         </div>
 
         <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80 space-y-1.5">
           <div class="flex items-center justify-between">
-            <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 flex items-center gap-1">
-              <i class="fa-solid fa-user-check text-indigo-600"></i> Seleziona Allievo per la Comparazione & Pianificazione:
+            <label class="block text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+              <i class="fa-solid fa-user-check text-indigo-600"></i> Seleziona Allievo per Pianificazione:
             </label>
-            <span class="text-[9px] text-slate-400 font-semibold">Tocca per filtrare o assegnare orari</span>
           </div>
           <div class="flex flex-wrap gap-1.5" id="schedule-student-pills"></div>
         </div>
 
         <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">1. Seleziona Giorno Settimana</label>
-          <div class="grid grid-cols-5 gap-1.5" id="day-filter-buttons">
+          <label class="block text-[9px] sm:text-[10px] font-bold uppercase text-slate-400 mb-1">1. Seleziona Giorno Settimana</label>
+          <div class="grid grid-cols-5 gap-1" id="day-filter-buttons">
             <button onclick="filterDay('LUNEDI')" class="day-btn py-2 px-1 text-xs font-bold rounded-xl border border-indigo-600 bg-indigo-600 text-white text-center">LUN</button>
             <button onclick="filterDay('MARTEDI')" class="day-btn py-2 px-1 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-center">MAR</button>
             <button onclick="filterDay('MERCOLEDI')" class="day-btn py-2 px-1 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-center">MER</button>
@@ -268,22 +270,22 @@
 
         <div>
           <div class="flex items-center justify-between mb-1">
-            <label class="block text-[10px] font-bold uppercase text-slate-400">2. Filtra per Sala Espressa</label>
+            <label class="block text-[9px] sm:text-[10px] font-bold uppercase text-slate-400">2. Filtra per Sala</label>
             <span class="text-[9px] text-indigo-600 font-bold">5 Sale Attive</span>
           </div>
-          <div class="flex flex-wrap gap-1.5" id="room-filter-buttons">
-            <button onclick="filterRoom('ALL')" class="room-btn active-scale py-1.5 px-3 text-xs font-extrabold rounded-xl border border-indigo-600 bg-indigo-600 text-white">Tutte le Sale</button>
-            <button onclick="filterRoom('Sala 1')" class="room-btn active-scale py-1.5 px-3 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100">Sala 1</button>
-            <button onclick="filterRoom('Sala 2')" class="room-btn active-scale py-1.5 px-3 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100">Sala 2</button>
-            <button onclick="filterRoom('Sala 3')" class="room-btn active-scale py-1.5 px-3 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100">Sala 3</button>
-            <button onclick="filterRoom('Sala 4')" class="room-btn active-scale py-1.5 px-3 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100">Sala 4</button>
-            <button onclick="filterRoom('Sala 5')" class="room-btn active-scale py-1.5 px-3 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100">Sala 5</button>
+          <div class="flex flex-wrap gap-1" id="room-filter-buttons">
+            <button onclick="filterRoom('ALL')" class="room-btn active-scale py-1 px-2.5 text-xs font-extrabold rounded-xl border border-indigo-600 bg-indigo-600 text-white">Tutte le Sale</button>
+            <button onclick="filterRoom('Sala 1')" class="room-btn active-scale py-1 px-2.5 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700">Sala 1</button>
+            <button onclick="filterRoom('Sala 2')" class="room-btn active-scale py-1 px-2.5 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700">Sala 2</button>
+            <button onclick="filterRoom('Sala 3')" class="room-btn active-scale py-1 px-2.5 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700">Sala 3</button>
+            <button onclick="filterRoom('Sala 4')" class="room-btn active-scale py-1 px-2.5 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700">Sala 4</button>
+            <button onclick="filterRoom('Sala 5')" class="room-btn active-scale py-1 px-2.5 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700">Sala 5</button>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-100">
           <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Modalità Vista</label>
+            <label class="block text-[9px] sm:text-[10px] font-bold uppercase text-slate-400 mb-1">Modalità Vista</label>
             <div class="grid grid-cols-2 gap-1 p-0.5 bg-slate-100 rounded-xl border border-slate-200">
               <button id="view-mode-cron" onclick="setScheduleViewMode('CRON')" class="py-1 text-[10px] font-extrabold rounded-lg bg-white text-indigo-600 shadow-sm text-center">
                 🕒 Cronologico
@@ -295,8 +297,8 @@
           </div>
 
           <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Fascia di Età</label>
-            <select id="schedule-age-filter" onchange="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
+            <label class="block text-[9px] sm:text-[10px] font-bold uppercase text-slate-400 mb-1">Fascia di Età</label>
+            <select id="schedule-age-filter" onchange="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-1.5 text-xs font-semibold text-slate-800">
               <option value="ALL">Tutte le età</option>
               <option value="BABY">Baby (3-5 anni)</option>
               <option value="BIMBI">Bimbi (6-9 anni)</option>
@@ -307,33 +309,33 @@
           </div>
 
           <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Cerca Corso o Istruttore</label>
-            <input id="schedule-search" type="text" placeholder="Es. Circo, Danza, Judo..." oninput="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
+            <label class="block text-[9px] sm:text-[10px] font-bold uppercase text-slate-400 mb-1">Cerca Corso o Istruttore</label>
+            <input id="schedule-search" type="text" placeholder="Es. Circo, Danza, Judo..." oninput="renderSchedule()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-1.5 text-xs font-semibold text-slate-800">
           </div>
         </div>
       </section>
 
-      <section id="family-live-comparison-card" class="bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 rounded-3xl p-4 sm:p-5 text-white shadow-lg space-y-3">
+      <section id="family-live-comparison-card" class="bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 text-white shadow-lg space-y-3">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-400 font-extrabold text-sm border border-white/10">
+            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-400 font-extrabold text-xs sm:text-sm border border-white/10">
               ⚡
             </span>
             <div>
-              <h3 class="text-xs sm:text-sm font-extrabold tracking-tight">Comparatore Orari & Incontri Famiglia in Tempo Reale</h3>
-              <p class="text-[10px] text-indigo-200">Sincronizzazione logistica fra tutti i componenti del nucleo familiare</p>
+              <h3 class="text-xs sm:text-sm font-extrabold tracking-tight">Comparatore Orari & Incontri Famiglia</h3>
+              <p class="text-[9px] sm:text-[10px] text-indigo-200">Sincronizzazione logistica fra i componenti della famiglia</p>
             </div>
           </div>
-          <button onclick="switchTab('calc')" class="text-[10px] bg-white/10 hover:bg-white/20 text-indigo-100 font-bold px-2.5 py-1 rounded-lg border border-white/10 transition-all">
-            <i class="fa-solid fa-pen-to-square mr-1"></i> Modifica Allievi
+          <button onclick="switchTab('calc')" class="text-[9px] sm:text-[10px] bg-white/10 hover:bg-white/20 text-indigo-100 font-bold px-2 py-1 rounded-lg border border-white/10 transition-all shrink-0">
+            <i class="fa-solid fa-pen-to-square mr-1"></i> Modifica
           </button>
         </div>
 
-        <div id="family-comparison-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-1"></div>
-        <div id="family-coincidence-alerts" class="text-[11px] bg-indigo-950/80 border border-indigo-700/60 p-2.5 rounded-2xl space-y-1 hidden"></div>
+        <div id="family-comparison-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 pt-1"></div>
+        <div id="family-coincidence-alerts" class="text-[10px] sm:text-[11px] bg-indigo-950/80 border border-indigo-700/60 p-2.5 rounded-2xl space-y-1 hidden"></div>
       </section>
 
-      <section class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/80">
+      <section class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm border border-slate-200/80">
         <div class="flex items-center justify-between mb-3">
           <span id="active-day-title" class="text-xs font-extrabold text-indigo-900 uppercase tracking-wider">
             📅 Programmazione del Lunedì
@@ -341,64 +343,59 @@
           <span id="slot-count-badge" class="text-[10px] text-slate-500 font-semibold">0 lezioni</span>
         </div>
 
-        <div id="schedule-slots-container" class="space-y-3"></div>
+        <div id="schedule-slots-container" class="space-y-2.5"></div>
       </section>
     </div>
 
     <!-- SECTION 3: PRINTABLE MODULES -->
-    <div id="view-print" class="hidden space-y-6">
-      <section class="no-print bg-white p-4 rounded-3xl shadow-sm border border-slate-200/80 space-y-3">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    <div id="view-print" class="hidden space-y-4">
+      <section class="no-print bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200/80 space-y-3">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
           <div>
-            <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
+            <h2 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
               <i class="fa-solid fa-file-export text-indigo-600"></i> Generatore & Stampa Moduli PDF
             </h2>
-            <p class="text-[11px] text-slate-500">Stampa singola o combinata in formato A4 ad alta definizione</p>
+            <p class="text-[10px] sm:text-[11px] text-slate-500">Stampa singola o combinata in formato A4</p>
           </div>
 
           <div class="flex flex-wrap gap-1.5 w-full sm:w-auto">
-            <button onclick="triggerPrint('1')" class="active-scale bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md flex items-center gap-1">
-              <i class="fa-solid fa-print"></i> Stampa Mod. 1 (Preventivo)
+            <button onclick="triggerPrint('1')" class="active-scale flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold px-2.5 py-2 rounded-xl shadow-md flex items-center justify-center gap-1">
+              <i class="fa-solid fa-print"></i> Mod. 1 (Preventivo)
             </button>
-            <button onclick="triggerPrint('2')" class="active-scale bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md flex items-center gap-1">
-              <i class="fa-solid fa-calendar-week"></i> Stampa Mod. 2 (Planner 07-22)
-            </button>
-            <button onclick="triggerPrint('all')" class="active-scale bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md flex items-center gap-1">
-              <i class="fa-solid fa-copy"></i> Stampa Entrambi
+            <button onclick="triggerPrint('2')" class="active-scale flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold px-2.5 py-2 rounded-xl shadow-md flex items-center justify-center gap-1">
+              <i class="fa-solid fa-calendar-week"></i> Mod. 2 (Planner)
             </button>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-100">
-          <button id="mod-toggle-btn-1" onclick="switchPrintModule(1)" class="py-2.5 px-3 text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center">
-            📄 Vista Modulo 1: Preventivo & Rate Scontate
+        <div class="grid grid-cols-2 gap-1.5 pt-1 border-t border-slate-100">
+          <button id="mod-toggle-btn-1" onclick="switchPrintModule(1)" class="py-2 px-2 text-[10px] sm:text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center">
+            📄 Modulo 1: Preventivo
           </button>
-          <button id="mod-toggle-btn-2" onclick="switchPrintModule(2)" class="py-2.5 px-3 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200">
-            📅 Vista Modulo 2: Planner Settimanale 07:00-22:00
+          <button id="mod-toggle-btn-2" onclick="switchPrintModule(2)" class="py-2 px-2 text-[10px] sm:text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200">
+            📅 Modulo 2: Planner Settimanale
           </button>
         </div>
       </section>
 
       <!-- PRINTABLE MODULE 1 -->
-      <div id="print-module-1" class="print-area bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+      <div id="print-module-1" class="print-area bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div class="flex justify-between items-start border-b border-slate-300 pb-3">
           <div class="space-y-1">
             <div class="flex items-center gap-2">
-              <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-sm">
-                RS
+              <div class="w-7 h-7 rounded bg-indigo-600 text-white flex items-center justify-center font-black text-xs">
+                UGA
               </div>
               <div>
-                <span class="text-xs font-black uppercase tracking-wider text-indigo-900 block">RAILIM SOLUTIONS</span>
-                <span class="text-[9px] text-slate-500 block">Management Software per Poli Sportivi & Artistici</span>
+                <span class="text-xs font-black uppercase tracking-wider text-indigo-900 block">URBAN GRAVITY ACADEMY</span>
+                <span class="text-[9px] text-slate-500 block">Polo Artistico Ludico Sportivo — Vigevano</span>
               </div>
             </div>
-            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-slate-900 pt-1">Prospetto Preventivo Economico & Rateizzazioni</h1>
-            <p class="text-xs text-slate-600">Polo Artistico Ludico Sportivo — Urban Gravity Academy A.S.D. Vigevano</p>
+            <h1 class="text-base sm:text-xl font-bold tracking-tight text-slate-900 pt-1">Prospetto Preventivo Economico & Rateizzazioni</h1>
           </div>
-          <div class="text-right text-xs text-slate-500 space-y-0.5">
+          <div class="text-right text-[10px] sm:text-xs text-slate-500 space-y-0.5">
             <p><strong>A.A. 2026/2027</strong></p>
-            <p>Emissione: <span id="print-date-stamp">07/09/2026</span></p>
-            <p class="text-[10px] text-indigo-600 font-mono font-bold" id="print-quote-code">RFR-UGART-2026-948</p>
+            <p>Emissione: <span id="print-date-stamp">09/09/2026</span></p>
           </div>
         </div>
 
@@ -416,59 +413,51 @@
           <table class="w-full text-xs text-left border-collapse border border-slate-200">
             <thead>
               <tr class="bg-slate-100 text-slate-700 border-b border-slate-300">
-                <th class="py-2 px-3 font-bold border-r border-slate-200">Versamento / Tranche</th>
-                <th class="py-2 px-3 font-bold border-r border-slate-200">Scadenza Tassativa</th>
-                <th class="py-2 px-3 font-bold border-r border-slate-200">Dettaglio Voci Incluse</th>
-                <th class="py-2 px-3 font-bold text-right">Importo Rata</th>
+                <th class="py-2 px-2 font-bold border-r border-slate-200">Versamento</th>
+                <th class="py-2 px-2 font-bold border-r border-slate-200">Scadenza Tassativa</th>
+                <th class="py-2 px-2 font-bold border-r border-slate-200">Voci Incluse</th>
+                <th class="py-2 px-2 font-bold text-right">Importo</th>
               </tr>
             </thead>
             <tbody id="mod1-schedule-rows" class="divide-y divide-slate-200"></tbody>
             <tfoot>
-              <tr class="bg-slate-50 border-t-2 border-slate-800 text-sm font-bold">
-                <td colspan="3" class="py-2.5 px-3 text-slate-900">TOTALE COMPLESSIVO ANNUALE</td>
-                <td class="py-2.5 px-3 text-right text-indigo-700" id="mod1-grand-total">€ 0,00</td>
+              <tr class="bg-slate-50 border-t-2 border-slate-800 text-xs sm:text-sm font-bold">
+                <td colspan="3" class="py-2.5 px-2 text-slate-900">TOTALE COMPLESSIVO ANNUALE</td>
+                <td class="py-2.5 px-2 text-right text-indigo-700" id="mod1-grand-total">€ 0,00</td>
               </tr>
             </tfoot>
           </table>
         </div>
 
-        <div class="pt-3 border-t border-slate-200 text-[10px] text-slate-600 space-y-1.5 leading-relaxed">
-          <p><strong>Dati Bonifico Bancario (Detrazione Fiscale 730):</strong> Banca INTESA SANPAOLO — Filiale di Vigevano<br>
+        <div class="pt-2 border-t border-slate-200 text-[9px] sm:text-[10px] text-slate-600 space-y-1 leading-relaxed">
+          <p><strong>Dati Bonifico Bancario:</strong> Banca INTESA SANPAOLO — Filiale di Vigevano<br>
           <strong>IBAN:</strong> <code class="font-bold text-slate-900 select-all">IT84E0306909606100000137439</code> | <strong>Intestato a:</strong> URBAN GRAVITY ACADEMY A.S.D.&A.C.</p>
-          <p>• La quota associativa di € 30,00/allievo comprende t-shirt in omaggio e copertura assicurativa valida fino al 31/08/2027.<br>
-          • Per la detrazione fiscale 730, i versamenti devono essere eseguiti esclusivamente tramite bonifico bancario o POS.</p>
+          <p>• La quota associativa di € 30,00/allievo comprende t-shirt in omaggio e copertura assicurativa valida fino al 31/08/2027.</p>
         </div>
 
-        <div class="pt-6 flex justify-between text-xs text-slate-600">
-          <div class="border-t border-slate-400 pt-1 w-48 text-center">Firma Genitore / Atleta</div>
-          <div class="border-t border-slate-400 pt-1 w-48 text-center">Timbro e Firma Segreteria UGART</div>
+        <div class="pt-4 flex justify-between text-[10px] sm:text-xs text-slate-600">
+          <div class="border-t border-slate-400 pt-1 w-36 sm:w-48 text-center">Firma Genitore / Atleta</div>
+          <div class="border-t border-slate-400 pt-1 w-36 sm:w-48 text-center">Timbro e Firma Segreteria</div>
         </div>
       </div>
 
       <!-- PRINTABLE MODULE 2 -->
-      <div id="print-module-2" class="print-area hidden bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div id="print-module-2" class="print-area hidden bg-white p-3 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
         <div class="flex justify-between items-start border-b border-slate-300 pb-2">
           <div>
-            <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded bg-indigo-600 text-white flex items-center justify-center font-black text-xs">
-                RS
-              </div>
-              <span class="text-xs font-black uppercase tracking-wider text-indigo-900">RAILIM SOLUTIONS — Weekly Family EdTech Planner</span>
-            </div>
-            <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 pt-0.5">Agenda & Planner Settimanale Attività (07:00 – 22:00)</h1>
-            <p class="text-[11px] text-slate-600" id="mod2-family-title">Programmazione settimanale personalizzata ed appuntamenti familiari</p>
+            <span class="text-xs font-black uppercase tracking-wider text-indigo-900">URBAN GRAVITY ACADEMY — Weekly Planner</span>
+            <h1 class="text-sm sm:text-lg font-bold tracking-tight text-slate-900 pt-0.5">Agenda & Planner Settimanale Attività (07:00 – 22:00)</h1>
           </div>
           <div class="text-right text-xs text-slate-500">
             <p><strong>A.A. 2026/2027</strong></p>
-            <p class="text-[10px]">Urban Gravity Academy Vigevano</p>
           </div>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-[9px] border-collapse border border-slate-300">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-[8px] sm:text-[9px] border-collapse border border-slate-300 min-w-[500px]">
             <thead>
               <tr class="bg-indigo-900 text-white font-bold text-center">
-                <th class="py-1 px-1 w-12 border border-indigo-950">ORA</th>
+                <th class="py-1 px-1 w-10 border border-indigo-950">ORA</th>
                 <th class="py-1 px-1 w-1/5 border border-indigo-950 uppercase">Lunedì</th>
                 <th class="py-1 px-1 w-1/5 border border-indigo-950 uppercase">Martedì</th>
                 <th class="py-1 px-1 w-1/5 border border-indigo-950 uppercase">Mercoledì</th>
@@ -479,17 +468,12 @@
             <tbody id="hourly-planner-body" class="divide-y divide-slate-200"></tbody>
           </table>
         </div>
-
-        <div class="text-[9px] text-slate-500 text-center border-t border-slate-200 pt-2 flex justify-between items-center">
-          <span>Polo UGART Vigevano — Via Domenico Pisani 1 | Tel: +39 389 2050256</span>
-          <span class="font-bold">App gestionale sviluppata da Railim Solutions</span>
-        </div>
       </div>
 
     </div>
 
     <!-- Footer -->
-    <footer class="no-print mt-8 text-center text-[10px] text-slate-400 space-y-0.5 pb-6">
+    <footer class="no-print mt-6 text-center text-[9px] sm:text-[10px] text-slate-400 space-y-0.5 pb-4">
       <p>Urban Gravity Academy A.S.D. & Arti Circensi — Vigevano (PV)</p>
       <p>Via Domenico Pisani 1 | Tel: +39 389 2050256 | www.ugacademy.it</p>
     </footer>
@@ -520,49 +504,52 @@
 
     const REGISTRATION_FEE = 30;
 
+    // CATALOGO UNIFICATO E VERIFICATO DAL PDF ORARI A.A. 26/27 (REV. 31/08/2026)
     const COURSE_CATALOG = [
       { id: 'CIRCO_F1', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
       { id: 'CIRCO_F2', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (2 v/sett)', trim: 260, sol: 390, ageGroup: 'BIMBI' },
       { id: 'CIRCO_F3', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (3 v/sett)', trim: 315, sol: 473, ageGroup: 'JUNIOR' },
-      { id: 'CIRCO_F4', cat: 'Accademica Circo/Danza', name: 'Circo / Acrobatica (4 v/sett)', trim: 410, sol: 615, ageGroup: 'JUNIOR' },
-      { id: 'CIRCUS_BASE', cat: 'Accademica Circo/Danza', name: 'Academy Circus Base (Acro + Circo)', trim: 240, sol: 360, ageGroup: 'JUNIOR' },
-      { id: 'CIRCUS_PLUS', cat: 'Accademica Circo/Danza', name: 'Academy Circus Plus (Open All Access)', trim: 400, sol: 600, ageGroup: 'JUNIOR' },
-      { id: 'PRE_ACRO', cat: 'Accademica Circo/Danza', name: 'Pre Acrobatica (3-5 anni)', trim: 170, sol: 255, ageGroup: 'BABY' },
+      { id: 'CIRCUS_BASE', cat: 'Accademica Circo/Danza', name: 'Academy Circus Base', trim: 240, sol: 360, ageGroup: 'JUNIOR' },
+      { id: 'CIRCUS_PLUS', cat: 'Accademica Circo/Danza', name: 'Academy Circus Plus (Open)', trim: 400, sol: 600, ageGroup: 'JUNIOR' },
+      { id: 'PRE_ACRO', cat: 'Accademica Circo/Danza', name: 'Pre Acrobatica / Baby Circo (3-5 anni)', trim: 170, sol: 255, ageGroup: 'BABY' },
 
       { id: 'DANZA_CLASSICA_F1', cat: 'Accademica Circo/Danza', name: 'Danza Classica (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
       { id: 'DANZA_MODERN_F1', cat: 'Accademica Circo/Danza', name: 'Danza Modern (1 v/sett)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
       { id: 'DANZA_CONTEMP', cat: 'Accademica Circo/Danza', name: 'Danza Contemporanea & Lab', trim: 170, sol: 255, ageGroup: 'JUNIOR' },
-      { id: 'DANZA_HIPHOP', cat: 'Accademica Circo/Danza', name: 'Danza Hip Hop / VideoDance', trim: 170, sol: 255, ageGroup: 'BIMBI' },
-      { id: 'DANZA_HEELS', cat: 'Accademica Circo/Danza', name: 'Danza Heels (Senior / Tacchi)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
-      { id: 'POLE_KIDS', cat: 'Pole Dance', name: 'Pole Kids (Bimbi / Junior)', trim: 170, sol: 255, ageGroup: 'BIMBI' },
-      { id: 'POLE_F1', cat: 'Pole Dance', name: 'Pole Dance Senior (1 v/sett)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
-      { id: 'POLE_F2', cat: 'Pole Dance', name: 'Pole Dance Senior (2 v/sett)', trim: 295, sol: 430, ageGroup: 'SENIOR' },
-      { id: 'FLYING_POLE', cat: 'Pole Dance', name: 'Flying Pole (Palo Volante)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
+      { id: 'DANZA_HIPHOP', cat: 'Accademica Circo/Danza', name: 'Danza Hip Hop / Cheerleading', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'DANZA_HEELS', cat: 'Accademica Circo/Danza', name: 'Danza Heels (Senior)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
+      
+      { id: 'POLE_KIDS', cat: 'Pole Dance', name: 'Pole Kids', trim: 170, sol: 255, ageGroup: 'BIMBI' },
+      { id: 'POLE_F1', cat: 'Pole Dance', name: 'Pole Dance Senior / Acro Pole (1 v/sett)', trim: 190, sol: 285, ageGroup: 'SENIOR' },
+      { id: 'POLE_F2', cat: 'Pole Dance', name: 'Pole Dance Senior / Acro Pole (2 v/sett)', trim: 295, sol: 430, ageGroup: 'SENIOR' },
+      { id: 'FLYING_POLE', cat: 'Pole Dance', name: 'Flying Pole', trim: 190, sol: 285, ageGroup: 'SENIOR' },
 
       { id: 'ARTE_CREATIVA', cat: 'Arte & Cultura', name: 'Arte Creativa (Sett. Gratis)', trim: 120, sol: 180, septFree: true, ageGroup: 'BABY' },
       { id: 'TEATRO_BIMBI', cat: 'Arte & Cultura', name: 'Teatro Bimbi (6-9 anni)', trim: 150, sol: 225, ageGroup: 'BIMBI' },
       { id: 'TEATRO_JUNIOR', cat: 'Arte & Cultura', name: 'Teatro Junior (10-18 anni)', trim: 150, sol: 225, ageGroup: 'JUNIOR' },
       { id: 'TEATRO_SENIOR', cat: 'Arte & Cultura', name: 'Teatro Senior (Adulti)', trim: 180, sol: 270, ageGroup: 'SENIOR' },
 
-      { id: 'JUDO_BIMBI_F1', cat: 'Arti Marziali', name: 'Judo Bimbi (1 v/sett)', trim: 120, sol: 180, septFee: 35, ageGroup: 'BIMBI' },
-      { id: 'JUDO_BIMBI_F2', cat: 'Arti Marziali', name: 'Judo Bimbi (2 v/sett)', trim: 150, sol: 225, septFee: 45, ageGroup: 'BIMBI' },
-      { id: 'JUDO_SENIOR_F2', cat: 'Arti Marziali', name: 'Judo Senior (+12 anni 2 v/sett)', trim: 165, sol: 248, septFee: 35, ageGroup: 'SENIOR' },
-      { id: 'KUNG_FU', cat: 'Arti Marziali', name: 'Kung Fu - Arku Tai Pa (+14 anni)', trim: 165, sol: 248, ageGroup: 'RAGAZZI' },
+      { id: 'JUDO_BIMBI_F1', cat: 'Arti Marziali', name: 'Gioca Judo / Judo Bimbi (1 v/sett)', trim: 120, sol: 180, ageGroup: 'BIMBI' },
+      { id: 'JUDO_BIMBI_F2', cat: 'Arti Marziali', name: 'Judo Junior / Bimbi (2 v/sett)', trim: 150, sol: 225, ageGroup: 'BIMBI' },
+      { id: 'JUDO_SENIOR_F2', cat: 'Arti Marziali', name: 'Judo Senior (+12 anni 2 v/sett)', trim: 165, sol: 248, ageGroup: 'SENIOR' },
+      { id: 'KUNG_FU', cat: 'Arti Marziali', name: 'Kung Fu San Dao / Difesa Personale (+14 anni)', trim: 165, sol: 248, ageGroup: 'RAGAZZI' },
 
       { id: 'FITNESS_F1', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (1 v/sett)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
       { id: 'FITNESS_F2', cat: 'Fitness & Posturale', name: 'Fitness / Yoga / Pilates (2 v/sett)', trim: 195, sol: 293, ageGroup: 'SENIOR' },
       { id: 'NO_GRAVITY', cat: 'Fitness & Posturale', name: 'No Gravity Pilates', trim: 135, sol: 203, ageGroup: 'SENIOR' },
-      { id: 'BUNGEE_FLY', cat: 'Fitness & Posturale', name: 'Bungee Fly (1 v/sett)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
-      { id: 'GEP_POSTURALE', cat: 'Fitness & Posturale', name: 'GEP Ginnastica Posturale (Mattino)', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'BUNGEE_FLY', cat: 'Fitness & Posturale', name: 'Bungee Fly', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'GEP_POSTURALE', cat: 'Fitness & Posturale', name: 'GEP Ginnastica Energetico Posturale', trim: 135, sol: 203, ageGroup: 'SENIOR' },
       { id: 'YAMUNA_BODY', cat: 'Fitness & Posturale', name: 'Yamuna Body Rolling', trim: 135, sol: 203, ageGroup: 'SENIOR' },
-      { id: 'CALISTHENICS_1', cat: 'Fitness & Posturale', name: 'Calisthenics & Functional (1+1)', trim: 98, sol: 147, septFee: 18, ageGroup: 'SENIOR' },
-      { id: 'BACHATA_JUNIOR', cat: 'Fitness & Posturale', name: 'Bachata Moderna Junior / Senior', trim: 135, sol: 203, ageGroup: 'JUNIOR' }
+      { id: 'CALISTHENICS_1', cat: 'Fitness & Posturale', name: 'UGA Calisthenics & Functional Training', trim: 135, sol: 203, ageGroup: 'SENIOR' },
+      { id: 'BACHATA_JUNIOR', cat: 'Fitness & Posturale', name: 'Bachata Moderna / Sensual', trim: 135, sol: 203, ageGroup: 'JUNIOR' }
     ];
 
+    // DATABASE ORARI E SALE UNIFICATO ESATTAMENTE DAL PDF ORARI A.A. 26/27 (REV 31/08/2026)
     const TIMETABLE_DB = [
+      // LUNEDI
       { day: 'LUNEDI', time: '12:45 - 13:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '12:45 - 13:30', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'LUNEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab 2.0', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
       { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'LUNEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'LUNEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Giocoleria ed Equilibrismo', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
@@ -574,51 +561,54 @@
       { day: 'LUNEDI', time: '18:45 - 19:45', courseId: 'FITNESS_F1', name: 'Flexy - Mobilità Articolare', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F3', name: 'Acrobatica Aerea Senior Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'CIRCO_F2', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'LUNEDI', time: '20:00 - 21:00', courseId: 'FITNESS_F1', name: 'UGA Pilates Matwork', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'UGA Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'LUNEDI', time: '18:15 - 19:15', courseId: 'FITNESS_F1', name: 'UGA Pilates Matwork', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '20:30 - 21:45', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Senior Corso 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
       { day: 'LUNEDI', time: '20:30 - 21:30', courseId: 'CIRCO_F1', name: 'Hula Hoop Dance Junior/Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
 
-      { day: 'MARTEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      // MARTEDI
+      { day: 'MARTEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Energetico Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '12:45 - 13:45', courseId: 'YAMUNA_BODY', name: 'Yamuna Body Rolling', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '15:00 - 17:00', courseId: 'SPAZIO_COMPITI', name: 'Spazio Compiti - Studio Lab 2.0', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Pre Acrobatica (3-5 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Pre Acrobatica / Baby (3-5 anni)', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
       { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '17:00 - 18:15', courseId: 'JUDO_BIMBI_F1', name: 'Gioca Judo (3-5 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'BABY' },
-      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'FITNESS_F1', name: 'Viso Fitness', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'JUDO_BIMBI_F1', name: 'Gioca Judo (3-5 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BABY' },
+      { day: 'MARTEDI', time: '17:00 - 18:00', courseId: 'FITNESS_F1', name: 'Viso Fitness', room: 'Sala 5', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '17:30 - 18:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (3-5 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BABY' },
       { day: 'MARTEDI', time: '18:15 - 19:15', courseId: 'JUDO_BIMBI_F1', name: 'Judo Bimbi (6-7 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'BIMBI' },
       { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'MARTEDI', time: '18:30 - 19:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (6-11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
+      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (6-11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'BIMBI' },
       { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
       { day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '19:15 - 20:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 2', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
-      { day: 'MARTEDI', time: '19:30 - 20:30', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (+11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'Acro Pole Junior 2', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
+      { day: 'MARTEDI', time: '19:00 - 20:00', courseId: 'ARTE_CREATIVA', name: 'Arte Creativa (+11 anni)', room: 'Sala 5', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
       { day: 'MARTEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'FITNESS_F1', name: 'UGA Pilates Barré', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MARTEDI', time: '20:15 - 21:15', courseId: 'BUNGEE_FLY', name: 'Bungee Fly', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '20:06 - 21:05', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MARTEDI', time: '21:15 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+      { day: 'MARTEDI', time: '20:05 - 21:05', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna/Sensual Open Level', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MARTEDI', time: '20:30 - 21:45', courseId: 'KUNG_FU', name: 'Kung Fu San Dao / Difesa Personale (+14 anni)', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
 
-      { day: 'MERCOLEDI', time: '12:45 - 13:30', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Open Level', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      // MERCOLEDI
+      { day: 'MERCOLEDI', time: '12:45 - 13:30', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna/Sensual Open Level', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '15:45 - 17:00', courseId: 'CIRCUS_BASE', name: 'Academy Circus 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
       { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Circo (3-5 anni)', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
-      { day: 'MERCOLEDI', time: '17:00 - 18:00', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Junior', room: 'Sala 5', cat: 'Fitness & Posturale', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'TEATRO_JUNIOR', name: 'Teatro Junior (10-13 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'BACHATA_JUNIOR', name: 'Bachata Moderna Junior', room: 'Sala 4', cat: 'Fitness & Posturale', ageGroup: 'JUNIOR' },
+      { day: 'MERCOLEDI', time: '17:15 - 18:15', courseId: 'TEATRO_JUNIOR', name: 'Teatro 10-13 anni', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR Avanzato Corso 3', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'MERCOLEDI', time: '18:15 - 19:15', courseId: 'POLE_F1', name: 'Acro Pole Junior 3', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'JUNIOR' },
-      { day: 'MERCOLEDI', time: '18:15 - 19:45', courseId: 'TEATRO_JUNIOR', name: 'Teatro Ragazzi (14-18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'RAGAZZI' },
-      { day: 'MERCOLEDI', time: '19:30 - 20:30', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '19:45 - 21:15', courseId: 'TEATRO_SENIOR', name: 'Teatro Senior (+18 anni)', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '18:15 - 19:45', courseId: 'TEATRO_JUNIOR', name: 'Teatro (Junior) 14-18 anni', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'RAGAZZI' },
+      { day: 'MERCOLEDI', time: '19:30 - 20:30', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '19:15 - 20:30', courseId: 'POLE_F1', name: 'UGA Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '19:45 - 21:15', courseId: 'TEATRO_SENIOR', name: 'Teatro (Senior) +18 anni', room: 'Sala 4', cat: 'Arte & Cultura', ageGroup: 'SENIOR' },
       { day: 'MERCOLEDI', time: '20:30 - 21:45', courseId: 'CALISTHENICS_1', name: 'Calisthenics Senior Corso 3', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'MERCOLEDI', time: '20:30 - 21:30', courseId: 'POLE_F2', name: 'Pole Dance Senior Intermedio/Advance', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'MERCOLEDI', time: '20:30 - 21:30', courseId: 'POLE_F2', name: 'UGA Pole Dance Senior Intermedio/Advance', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
 
+      // GIOVEDI
       { day: 'GIOVEDI', time: '08:15 - 09:00', courseId: 'BUNGEE_FLY', name: 'Bungee Fly Mattino', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '09:00 - 10:00', courseId: 'GEP_POSTURALE', name: 'GEP Ginnastica Energetico Posturale', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'GIOVEDI', time: '15:45 - 17:00', courseId: 'CIRCO_F1', name: 'Acrobatica Aerea Junior Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Circo Bimbi Corso 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
       { day: 'GIOVEDI', time: '17:00 - 18:00', courseId: 'DANZA_CLASSICA_F1', name: 'Danza Classica Junior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
@@ -627,24 +617,25 @@
       { day: 'GIOVEDI', time: '18:00 - 19:00', courseId: 'DANZA_CONTEMP', name: 'Danza Contemporanea & Lab', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'GIOVEDI', time: '18:00 - 19:15', courseId: 'NO_GRAVITY', name: 'No Gravity Pilates', room: 'Sala 3', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
       { day: 'GIOVEDI', time: '19:15 - 20:15', courseId: 'JUDO_BIMBI_F2', name: 'Judo Junior (8-12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'JUNIOR' },
-      { day: 'GIOVEDI', time: '19:00 - 20:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern & Lab Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
+      { day: 'GIOVEDI', time: '19:00 - 20:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern & Lab Senior', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' },
       { day: 'GIOVEDI', time: '20:15 - 21:30', courseId: 'JUDO_SENIOR_F2', name: 'Judo Senior (+12 anni)', room: 'Sala 1', cat: 'Arti Marziali', ageGroup: 'SENIOR' },
       { day: 'GIOVEDI', time: '20:30 - 22:00', courseId: 'FITNESS_F1', name: 'Hatha Yoga', room: 'Sala 2', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'GIOVEDI', time: '20:30 - 21:30', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale (+14 anni)', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+      { day: 'GIOVEDI', time: '20:30 - 21:30', courseId: 'KUNG_FU', name: 'Kung Fu San Dao / Difesa Personale', room: 'Sala 3', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
 
+      // VENERDI
       { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 1/2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'VENERDI', time: '15:30 - 17:00', courseId: 'CIRCO_F3', name: 'Acrobatica a Terra JR/SN Corso 3', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'VENERDI', time: '17:00 - 18:15', courseId: 'CIRCO_F1', name: 'Flexy Contortion Liv. 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '17:00 - 18:15', courseId: 'CIRCO_F1', name: 'Flexy Contortion Livello 1', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
       { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'CIRCO_F1', name: 'Acrobatica a Terra Bimbi Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Danza / Danza Motricità', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
+      { day: 'VENERDI', time: '17:00 - 18:00', courseId: 'PRE_ACRO', name: 'Baby Danza / Danza Motricità', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BABY' },
       { day: 'VENERDI', time: '18:15 - 19:30', courseId: 'CIRCO_F3', name: 'Contorsionismo Livello 2', room: 'Sala 1', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'VENERDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 1', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
-      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
-      { day: 'VENERDI', time: '19:15 - 20:15', courseId: 'CALISTHENICS_1', name: 'Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
-      { day: 'VENERDI', time: '19:00 - 20:00', courseId: 'DANZA_HIPHOP', name: 'Cheerleading & Cheerdance Bimbi', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '18:00 - 19:30', courseId: 'CIRCUS_BASE', name: 'Verticalismo & Acrobalance Corso 2', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'JUNIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'POLE_F1', name: 'UGA Pole Dance Senior Base/Intermedio', room: 'Sala 3', cat: 'Pole Dance', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_MODERN_F1', name: 'Danza Modern Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
+      { day: 'VENERDI', time: '19:15 - 20:15', courseId: 'CALISTHENICS_1', name: 'UGA Calisthenics & Functional Training', room: 'Sala 1', cat: 'Fitness & Posturale', ageGroup: 'SENIOR' },
+      { day: 'VENERDI', time: '18:00 - 19:00', courseId: 'DANZA_HIPHOP', name: 'Cheerleading & Cheerdance Bimbi', room: 'Sala 2', cat: 'Accademica Circo/Danza', ageGroup: 'BIMBI' },
       { day: 'VENERDI', time: '20:00 - 21:00', courseId: 'FLYING_POLE', name: 'Flying Pole', room: 'Sala 1', cat: 'Pole Dance', ageGroup: 'SENIOR' },
-      { day: 'VENERDI', time: '20:30 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu - Difesa Personale', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
+      { day: 'VENERDI', time: '20:30 - 22:00', courseId: 'KUNG_FU', name: 'Kung Fu San Dao / Difesa Personale', room: 'Sala 2', cat: 'Arti Marziali', ageGroup: 'RAGAZZI' },
       { day: 'VENERDI', time: '20:15 - 21:15', courseId: 'DANZA_HEELS', name: 'Danza Heels / Video Dance Senior', room: 'Sala 4', cat: 'Accademica Circo/Danza', ageGroup: 'SENIOR' }
     ];
 
@@ -655,7 +646,7 @@
 
       state.participants.forEach(p => {
         if (!p.courses) {
-          p.courses = (p.courseIds || ['CIRCO_F1']).map(cId => ({ courseId: cId, slotId: '' }));
+          p.courses = [{ courseId: 'CIRCO_F1', slotId: '' }];
         }
         if (p.age === undefined) p.age = 7;
         if (p.filterByAge === undefined) p.filterByAge = true;
@@ -683,9 +674,9 @@
       const btnSched = document.getElementById('tab-btn-schedule');
       const btnPrint = document.getElementById('tab-btn-print');
 
-      btnCalc.className = `py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all ${tab === 'calc' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-indigo-600'} flex items-center justify-center gap-1.5`;
-      btnSched.className = `py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all ${tab === 'schedule' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-indigo-600'} flex items-center justify-center gap-1.5`;
-      btnPrint.className = `py-2.5 px-2 text-xs sm:text-sm font-bold rounded-xl transition-all ${tab === 'print' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-indigo-600'} flex items-center justify-center gap-1.5`;
+      btnCalc.className = `py-2.5 px-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all ${tab === 'calc' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-indigo-600'} flex items-center justify-center gap-1 sm:gap-1.5`;
+      btnSched.className = `py-2.5 px-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all ${tab === 'schedule' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-indigo-600'} flex items-center justify-center gap-1 sm:gap-1.5`;
+      btnPrint.className = `py-2.5 px-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all ${tab === 'print' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-indigo-600'} flex items-center justify-center gap-1 sm:gap-1.5`;
 
       if (tab === 'schedule') renderSchedule();
       if (tab === 'print') renderPrintModules();
@@ -693,8 +684,8 @@
 
     function setPaymentPlan(plan) {
       state.plan = plan;
-      document.getElementById('plan-btn-trim').className = `active-scale cursor-pointer border-2 ${plan === 'TRIMESTRALE' ? 'border-indigo-600 bg-indigo-50/70' : 'border-slate-200 bg-white'} p-3 rounded-2xl relative`;
-      document.getElementById('plan-btn-sol').className = `active-scale cursor-pointer border-2 ${plan === 'DUE_SOLUZIONI' ? 'border-indigo-600 bg-indigo-50/70' : 'border-slate-200 bg-white'} p-3 rounded-2xl relative`;
+      document.getElementById('plan-btn-trim').className = `active-scale cursor-pointer border-2 ${plan === 'TRIMESTRALE' ? 'border-indigo-600 bg-indigo-50/70' : 'border-slate-200 bg-white'} p-2.5 sm:p-3 rounded-2xl relative`;
+      document.getElementById('plan-btn-sol').className = `active-scale cursor-pointer border-2 ${plan === 'DUE_SOLUZIONI' ? 'border-indigo-600 bg-indigo-50/70' : 'border-slate-200 bg-white'} p-2.5 sm:p-3 rounded-2xl relative`;
       render();
     }
 
@@ -703,11 +694,11 @@
       const optBtn = document.getElementById('strat-opt-btn');
       const stdBtn = document.getElementById('strat-std-btn');
       if (strat === 'OPTIMIZED') {
-        optBtn.className = 'py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
-        stdBtn.className = 'py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+        optBtn.className = 'py-1.5 px-2 text-[9px] sm:text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
+        stdBtn.className = 'py-1.5 px-2 text-[9px] sm:text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
       } else {
-        stdBtn.className = 'py-1.5 px-2 text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
-        optBtn.className = 'py-1.5 px-2 text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
+        stdBtn.className = 'py-1.5 px-2 text-[9px] sm:text-[10px] font-extrabold rounded-lg transition-all bg-indigo-600 text-white shadow-sm';
+        optBtn.className = 'py-1.5 px-2 text-[9px] sm:text-[10px] font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900';
       }
       render();
     }
@@ -853,61 +844,61 @@
         const ageLabel = getAgeGroupLabel(ageGroup);
 
         let coursesHtml = (p.courses || []).map((cObj, cIdx) => `
-          <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-2">
+          <div class="bg-slate-50 p-2.5 sm:p-3 rounded-xl border border-slate-200/80 space-y-2">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-extrabold uppercase text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">Corso #${cIdx + 1}</span>
+              <span class="text-[9px] sm:text-[10px] font-extrabold uppercase text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">Corso #${cIdx + 1}</span>
               ${p.courses.length > 1 ? `
-                <button onclick="removeCourseFromParticipant('${p.id}', ${cIdx})" class="text-xs text-rose-600 hover:text-rose-800 font-bold flex items-center gap-1">
-                  <i class="fa-solid fa-trash-can text-[10px]"></i> Rimuovi Corso
+                <button onclick="removeCourseFromParticipant('${p.id}', ${cIdx})" class="text-[11px] text-rose-600 hover:text-rose-800 font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-trash-can text-[9px]"></i> Rimuovi
                 </button>
               ` : ''}
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
-                <label class="block text-[10px] font-bold text-slate-500 mb-1">Seleziona Disciplina</label>
-                <select onchange="updateParticipantCourse('${p.id}', ${cIdx}, this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
+                <label class="block text-[9px] sm:text-[10px] font-bold text-slate-500 mb-1">Seleziona Disciplina</label>
+                <select onchange="updateParticipantCourse('${p.id}', ${cIdx}, this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-2 py-1.5 text-xs font-semibold text-slate-800">
                   ${buildCourseOptions(cObj.courseId, p.age, p.filterByAge)}
                 </select>
               </div>
 
               <div>
-                <label class="block text-[10px] font-bold text-slate-500 mb-1">Giorno & Orario Lezione</label>
-                <select onchange="updateParticipantSlot('${p.id}', ${cIdx}, this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800">
+                <label class="block text-[9px] sm:text-[10px] font-bold text-slate-500 mb-1">Giorno & Orario Lezione</label>
+                <select onchange="updateParticipantSlot('${p.id}', ${cIdx}, this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-2 py-1.5 text-xs font-semibold text-slate-800">
                   ${buildCourseSlotOptions(p.id, cObj.courseId, cObj.slotId)}
                 </select>
               </div>
             </div>
 
-            <div class="pt-1 flex items-center justify-between">
-              <span class="text-[10px] text-slate-500 font-medium">Orario Selezionato:</span>
+            <div class="pt-0.5 flex items-center justify-between">
+              <span class="text-[9px] sm:text-[10px] text-slate-500 font-medium">Stato Orario:</span>
               ${getSelectedSlotBadgeHTML(cObj.slotId)}
             </div>
           </div>
         `).join('');
 
         pList.innerHTML += `
-          <div class="bg-white rounded-2xl p-4 border-2 border-slate-200/90 shadow-sm space-y-3">
+          <div class="bg-white rounded-2xl p-3 sm:p-4 border-2 border-slate-200/90 shadow-sm space-y-2.5">
             <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-100">
               <div class="flex items-center gap-2 flex-1">
-                <span class="text-xs font-black text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-xl shrink-0">#${pIdx + 1}</span>
-                <input type="text" value="${escapeHtml(p.name)}" onchange="updateParticipantName('${p.id}', this.value)" placeholder="Nome Allievo" class="font-bold text-slate-900 text-sm bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 w-full max-w-[160px] sm:max-w-xs">
+                <span class="text-xs font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-lg shrink-0">#${pIdx + 1}</span>
+                <input type="text" value="${escapeHtml(p.name)}" onchange="updateParticipantName('${p.id}', this.value)" placeholder="Nome Allievo" class="font-bold text-slate-900 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 w-full max-w-[140px] sm:max-w-xs">
               </div>
               <button onclick="removeParticipant('${p.id}')" class="text-xs text-slate-400 hover:text-rose-600 font-bold p-1">
                 <i class="fa-solid fa-user-minus"></i>
               </button>
             </div>
 
-            <div class="flex items-center gap-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
+            <div class="flex items-center justify-between gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200/80">
               <div class="flex items-center gap-1.5 shrink-0">
-                <label class="text-[11px] font-bold text-slate-600">Età:</label>
-                <input type="number" min="3" max="99" value="${p.age}" onchange="updateParticipantAge('${p.id}', this.value)" class="w-14 bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 text-center">
-                <span class="text-[11px] text-slate-500 font-medium">anni</span>
+                <label class="text-[10px] sm:text-[11px] font-bold text-slate-600">Età:</label>
+                <input type="number" min="3" max="99" value="${p.age}" onchange="updateParticipantAge('${p.id}', this.value)" class="w-12 sm:w-14 bg-white border border-slate-300 rounded-lg px-1.5 py-0.5 text-xs font-bold text-slate-900 text-center">
+                <span class="text-[10px] text-slate-500">anni</span>
               </div>
-              <span class="text-[10px] font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md">${ageLabel}</span>
-              <label class="ml-auto flex items-center gap-1.5 cursor-pointer text-[10px] font-bold text-slate-600 select-none">
-                <input type="checkbox" ${p.filterByAge ? 'checked' : ''} onchange="toggleFilterByAge('${p.id}')" class="rounded text-indigo-600 focus:ring-indigo-500">
-                Filtra Corsi per Età
+              <span class="text-[9px] sm:text-[10px] font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md truncate max-w-[120px] sm:max-w-none">${ageLabel}</span>
+              <label class="flex items-center gap-1 cursor-pointer text-[9px] sm:text-[10px] font-bold text-slate-600 select-none shrink-0">
+                <input type="checkbox" ${p.filterByAge ? 'checked' : ''} onchange="toggleFilterByAge('${p.id}')" class="rounded text-indigo-600">
+                Filtra Età
               </label>
             </div>
 
@@ -916,7 +907,7 @@
             </div>
 
             <button onclick="addCourseToParticipant('${p.id}')" class="w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200/80 flex items-center justify-center gap-1.5 transition-all">
-              <i class="fa-solid fa-plus-circle"></i> Aggiungi un altro corso a ${escapeHtml(p.name)}
+              <i class="fa-solid fa-plus-circle text-[10px]"></i> Aggiungi corso per ${escapeHtml(p.name)}
             </button>
           </div>
         `;
@@ -927,43 +918,43 @@
         schedContainer.innerHTML = '';
         if (state.plan === 'TRIMESTRALE') {
           schedContainer.innerHTML = `
-            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center">
+            <div class="p-2.5 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center text-xs">
               <div>
-                <span class="text-[10px] font-extrabold text-indigo-600 uppercase">1° Versamento (Iscrizione + 1° Trim)</span>
-                <p class="text-xs font-bold text-slate-800">All'atto dell'iscrizione</p>
+                <span class="text-[9px] sm:text-[10px] font-extrabold text-indigo-600 uppercase block">1° Versamento (Iscrizione + 1° Trim)</span>
+                <p class="font-bold text-slate-800 text-[11px]">All'atto dell'iscrizione</p>
               </div>
-              <span class="text-sm font-black text-slate-900">€ ${calcResult.tranche1.toFixed(2)}</span>
+              <span class="font-black text-slate-900 text-xs sm:text-sm">€ ${calcResult.tranche1.toFixed(2)}</span>
             </div>
-            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center">
+            <div class="p-2.5 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center text-xs">
               <div>
-                <span class="text-[10px] font-extrabold text-indigo-600 uppercase">2° Versamento (2° Trimestre)</span>
-                <p class="text-xs font-bold text-slate-800">Entro 25 Dicembre 2026</p>
+                <span class="text-[9px] sm:text-[10px] font-extrabold text-indigo-600 uppercase block">2° Versamento (2° Trimestre)</span>
+                <p class="font-bold text-slate-800 text-[11px]">Entro 25 Dicembre 2026</p>
               </div>
-              <span class="text-sm font-black text-slate-900">€ ${calcResult.tranche2.toFixed(2)}</span>
+              <span class="font-black text-slate-900 text-xs sm:text-sm">€ ${calcResult.tranche2.toFixed(2)}</span>
             </div>
-            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center">
+            <div class="p-2.5 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center text-xs">
               <div>
-                <span class="text-[10px] font-extrabold text-indigo-600 uppercase">3° Versamento (3° Trimestre)</span>
-                <p class="text-xs font-bold text-slate-800">Entro 27 Marzo 2027</p>
+                <span class="text-[9px] sm:text-[10px] font-extrabold text-indigo-600 uppercase block">3° Versamento (3° Trimestre)</span>
+                <p class="font-bold text-slate-800 text-[11px]">Entro 27 Marzo 2027</p>
               </div>
-              <span class="text-sm font-black text-slate-900">€ ${calcResult.tranche3.toFixed(2)}</span>
+              <span class="font-black text-slate-900 text-xs sm:text-sm">€ ${calcResult.tranche3.toFixed(2)}</span>
             </div>
           `;
         } else {
           schedContainer.innerHTML = `
-            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center">
+            <div class="p-2.5 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center text-xs">
               <div>
-                <span class="text-[10px] font-extrabold text-indigo-600 uppercase">1ª Soluzione (Iscrizione + 50%)</span>
-                <p class="text-xs font-bold text-slate-800">All'atto dell'iscrizione</p>
+                <span class="text-[9px] sm:text-[10px] font-extrabold text-indigo-600 uppercase block">1ª Soluzione (Iscrizione + 50%)</span>
+                <p class="font-bold text-slate-800 text-[11px]">All'atto dell'iscrizione</p>
               </div>
-              <span class="text-sm font-black text-slate-900">€ ${calcResult.tranche1.toFixed(2)}</span>
+              <span class="font-black text-slate-900 text-xs sm:text-sm">€ ${calcResult.tranche1.toFixed(2)}</span>
             </div>
-            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center">
+            <div class="p-2.5 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center text-xs">
               <div>
-                <span class="text-[10px] font-extrabold text-indigo-600 uppercase">2ª Soluzione (Saldo 50%)</span>
-                <p class="text-xs font-bold text-slate-800">Entro 12 Febbraio 2027</p>
+                <span class="text-[9px] sm:text-[10px] font-extrabold text-indigo-600 uppercase block">2ª Soluzione (Saldo 50%)</span>
+                <p class="font-bold text-slate-800 text-[11px]">Entro 12 Febbraio 2027</p>
               </div>
-              <span class="text-sm font-black text-slate-900">€ ${calcResult.tranche2.toFixed(2)}</span>
+              <span class="font-black text-slate-900 text-xs sm:text-sm">€ ${calcResult.tranche2.toFixed(2)}</span>
             </div>
           `;
         }
@@ -996,9 +987,9 @@
       const rooms = ['ALL', 'Sala 1', 'Sala 2', 'Sala 3', 'Sala 4', 'Sala 5'];
       buttons.forEach((btn, idx) => {
         if (rooms[idx] === room) {
-          btn.className = 'room-btn active-scale py-1.5 px-3 text-xs font-extrabold rounded-xl border border-indigo-600 bg-indigo-600 text-white';
+          btn.className = 'room-btn active-scale py-1 px-2.5 text-xs font-extrabold rounded-xl border border-indigo-600 bg-indigo-600 text-white';
         } else {
-          btn.className = 'room-btn active-scale py-1.5 px-3 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100';
+          btn.className = 'room-btn active-scale py-1 px-2.5 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100';
         }
       });
       renderSchedule();
@@ -1112,7 +1103,7 @@
 
       return filteredCatalog.map(c => `
         <option value="${c.id}" ${c.id === selectedCourseId ? 'selected' : ''}>
-          ${escapeHtml(c.name)} — Trim: €${c.trim} / Sol: €${c.sol}
+          ${escapeHtml(c.name)} — €${c.trim} (Trim)
         </option>
       `).join('');
     }
@@ -1132,14 +1123,14 @@
         }
       });
 
-      let optionsHtml = `<option value="" ${!selectedSlotId ? 'selected' : ''}>⏱️ Orario da concordare con la segreteria</option>`;
+      let optionsHtml = `<option value="" ${!selectedSlotId ? 'selected' : ''}>⏱️ Orario da concordare</option>`;
 
       matchSlots.forEach(s => {
         const overlaps = otherSlots.filter(os => isSlotOverlapping(s, os.slot));
         let label = `${capitalize(s.day)} ${s.time} — ${s.name} (${s.room})`;
         if (overlaps.length > 0) {
           const names = overlaps.map(o => o.participantName).join(', ');
-          label = `⚡ [COINCIDENZA D'ORARIO con ${names}] ${label}`;
+          label = `⚡ [CONTEMPORANEO con ${names}] ${label}`;
         }
         optionsHtml += `<option value="${s.id}" ${s.id === selectedSlotId ? 'selected' : ''}>${escapeHtml(label)}</option>`;
       });
@@ -1148,10 +1139,10 @@
     }
 
     function getSelectedSlotBadgeHTML(slotId) {
-      if (!slotId) return '<span class="text-[10px] text-slate-400 italic">⏱️ Da concordare</span>';
+      if (!slotId) return '<span class="text-[9px] sm:text-[10px] text-slate-400 italic">⏱️ Da concordare</span>';
       const slot = TIMETABLE_DB.find(s => s.id === slotId);
-      if (!slot) return '<span class="text-[10px] text-slate-400 italic">⏱️ Da concordare</span>';
-      return `<span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-100 text-indigo-800 text-[10px] font-extrabold"><i class="fa-regular fa-calendar-check text-indigo-600"></i> ${capitalize(slot.day)} ${slot.time} (${slot.room})</span>`;
+      if (!slot) return '<span class="text-[9px] sm:text-[10px] text-slate-400 italic">⏱️ Da concordare</span>';
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-indigo-100 text-indigo-800 text-[9px] sm:text-[10px] font-extrabold"><i class="fa-regular fa-calendar-check text-indigo-600"></i> ${capitalize(slot.day)} ${slot.time} (${slot.room})</span>`;
     }
 
     function filterStudent(studentId) {
@@ -1165,8 +1156,8 @@
       if (!container) return;
 
       let pillsHtml = `
-        <button onclick="filterStudent('ALL')" class="active-scale text-xs font-bold px-3 py-1.5 rounded-xl border ${state.activeStudentFilter === 'ALL' ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'}">
-          👨‍👩‍👧‍👦 Tutti gli Allievi (${state.participants.length})
+        <button onclick="filterStudent('ALL')" class="active-scale text-xs font-bold px-2.5 py-1 rounded-xl border ${state.activeStudentFilter === 'ALL' ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'}">
+          👨‍👩‍👧‍👦 Tutti (${state.participants.length})
         </button>
       `;
 
@@ -1174,10 +1165,9 @@
         const isSelected = state.activeStudentFilter === p.id;
         const pCoursesCount = p.courses ? p.courses.length : 0;
         pillsHtml += `
-          <button onclick="filterStudent('${p.id}')" class="active-scale text-xs font-bold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${isSelected ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'}">
-            <i class="fa-solid fa-user-graduate text-[10px] ${isSelected ? 'text-indigo-200' : 'text-indigo-600'}"></i>
+          <button onclick="filterStudent('${p.id}')" class="active-scale text-xs font-bold px-2.5 py-1 rounded-xl border flex items-center gap-1 ${isSelected ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'}">
+            <i class="fa-solid fa-user-graduate text-[9px] ${isSelected ? 'text-indigo-200' : 'text-indigo-600'}"></i>
             <span>${escapeHtml(p.name || 'Allievo')} (${p.age}a)</span>
-            <span class="text-[9px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-indigo-50 text-indigo-700 font-extrabold'}">${pCoursesCount} corsi</span>
           </button>
         `;
       });
@@ -1193,7 +1183,7 @@
       grid.innerHTML = '';
 
       if (state.participants.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center text-xs text-indigo-300 py-3">Nessun allievo inserito nel preventivo.</div>`;
+        grid.innerHTML = `<div class="col-span-full text-center text-xs text-indigo-300 py-2">Nessun allievo inserito.</div>`;
         return;
       }
 
@@ -1202,19 +1192,18 @@
         let coursesDetailHtml = pCourses.map((cObj, cIdx) => {
           const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
           const courseName = course ? course.name : 'Corso';
-          let slotBadge = `<span class="text-[10px] text-amber-300 italic">⏱️ Incontro ${cIdx + 1}: Orario da assegnare</span>`;
+          let slotBadge = `<span class="text-[9px] text-amber-300 italic">⏱️ Incontro #${cIdx + 1}: Orario da assegnare</span>`;
           if (cObj.slotId) {
             const slot = TIMETABLE_DB.find(s => s.id === cObj.slotId);
             if (slot) {
-              slotBadge = `<span class="text-[10px] font-extrabold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-md inline-flex items-center gap-1"><i class="fa-solid fa-clock"></i> ${capitalize(slot.day)} ${slot.time} (${slot.room})</span>`;
+              slotBadge = `<span class="text-[9px] font-extrabold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-1.5 py-0.5 rounded inline-flex items-center gap-1"><i class="fa-solid fa-clock"></i> ${capitalize(slot.day)} ${slot.time} (${slot.room})</span>`;
             }
           }
 
           return `
             <div class="bg-white/10 p-2 rounded-xl border border-white/10 space-y-1">
-              <div class="flex items-center justify-between text-[11px] font-extrabold text-white">
+              <div class="flex items-center justify-between text-[10px] font-extrabold text-white">
                 <span class="truncate">${escapeHtml(courseName)}</span>
-                <span class="text-[9px] text-indigo-200 bg-white/10 px-1.5 py-0.5 rounded">Incontro #${cIdx + 1}</span>
               </div>
               <div>${slotBadge}</div>
             </div>
@@ -1222,16 +1211,16 @@
         }).join('');
 
         grid.innerHTML += `
-          <div class="bg-white/5 border border-white/10 rounded-2xl p-3 space-y-2 hover:border-indigo-400/50 transition-all">
-            <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
-              <span class="text-xs font-black text-white flex items-center gap-1.5">
-                <i class="fa-solid fa-user text-indigo-300"></i> ${escapeHtml(p.name || 'Allievo ' + (idx + 1))}
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-2.5 space-y-1.5">
+            <div class="flex items-center justify-between border-b border-white/10 pb-1">
+              <span class="text-xs font-black text-white flex items-center gap-1">
+                <i class="fa-solid fa-user text-indigo-300 text-[10px]"></i> ${escapeHtml(p.name || 'Allievo ' + (idx + 1))}
               </span>
-              <span class="text-[10px] text-indigo-200 font-bold bg-indigo-500/20 px-2 py-0.5 rounded-full border border-indigo-400/30">
-                ${p.age} Anni (${getAgeGroupLabel(getAgeGroupFromAge(p.age))})
+              <span class="text-[9px] text-indigo-200 font-bold bg-indigo-500/20 px-1.5 py-0.5 rounded-full">
+                ${p.age}a (${getAgeGroupLabel(getAgeGroupFromAge(p.age))})
               </span>
             </div>
-            <div class="space-y-1.5">${coursesDetailHtml}</div>
+            <div class="space-y-1">${coursesDetailHtml}</div>
           </div>
         `;
       });
@@ -1241,12 +1230,12 @@
         if (coincidences.length > 0) {
           alerts.classList.remove('hidden');
           alerts.innerHTML = `
-            <div class="flex items-center gap-1.5 font-bold text-amber-300 text-xs mb-1">
-              <i class="fa-solid fa-circle-check text-emerald-400"></i> 🎯 Opportunità Logistica Trovata! Lezioni Contemporanee nel Polo:
+            <div class="flex items-center gap-1 font-bold text-amber-300 text-xs mb-0.5">
+              <i class="fa-solid fa-circle-check text-emerald-400"></i> Lezioni Contemporanee Trovate!
             </div>
-            <ul class="list-disc pl-4 space-y-0.5 text-indigo-100 text-[10px]">
+            <ul class="list-disc pl-4 space-y-0.5 text-indigo-100 text-[9px]">
               ${coincidences.map(c => `
-                <li><strong>${c.participantA}</strong> (${c.courseA} - ${c.roomA}) e <strong>${c.participantB}</strong> (${c.courseB} - ${c.roomB}) hanno lezioni in contemporanea il <strong>${capitalize(c.day)} (${c.timeA})</strong>.</li>
+                <li><strong>${c.participantA}</strong> e <strong>${c.participantB}</strong> sono contemporanei il <strong>${capitalize(c.day)} (${c.timeA})</strong> in ${c.roomA} e ${c.roomB}.</li>
               `).join('')}
             </ul>
           `;
@@ -1312,9 +1301,9 @@
 
       if (slots.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-8 text-slate-400 text-xs">
-            <i class="fa-solid fa-calendar-xmark text-2xl mb-2 block text-slate-300"></i>
-            Nessuna lezione trovata per i filtri selezionati.
+          <div class="text-center py-6 text-slate-400 text-xs">
+            <i class="fa-solid fa-calendar-xmark text-xl mb-1 block text-slate-300"></i>
+            Nessuna lezione trovata.
           </div>
         `;
         return;
@@ -1336,8 +1325,8 @@
             const isAssigned = cObj.slotId === slot.id;
             optionsHtml += `
               <button onclick="assignSlotToSpecificStudentCourse('${p.id}', '${slot.id}', ${cIdx})" 
-                      class="w-full text-left px-3 py-1.5 hover:bg-indigo-50 text-[11px] font-bold text-slate-800 border-b border-slate-100 flex items-center justify-between ${isAssigned ? 'bg-indigo-100 text-indigo-900' : ''}">
-                <span>${escapeHtml(p.name)} — Incontro #${cIdx + 1} (${escapeHtml(courseName)})</span>
+                      class="w-full text-left px-2.5 py-1.5 hover:bg-indigo-50 text-[10px] sm:text-[11px] font-bold text-slate-800 border-b border-slate-100 flex items-center justify-between ${isAssigned ? 'bg-indigo-100 text-indigo-900' : ''}">
+                <span class="truncate pr-1">${escapeHtml(p.name)} — #${cIdx + 1} (${escapeHtml(courseName)})</span>
                 ${isAssigned ? '<i class="fa-solid fa-check text-indigo-600"></i>' : '<i class="fa-solid fa-plus text-slate-400"></i>'}
               </button>
             `;
@@ -1346,11 +1335,11 @@
 
         return `
           <div class="relative inline-block text-left group shrink-0">
-            <button class="active-scale bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-md shadow-indigo-600/20 flex items-center gap-1.5">
-              <i class="fa-solid fa-plus text-[10px]"></i> Assegna ad Allievo
+            <button class="active-scale bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded-xl text-[10px] sm:text-xs font-bold shadow-md shadow-indigo-600/20 flex items-center gap-1">
+              <i class="fa-solid fa-plus text-[9px]"></i> Assegna
             </button>
-            <div class="hidden group-hover:block group-focus-within:block absolute right-0 mt-1 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl z-30 overflow-hidden py-1">
-              <div class="px-3 py-1 bg-slate-50 border-b border-slate-100 text-[9px] font-extrabold uppercase text-slate-400">
+            <div class="hidden group-hover:block group-focus-within:block absolute right-0 mt-1 w-56 sm:w-64 bg-white border border-slate-200 rounded-2xl shadow-xl z-30 overflow-hidden py-1">
+              <div class="px-2.5 py-1 bg-slate-50 border-b border-slate-100 text-[8px] sm:text-[9px] font-extrabold uppercase text-slate-400">
                 Seleziona Allievo & Incontro
               </div>
               ${optionsHtml}
@@ -1368,14 +1357,14 @@
           if (roomSlots.length === 0) return;
 
           const roomCard = document.createElement('div');
-          roomCard.className = 'bg-slate-50 border border-slate-200/90 rounded-2xl p-3 space-y-2';
+          roomCard.className = 'bg-slate-50 border border-slate-200/90 rounded-2xl p-2.5 sm:p-3 space-y-2';
 
           let itemsHtml = roomSlots.map(s => `
-            <div class="bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-2 shadow-sm">
-              <div>
-                <div class="flex items-center gap-1.5 mb-0.5">
-                  <span class="text-[10px] font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md">${s.time}</span>
-                  <span class="text-[9px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded-md border border-purple-100">${getAgeGroupLabel(s.ageGroup)}</span>
+            <div class="bg-white p-2 sm:p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-2 shadow-sm">
+              <div class="space-y-0.5">
+                <div class="flex items-center gap-1 flex-wrap">
+                  <span class="text-[9px] font-extrabold text-indigo-700 bg-indigo-100 px-1.5 py-0.5 rounded">${s.time}</span>
+                  <span class="text-[8px] font-bold text-purple-700 bg-purple-50 px-1 py-0.5 rounded border border-purple-100">${getAgeGroupLabel(s.ageGroup)}</span>
                 </div>
                 <h4 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h4>
                 <span class="text-[9px] text-slate-500 block">${escapeHtml(s.cat)}</span>
@@ -1385,11 +1374,11 @@
           `).join('');
 
           roomCard.innerHTML = `
-            <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
-              <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
-                <i class="fa-solid fa-door-open text-indigo-600"></i> ${roomName}
+            <div class="flex items-center justify-between border-b border-slate-200 pb-1">
+              <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1">
+                <i class="fa-solid fa-door-open text-indigo-600 text-[10px]"></i> ${roomName}
               </span>
-              <span class="text-[10px] font-bold text-slate-400">${roomSlots.length} corsi</span>
+              <span class="text-[9px] font-bold text-slate-400">${roomSlots.length} corsi</span>
             </div>
             <div class="space-y-1.5">${itemsHtml}</div>
           `;
@@ -1400,14 +1389,14 @@
 
         slots.forEach(s => {
           const card = document.createElement('div');
-          card.className = 'p-3 rounded-2xl border border-slate-200/90 bg-slate-50 flex items-center justify-between gap-2 hover:border-indigo-300 transition-all';
+          card.className = 'p-2.5 sm:p-3 rounded-2xl border border-slate-200/90 bg-slate-50 flex items-center justify-between gap-2 hover:border-indigo-300 transition-all';
 
           card.innerHTML = `
-            <div class="space-y-1">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="text-[10px] font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md">${s.time}</span>
-                <span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded-md">${s.room}</span>
-                <span class="text-[9px] font-extrabold text-purple-700 bg-purple-50 border border-purple-100 px-1.5 py-0.5 rounded-md">${getAgeGroupLabel(s.ageGroup)}</span>
+            <div class="space-y-0.5">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="text-[9px] font-extrabold text-indigo-700 bg-indigo-100 px-1.5 py-0.5 rounded">${s.time}</span>
+                <span class="text-[9px] font-bold text-slate-600 bg-slate-200 px-1.5 py-0.5 rounded">${s.room}</span>
+                <span class="text-[8px] font-extrabold text-purple-700 bg-purple-50 border border-purple-100 px-1 py-0.5 rounded">${getAgeGroupLabel(s.ageGroup)}</span>
               </div>
               <h4 class="font-bold text-slate-900 text-xs">${escapeHtml(s.name)}</h4>
               <span class="text-[9px] text-slate-500 block">${escapeHtml(s.cat)}</span>
@@ -1445,7 +1434,7 @@
       }
       setPaymentPlan(state.plan);
       render();
-      showToast('Preset caricato con successo!');
+      showToast('Preset caricato!');
     }
 
     function switchPrintModule(modNum) {
@@ -1458,13 +1447,13 @@
       if (modNum === 1) {
         if (mod1) mod1.classList.remove('hidden');
         if (mod2) mod2.classList.add('hidden');
-        if (btn1) btn1.className = 'py-2.5 px-3 text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center';
-        if (btn2) btn2.className = 'py-2.5 px-3 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200';
+        if (btn1) btn1.className = 'py-2 px-2 text-[10px] sm:text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center';
+        if (btn2) btn2.className = 'py-2 px-2 text-[10px] sm:text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200';
       } else {
         if (mod2) mod2.classList.remove('hidden');
         if (mod1) mod1.classList.add('hidden');
-        if (btn2) btn2.className = 'py-2.5 px-3 text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center';
-        if (btn1) btn1.className = 'py-2.5 px-3 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200';
+        if (btn2) btn2.className = 'py-2 px-2 text-[10px] sm:text-xs font-extrabold rounded-xl bg-indigo-600 text-white shadow-sm text-center';
+        if (btn1) btn1.className = 'py-2 px-2 text-[10px] sm:text-xs font-bold rounded-xl bg-slate-100 text-slate-700 text-center hover:bg-slate-200';
       }
     }
 
@@ -1481,17 +1470,17 @@
         state.participants.forEach((p, idx) => {
           let coursesDetail = (p.courses || []).map(cObj => {
             const course = COURSE_CATALOG.find(c => c.id === cObj.courseId);
-            let slotText = 'Orario da concordare con la segreteria';
+            let slotText = 'Orario da concordare';
             if (cObj.slotId) {
               const slot = TIMETABLE_DB.find(s => s.id === cObj.slotId);
               if (slot) slotText = `${capitalize(slot.day)} ${slot.time} (${slot.room})`;
             }
-            return `<div class="text-xs text-slate-700 font-medium ml-3">• <strong>${course ? course.name : cObj.courseId}</strong> [${slotText}]</div>`;
+            return `<div class="text-[11px] text-slate-700 font-medium ml-2">• <strong>${course ? course.name : cObj.courseId}</strong> [${slotText}]</div>`;
           }).join('');
 
           mod1List.innerHTML += `
-            <div class="border-b border-slate-100 pb-2">
-              <div class="font-bold text-xs text-slate-900">Allievo #${idx + 1}: ${escapeHtml(p.name)} (Età: ${p.age} anni)</div>
+            <div class="border-b border-slate-100 pb-1.5">
+              <div class="font-bold text-xs text-slate-900">Allievo #${idx + 1}: ${escapeHtml(p.name)} (${p.age} anni)</div>
               ${coursesDetail}
             </div>
           `;
@@ -1506,37 +1495,37 @@
         if (state.plan === 'TRIMESTRALE') {
           mod1ScheduleRows.innerHTML = `
             <tr>
-              <td class="py-2 px-3 font-bold border-r border-slate-200">1° Versamento</td>
-              <td class="py-2 px-3 border-r border-slate-200">All'atto dell'iscrizione</td>
-              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">Iscrizione (€30/allievo) + 1° Trimestre (Ott, Nov, Dic)</td>
-              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche1.toFixed(2)}</td>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">1° Versamento</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">Iscrizione</td>
+              <td class="py-1.5 px-2 border-r border-slate-200 text-slate-600">Iscrizione (€30) + 1° Trim</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche1.toFixed(2)}</td>
             </tr>
             <tr>
-              <td class="py-2 px-3 font-bold border-r border-slate-200">2° Versamento</td>
-              <td class="py-2 px-3 border-r border-slate-200">25 Dicembre 2026</td>
-              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">2° Trimestre (Gen, Feb, Mar 2027)</td>
-              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche2.toFixed(2)}</td>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">2° Versamento</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">25 Dic 2026</td>
+              <td class="py-1.5 px-2 border-r border-slate-200 text-slate-600">2° Trimestre</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche2.toFixed(2)}</td>
             </tr>
             <tr>
-              <td class="py-2 px-3 font-bold border-r border-slate-200">3° Versamento</td>
-              <td class="py-2 px-3 border-r border-slate-200">27 Marzo 2027</td>
-              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">3° Trimestre (Apr, Mag, Giu 2027)</td>
-              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche3.toFixed(2)}</td>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">3° Versamento</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">27 Mar 2027</td>
+              <td class="py-1.5 px-2 border-r border-slate-200 text-slate-600">3° Trimestre</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche3.toFixed(2)}</td>
             </tr>
           `;
         } else {
           mod1ScheduleRows.innerHTML = `
             <tr>
-              <td class="py-2 px-3 font-bold border-r border-slate-200">1ª Soluzione</td>
-              <td class="py-2 px-3 border-r border-slate-200">All'atto dell'iscrizione</td>
-              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">Iscrizione (€30/allievo) + 50% Quota Corsi</td>
-              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche1.toFixed(2)}</td>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">1ª Soluzione</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">Iscrizione</td>
+              <td class="py-1.5 px-2 border-r border-slate-200 text-slate-600">Iscrizione (€30) + 50% Quota</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche1.toFixed(2)}</td>
             </tr>
             <tr>
-              <td class="py-2 px-3 font-bold border-r border-slate-200">2ª Soluzione</td>
-              <td class="py-2 px-3 border-r border-slate-200">12 Febbraio 2027</td>
-              <td class="py-2 px-3 border-r border-slate-200 text-slate-600">Saldo 50% restante (Feb - Giu 2027)</td>
-              <td class="py-2 px-3 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche2.toFixed(2)}</td>
+              <td class="py-1.5 px-2 font-bold border-r border-slate-200">2ª Soluzione</td>
+              <td class="py-1.5 px-2 border-r border-slate-200">12 Feb 2027</td>
+              <td class="py-1.5 px-2 border-r border-slate-200 text-slate-600">Saldo 50% restante</td>
+              <td class="py-1.5 px-2 text-right font-bold text-slate-900">€ ${state.calculatedTotals.tranche2.toFixed(2)}</td>
             </tr>
           `;
         }
@@ -1574,15 +1563,15 @@
 
           if (matchedItems.length > 0) {
             let content = matchedItems.map(item => `
-              <div class="bg-indigo-100 border border-indigo-300 p-1 rounded text-[8px] leading-tight space-y-0.5 mb-1">
+              <div class="bg-indigo-100 border border-indigo-300 p-0.5 rounded text-[8px] leading-tight mb-0.5">
                 <strong class="text-indigo-950 block">${escapeHtml(item.studentName)}</strong>
                 <span class="text-indigo-700 font-bold block">${item.slot.time} (${item.slot.room})</span>
-                <span class="text-slate-700 block">${escapeHtml(item.slot.name)}</span>
+                <span class="text-slate-700 block truncate">${escapeHtml(item.slot.name)}</span>
               </div>
             `).join('');
-            rowHtml += `<td class="py-1 px-1 border border-slate-300 bg-indigo-50/40 align-top">${content}</td>`;
+            rowHtml += `<td class="py-0.5 px-0.5 border border-slate-300 bg-indigo-50/40 align-top">${content}</td>`;
           } else {
-            rowHtml += `<td class="py-1 px-1 border border-slate-300 text-slate-300 hover:bg-slate-50"></td>`;
+            rowHtml += `<td class="py-0.5 px-0.5 border border-slate-300 hover:bg-slate-50"></td>`;
           }
         });
 
@@ -1605,7 +1594,7 @@
       const grandTotalElem = document.getElementById('grand-total-amount');
       const grandTotalText = grandTotalElem ? grandTotalElem.innerText : '€ 0,00';
 
-      let text = `🎪 *PROSPETTO PREVENTIVO URBAN GRAVITY ACADEMY*\n`;
+      let text = `🎪 *PREVENTIVO URBAN GRAVITY ACADEMY*\n`;
       text += `Polo UGART Vigevano - A.A. 2026/2027\n`;
       text += `-----------------------------------------\n`;
       text += `Modalità: ${state.plan === 'TRIMESTRALE' ? 'Trimestrale' : 'Due Soluzioni'}\n\n`;
@@ -1626,7 +1615,7 @@
 
       text += `\n💰 *Totale Annuo Complessivo:* ${grandTotalText}\n`;
       text += `🏦 *IBAN Bonifico:* IT84E0306909606100000137439\n`;
-      text += `Info e orari completi su: www.ugacademy.it`;
+      text += `Info su www.ugacademy.it`;
 
       const dummy = document.createElement("textarea");
       document.body.appendChild(dummy);
@@ -1635,7 +1624,7 @@
       document.execCommand("copy");
       document.body.removeChild(dummy);
 
-      showToast('Copiato per WhatsApp / Email!');
+      showToast('Copiato negli appunti!');
     }
 
     function showToast(msg) {
@@ -1646,7 +1635,7 @@
         toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         setTimeout(() => {
           toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-        }, 2500);
+        }, 2200);
       }
     }
 
